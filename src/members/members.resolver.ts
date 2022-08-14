@@ -12,15 +12,19 @@ import { MembersService } from '@/members/members.service';
 import {
   MemberCreateInput,
   MemberCreateOutput,
-} from './dtos/member.create.dto';
+} from '@/members/dtos/member.create.dto';
 import {
   MemberUpdateInput,
   MemberUpdateOutput,
-} from './dtos/member-update.dto';
+} from '@/members/dtos/member-update.dto';
 import {
   MemberDeleteInput,
   MemberDeleteOutput,
-} from './dtos/member-delete.dto';
+} from '@/members/dtos/member-delete.dto';
+import {
+  MemberLoginInput,
+  MemberLoginOutput,
+} from '@/members/dtos/member-login.dto';
 
 @Resolver(() => Member)
 export class MembersResolver {
@@ -59,5 +63,12 @@ export class MembersResolver {
     @Args('input') input: MemberDeleteInput,
   ): Promise<MemberDeleteOutput> {
     return this.membersService.deleteMember(input);
+  }
+
+  @Mutation(() => MemberLoginOutput)
+  async login(
+    @Args('input') input: MemberLoginInput,
+  ): Promise<MemberLoginOutput> {
+    return this.membersService.login(input);
   }
 }
