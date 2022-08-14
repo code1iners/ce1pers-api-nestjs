@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { hash } from 'bcrypt';
 import { RepositoriesService } from '@/repositories/repositories.service';
 import {
   MemberListInput,
@@ -20,6 +21,8 @@ import {
   MemberUpdateInput,
   MemberUpdateOutput,
 } from '@/members/dtos/member-update.dto';
+
+const HASH_SALT = 10;
 
 @Injectable()
 export class MembersService {
@@ -70,8 +73,16 @@ export class MembersService {
 
   async createMember(input: MemberCreateInput): Promise<MemberCreateOutput> {
     try {
+      // Encrypt member password.
+      let password;
+      try {
+        password = await hash(input.password, HASH_SALT);
+      } catch (error) {
+        throw new InternalServerErrorException('Failed hashing password.');
+      }
+
       const member = await this.repositoryService.member.create({
-        data: { ...input },
+        data: { ...input, password },
       });
       if (!member) throw new Error('Failed create the member.');
 
@@ -111,11 +122,25 @@ export class MembersService {
   async updateMember({
     id,
     username,
+    password,
   }: MemberUpdateInput): Promise<MemberUpdateOutput> {
     try {
+      // If input has password, Encrypt member password.
+      let newPassword;
+      if (password) {
+        try {
+          newPassword = await hash(password, HASH_SALT);
+        } catch (error) {
+          throw new InternalServerErrorException('Failed hashing password.');
+        }
+      }
+
       const member = await this.repositoryService.member.update({
         where: { id },
-        data: { username },
+        data: {
+          username,
+          ...(newPassword && { password: newPassword }),
+        },
       });
       if (!member) throw new Error('Failed update the member.');
 
