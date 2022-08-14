@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MembersModule } from './members/members.module';
 import { CoreModule } from './core/core.module';
+import { RepositoriesModule } from './repositories/repositories.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { CoreModule } from './core/core.module';
     }),
     MembersModule,
     CoreModule,
+    RepositoriesModule,
   ],
   controllers: [],
   providers: [],

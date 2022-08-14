@@ -4,13 +4,20 @@ This project serve various API services.
 
 ## Services
 
-- [ ] Weathers
-- [ ] Movies / Tv
+- Members (Processing)
+  - Create.
+  - Retrieve.
+  - Update.
+  - Delete.
+- Auth (Draft)
+- Weathers (Draft)
+- Movies / Tv (Draft)
 
 ## Main tech stacks
 
 - Nest.js
 - TypeScript
+- Prisma
 - Heroku
 
 ## How to play
