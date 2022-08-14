@@ -5,12 +5,19 @@ This project serve various API services.
 ## Services
 
 - Members (Processing)
+
   - Create.
   - Retrieve.
   - Update.
   - Delete.
-- Auth (Draft)
+
+- Auth (Processing)
+
+  - Designed as dynamic module.
+  - Member authentication with JWT.
+
 - Weathers (Draft)
+
 - Movies / Tv (Draft)
 
 ## Main tech stacks

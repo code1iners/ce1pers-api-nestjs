@@ -7,6 +7,7 @@ import { MembersModule } from '@/members/members.module';
 import { CoreModule } from '@/core/core.module';
 import { RepositoriesModule } from '@/repositories/repositories.module';
 import { EnvKeys } from '@/core/constants/env-keys';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -23,11 +24,15 @@ import { EnvKeys } from '@/core/constants/env-keys';
           .required(),
         PORT: Joi.number().required(),
         DATABASE_URL: Joi.string().required(),
+        PRIVATE_KEY: Joi.string().required(),
       }),
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
+    }),
+    AuthModule.forRoot({
+      privateKey: process.env.PRIVATE_KEY,
     }),
     MembersModule,
     CoreModule,

@@ -1,6 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { hash } from 'bcrypt';
+import { hash, compare } from 'bcrypt';
 import { RepositoriesService } from '@/repositories/repositories.service';
+import { AuthService } from '@/auth/auth.service';
 import {
   MemberListInput,
   MemberListOutput,
@@ -21,12 +22,19 @@ import {
   MemberUpdateInput,
   MemberUpdateOutput,
 } from '@/members/dtos/member-update.dto';
+import {
+  MemberLoginInput,
+  MemberLoginOutput,
+} from '@/members/dtos/member-login.dto';
 
 const HASH_SALT = 10;
 
 @Injectable()
 export class MembersService {
-  constructor(private readonly repositoryService: RepositoriesService) {}
+  constructor(
+    private readonly repositoryService: RepositoriesService,
+    private readonly authService: AuthService,
+  ) {}
 
   async findAll(inputs: MemberListInput): Promise<MemberListOutput> {
     inputs;
@@ -151,6 +159,42 @@ export class MembersService {
     } catch (error) {
       console.error('[updateMember]', error);
 
+      return {
+        ok: false,
+        error,
+      };
+    }
+  }
+
+  async login({
+    email,
+    password,
+  }: MemberLoginInput): Promise<MemberLoginOutput> {
+    try {
+      // Check the user exists by email.
+      const member = await this.repositoryService.member.findFirst({
+        where: { email },
+        select: {
+          id: true,
+          password: true,
+        },
+      });
+      if (!member) throw new Error('The email does not found.');
+
+      // Check the user password is valid.
+      const isPasswordValid = await compare(password, member.password);
+      if (!isPasswordValid) throw new Error('The password is invalid.');
+
+      // Create JWT token with auth module.
+      const accessToken = this.authService.sign({ id: member.id });
+      if (!accessToken) throw new Error('Failed create a access token.');
+
+      return {
+        ok: true,
+        accessToken,
+      };
+    } catch (error) {
+      console.error('[login]', error);
       return {
         ok: false,
         error,
