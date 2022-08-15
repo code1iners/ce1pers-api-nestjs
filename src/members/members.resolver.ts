@@ -2,7 +2,7 @@ import {
   MemberRetrieveInput,
   MemberRetrieveOutput,
 } from '@/members/dtos/member-retrieve.dto';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Member } from '@/members/entities/member.entity';
 import {
   MemberListInput,
@@ -25,6 +25,9 @@ import {
   MemberLoginInput,
   MemberLoginOutput,
 } from '@/members/dtos/member-login.dto';
+import { MemberMeOutput } from '@/members/dtos/member-me.dto';
+import { AuthGuard } from '@/auth/auth.guard';
+import { UseGuards } from '@nestjs/common';
 
 @Resolver(() => Member)
 export class MembersResolver {
@@ -70,5 +73,15 @@ export class MembersResolver {
     @Args('input') input: MemberLoginInput,
   ): Promise<MemberLoginOutput> {
     return this.membersService.login(input);
+  }
+
+  @Query(() => MemberMeOutput)
+  @UseGuards(AuthGuard)
+  async me(@Context() context): Promise<MemberMeOutput> {
+    // console.log(context['member']);
+
+    return {
+      ok: true,
+    };
   }
 }

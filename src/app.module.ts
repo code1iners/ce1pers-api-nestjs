@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -8,6 +13,7 @@ import { CoreModule } from '@/core/core.module';
 import { RepositoriesModule } from '@/repositories/repositories.module';
 import { EnvKeys } from '@/core/constants/env-keys';
 import { AuthModule } from './auth/auth.module';
+import { AuthMiddleWare } from './auth/auth.middleware';
 
 @Module({
   imports: [
@@ -30,6 +36,7 @@ import { AuthModule } from './auth/auth.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
+      context: ({ req }) => ({ member: req['member'] }),
     }),
     AuthModule.forRoot({
       privateKey: process.env.PRIVATE_KEY,
@@ -41,4 +48,11 @@ import { AuthModule } from './auth/auth.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleWare).forRoutes({
+      path: '/graphql',
+      method: RequestMethod.POST,
+    });
+  }
+}

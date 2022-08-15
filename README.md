@@ -15,6 +15,8 @@ This project serve various API services.
 
   - Designed as dynamic module.
   - Member authentication with JWT.
+  - Implement middleware for authentication.
+  - Implement Auth Guard for authorization.
 
 - Weathers (Draft)
 

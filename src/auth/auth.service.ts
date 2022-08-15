@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { sign } from 'jsonwebtoken';
+import { JwtPayload, sign, verify } from 'jsonwebtoken';
 import { AUTH_OPTIONS } from '@/auth/constants';
 import { AuthModuleOptions } from '@/auth/interfaces';
 
@@ -15,6 +15,15 @@ export class AuthService {
     } catch (error) {
       console.error('[sign]', error);
       return null;
+    }
+  }
+
+  verify(token: string): string | JwtPayload | null {
+    try {
+      return verify(token, this.options.privateKey);
+    } catch (error) {
+      console.error('[verify]', error);
+      return '';
     }
   }
 }
