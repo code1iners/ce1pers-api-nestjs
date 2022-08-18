@@ -18,7 +18,11 @@ This project serve various API services.
   - Implement Auth Guard for authorization.
   - Implement Auth Member decorator.
 
-- Weathers (Draft)
+- Weathers (Processing)
+
+  - Current weathers.
+
+    - Weather icons.
 
 - Movies / Tv (Draft)
 
