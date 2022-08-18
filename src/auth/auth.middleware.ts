@@ -12,17 +12,21 @@ export class AuthMiddleWare implements NestMiddleware {
   async use(req: any, res: any, next: (error?: any) => void) {
     if ('authorization' in req.headers) {
       // Extract access token
-      const [tokenType, accessToken] = req.headers.authorization.split(' ');
+      const [_, accessToken] = req.headers.authorization.split(' ');
       // Decode token
       const decoded = this.authService.verify(accessToken);
 
       // Extract user id from decoded token.
       if (typeof decoded === 'object' && decoded.hasOwnProperty('id')) {
         try {
-          const member = await this.membersService.findMember({
+          // Find member by decoded member id.
+          const { ok, member, error } = await this.membersService.findMember({
             id: decoded.id,
           });
-          console.log(member);
+          // There is a error?
+          if (!ok) throw new Error(error);
+
+          // Apply member into request.
           req['member'] = member;
         } catch (error) {
           console.error('[AUthMiddleWare]', error);

@@ -64,6 +64,11 @@ export class MembersService {
     try {
       const member = await this.repositoryService.member.findUnique({
         where: { id },
+        select: {
+          id: true,
+          email: true,
+          username: true,
+        },
       });
       if (!member) throw new Error('The member does not found.');
 
