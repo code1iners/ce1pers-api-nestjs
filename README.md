@@ -27,9 +27,19 @@ This project serve various API services.
 - Nest.js
 - TypeScript
 - Prisma
+- Planet Scale
 - Heroku
 
 ## How to play
+
+### Prerequisites
+
+- Have `.env` file with environment variables.
+
+  - `PRIVATE_KEY` => Secret key for backend system.
+  - `DATABASE_URL` => Database URL (MySQL).
+
+### Playing
 
 - Install dependencies.
 
