@@ -20,9 +20,11 @@ This project serve various API services.
 
 - Weathers (Processing)
 
-  - Current weathers.
-
-    - Weather icons.
+  - Current weather.
+  - 5 Day / 3 Hour weather forecast.
+  - Air pollution.
+  - Geocoding (Pending).
+  - Weather widget (Pending).
 
 - Movies / Tv (Draft)
 
