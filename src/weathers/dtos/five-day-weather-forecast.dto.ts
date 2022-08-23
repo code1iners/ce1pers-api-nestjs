@@ -6,15 +6,10 @@ import {
   CommonWeatherLanguage,
 } from '@/weathers/types/common-enums.type';
 import { FiveDayWeatherForecastResponse } from '@/weathers/types/five-day-weather.type';
+import { CommonWeatherInput } from '@/weathers/types/common-weather.type';
 
 @InputType()
-export class FiveDayWeatherForecastInput {
-  @Field(() => Number)
-  latitude: number;
-
-  @Field(() => Number)
-  longitude: number;
-
+export class FiveDayWeatherForecastInput extends CommonWeatherInput {
   @Field(() => CommonWeatherUnit, {
     nullable: true,
     defaultValue: CommonWeatherUnit.Metric,

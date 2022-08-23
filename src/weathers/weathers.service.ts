@@ -15,6 +15,11 @@ import {
   convertWeatherIcon,
 } from '@/weathers/utils/weather-helper';
 import type { FiveDayWeatherForecastResponse } from '@/weathers/types/five-day-weather.type';
+import {
+  AirPollutionInput,
+  AirPollutionOutput,
+} from '@/weathers/dtos/air-pollution.dto';
+import { AirPollutionResponse } from '@/weathers/types/air-pollution.type';
 
 @Injectable()
 export class WeathersService {
@@ -111,7 +116,39 @@ export class WeathersService {
       console.error('[getFiveDayWeatherForecast]', error);
       return {
         ok: false,
-        error: 'Failed getting five day weather forecast.',
+        error: 'Failed getting five day weather forecast information.',
+      };
+    }
+  }
+
+  async getAirPollution({
+    latitude: lat,
+    longitude: lon,
+  }: AirPollutionInput): Promise<AirPollutionOutput> {
+    try {
+      // Make url.
+      const url = makeUrlWithQueryString({
+        configService: this.configService,
+        path: '/data/2.5/air_pollution',
+        queries: {
+          lat,
+          lon,
+        },
+      });
+
+      // Fetch current weather.
+      const airPollution = await got.get(url).json<AirPollutionResponse>();
+      if (!airPollution) throw new Error('Failed fetch air pollution.');
+
+      return {
+        ok: true,
+        airPollution,
+      };
+    } catch (error) {
+      console.error('[getAirPollution]', error);
+      return {
+        ok: false,
+        error: 'Failed getting air pollution information.',
       };
     }
   }

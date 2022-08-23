@@ -6,15 +6,10 @@ import {
   CommonWeatherLanguage,
 } from '@/weathers/types/common-enums.type';
 import { CurrentWeatherResponse } from '@/weathers/types/current-weather.type';
+import { CommonWeatherInput } from '@/weathers/types/common-weather.type';
 
 @InputType()
-export class CurrentWeatherInput {
-  @Field(() => Float)
-  latitude: number;
-
-  @Field(() => Float)
-  longitude: number;
-
+export class CurrentWeatherInput extends CommonWeatherInput {
   @Field(() => CommonWeatherUnit, {
     nullable: true,
     defaultValue: CommonWeatherUnit.Metric,

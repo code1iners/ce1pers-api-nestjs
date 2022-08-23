@@ -1,4 +1,10 @@
-import { Field, Float, ObjectType, registerEnumType } from '@nestjs/graphql';
+import {
+  Field,
+  Float,
+  InputType,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql';
 import {
   CommonWeatherUnit,
   CommonWeatherLanguage,
@@ -10,6 +16,15 @@ registerEnumType(CommonWeatherLanguage, { name: 'CommonWeatherLanguage' });
 registerEnumType(FiveDayWeatherForecastPartOfDay, {
   name: 'FiveDayWeatherForecastPartOfDay',
 });
+
+@InputType()
+export class CommonWeatherInput {
+  @Field(() => Float)
+  latitude: number;
+
+  @Field(() => Float)
+  longitude: number;
+}
 
 @ObjectType()
 export class WeatherMain {

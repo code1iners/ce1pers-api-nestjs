@@ -10,6 +10,10 @@ import {
   FiveDayWeatherForecastInput,
   FiveDayWeatherForecastOutput,
 } from '@/weathers/dtos/five-day-weather-forecast.dto';
+import {
+  AirPollutionInput,
+  AirPollutionOutput,
+} from '@/weathers/dtos/air-pollution.dto';
 
 @Resolver()
 export class WeathersResolver {
@@ -29,5 +33,13 @@ export class WeathersResolver {
     @Args('input') input: FiveDayWeatherForecastInput,
   ): Promise<FiveDayWeatherForecastOutput> {
     return this.weathersService.getFiveDayWeatherForecast(input);
+  }
+
+  @Query(() => AirPollutionOutput)
+  @UseGuards(AuthGuard)
+  async airPollution(
+    @Args('input') input: AirPollutionInput,
+  ): Promise<AirPollutionOutput> {
+    return this.weathersService.getAirPollution(input);
   }
 }
