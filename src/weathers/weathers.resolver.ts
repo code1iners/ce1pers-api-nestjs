@@ -6,6 +6,10 @@ import {
 } from '@/weathers/dtos/current-weather.dto';
 import { AuthGuard } from '@/auth/auth.guard';
 import { WeathersService } from '@/weathers/weathers.service';
+import {
+  FiveDayWeatherForecastInput,
+  FiveDayWeatherForecastOutput,
+} from '@/weathers/dtos/five-day-weather-forecast.dto';
 
 @Resolver()
 export class WeathersResolver {
@@ -17,5 +21,13 @@ export class WeathersResolver {
     @Args('input') input: CurrentWeatherInput,
   ): Promise<CurrentWeatherOutput> {
     return this.weathersService.getCurrentWeather(input);
+  }
+
+  @Query(() => FiveDayWeatherForecastOutput)
+  @UseGuards(AuthGuard)
+  async fiveDayWeatherForecast(
+    @Args('input') input: FiveDayWeatherForecastInput,
+  ): Promise<FiveDayWeatherForecastOutput> {
+    return this.weathersService.getFiveDayWeatherForecast(input);
   }
 }

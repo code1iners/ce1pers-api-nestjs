@@ -1,18 +1,18 @@
-import { Field, Float, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsEnum } from 'class-validator';
 import { CoreOutput } from '@/core/dtos/core.dto';
 import {
   CommonWeatherUnit,
   CommonWeatherLanguage,
 } from '@/weathers/types/common-enums.type';
-import { CurrentWeatherResponse } from '@/weathers/types/current-weather.type';
+import { FiveDayWeatherForecastResponse } from '@/weathers/types/five-day-weather.type';
 
 @InputType()
-export class CurrentWeatherInput {
-  @Field(() => Float)
+export class FiveDayWeatherForecastInput {
+  @Field(() => Number)
   latitude: number;
 
-  @Field(() => Float)
+  @Field(() => Number)
   longitude: number;
 
   @Field(() => CommonWeatherUnit, {
@@ -20,8 +20,14 @@ export class CurrentWeatherInput {
     defaultValue: CommonWeatherUnit.Metric,
     description: 'Units of measurement.',
   })
-  @IsEnum(CommonWeatherUnit)
   units?: CommonWeatherUnit;
+
+  @Field(() => Number, {
+    nullable: true,
+    description:
+      'A number of timestamps, which will be returned in the API response.',
+  })
+  count?: number;
 
   @Field(() => CommonWeatherLanguage, {
     nullable: true,
@@ -34,7 +40,7 @@ export class CurrentWeatherInput {
 }
 
 @ObjectType()
-export class CurrentWeatherOutput extends CoreOutput {
-  @Field(() => CurrentWeatherResponse, { nullable: true })
-  current?: CurrentWeatherResponse;
+export class FiveDayWeatherForecastOutput extends CoreOutput {
+  @Field(() => FiveDayWeatherForecastResponse)
+  forecast?: FiveDayWeatherForecastResponse;
 }

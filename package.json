@@ -18,8 +18,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "db:open": "pscale connect ce1pers-database development --org ce1pers",
-    "db:push": "dotenv -e .env.development -- npx prisma db push",
-    "db:studio": "dotenv -e .env.development -- npx prisma studio"
+    "db:studio": "dotenv -e .env.development -- npx prisma studio",
+    "db:push": "dotenv -e .env.development -- npx prisma db push"
   },
   "dependencies": {
     "@nestjs/apollo": "^10.0.19",

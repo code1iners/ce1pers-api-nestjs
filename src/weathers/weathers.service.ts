@@ -1,45 +1,50 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import got from 'got';
-import * as qs from 'query-string';
 import {
   CurrentWeatherInput,
   CurrentWeatherOutput,
 } from '@/weathers/dtos/current-weather.dto';
-import { CurrentWeatherData } from './types/current-weather-unit';
+import { CurrentWeatherResponse } from '@/weathers/types/current-weather.type';
+import {
+  FiveDayWeatherForecastInput,
+  FiveDayWeatherForecastOutput,
+} from '@/weathers/dtos/five-day-weather-forecast.dto';
+import {
+  makeUrlWithQueryString,
+  convertWeatherIcon,
+} from '@/weathers/utils/weather-helper';
+import type { FiveDayWeatherForecastResponse } from '@/weathers/types/five-day-weather.type';
 
 @Injectable()
 export class WeathersService {
   constructor(private readonly configService: ConfigService) {}
 
+  /**
+   * Getting current weather information.
+   */
   async getCurrentWeather({
-    latitude,
-    longitude,
+    latitude: lat,
+    longitude: lon,
     units,
-    language,
+    language: lang,
   }: CurrentWeatherInput): Promise<CurrentWeatherOutput> {
-    const origin = this.configService.get('OPEN_WEATHER_ORIGIN');
-    const appId = this.configService.get('OPEN_WEATHER_KEY');
-    const path = '/data/2.5/weather';
-    const url = qs.stringifyUrl({
-      url: `${origin}${path}`,
-      query: {
-        lat: latitude,
-        lon: longitude,
-        units,
-        lang: language,
-        appid: appId,
-      },
-    });
     try {
+      // Make url.
+      const url = makeUrlWithQueryString({
+        configService: this.configService,
+        path: '/data/2.5/weather',
+        queries: { lat, lon, lang, units },
+      });
+
       // Fetch current weather.
-      const current = await got.get(url).json<CurrentWeatherData>();
+      const current = await got.get(url).json<CurrentWeatherResponse>();
       if (!current) throw new Error('Failed fetch current weather.');
 
-      // Fetch weather icon & apply.
+      // Weather icon & apply.
       current.weather = current.weather.map((weather) => ({
         ...weather,
-        icon: `http://openweathermap.org/img/wn/${weather.icon}@2x.png`,
+        icon: convertWeatherIcon(weather.icon),
       }));
 
       return {
@@ -50,6 +55,63 @@ export class WeathersService {
       return {
         ok: false,
         error,
+      };
+    }
+  }
+
+  /**
+   * Getting 5day/3hour weather forecast information.
+   */
+  async getFiveDayWeatherForecast({
+    latitude: lat,
+    longitude: lon,
+    count: cnt,
+    units,
+    language: lang,
+  }: FiveDayWeatherForecastInput): Promise<FiveDayWeatherForecastOutput> {
+    try {
+      // Make url.
+      const url = makeUrlWithQueryString({
+        configService: this.configService,
+        path: '/data/2.5/forecast',
+        queries: {
+          lat,
+          lon,
+          lang,
+          units,
+          cnt,
+        },
+      });
+
+      // Fetch current weather.
+      const forecast = await got
+        .get(url)
+        .json<FiveDayWeatherForecastResponse>();
+      if (!forecast) throw new Error('Failed fetch five day weather forecast.');
+
+      // Weather icon & apply.
+      forecast.list = forecast.list.map((item) => {
+        // Convert weather as icon url.
+        const weather = item.weather.map((w) => ({
+          ...w,
+          icon: convertWeatherIcon(w.icon),
+        }));
+
+        return {
+          ...item,
+          weather,
+        };
+      });
+
+      return {
+        ok: true,
+        forecast,
+      };
+    } catch (error) {
+      console.error('[getFiveDayWeatherForecast]', error);
+      return {
+        ok: false,
+        error: 'Failed getting five day weather forecast.',
       };
     }
   }
