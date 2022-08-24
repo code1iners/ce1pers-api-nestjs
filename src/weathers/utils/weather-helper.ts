@@ -21,6 +21,12 @@ export const makeUrlWithQueryString = ({
 };
 
 /**
+ * Make query parameter.
+ */
+export const makeQueryParameter = (items: string[]) =>
+  items.filter((isExist) => !!isExist).join(',');
+
+/**
  * Convert weather icon.
  */
 export const convertWeatherIcon = (icon) =>

@@ -1,9 +1,12 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { CoreOutput } from '@/core/dtos/core.dto';
-import { GeocodingResponse } from '@/weathers/types/geocoding.type';
+import {
+  GeocodingByLocationResponse,
+  GeocodingByZipCodeResponse,
+} from '@/weathers/types/geocoding.type';
 
 @InputType()
-export class FetchGeocodingInput {
+export class FetchGeocodingByLocationInput {
   @Field(() => String, {
     nullable: true,
     description: 'City name.',
@@ -27,7 +30,22 @@ export class FetchGeocodingInput {
 }
 
 @ObjectType()
-export class FetchGeocodingOutput extends CoreOutput {
-  @Field(() => [GeocodingResponse], { nullable: true })
-  geocoding?: GeocodingResponse[];
+export class FetchGeocodingByLocationOutput extends CoreOutput {
+  @Field(() => [GeocodingByLocationResponse], { nullable: true })
+  geocoding?: GeocodingByLocationResponse[];
+}
+
+@InputType()
+export class FetchGeocodingByZipCodeInput {
+  @Field(() => String, { nullable: true })
+  zipCode?: string;
+
+  @Field(() => String, { nullable: true })
+  countryCode?: string;
+}
+
+@ObjectType()
+export class FetchGeocodingByZipCodeOutput extends CoreOutput {
+  @Field(() => GeocodingByZipCodeResponse, { nullable: true })
+  geocoding?: GeocodingByZipCodeResponse;
 }

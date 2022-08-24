@@ -15,8 +15,10 @@ import {
   FetchAirPollutionOutput,
 } from '@/weathers/dtos/fetch-air-pollution.dto';
 import {
-  FetchGeocodingInput,
-  FetchGeocodingOutput,
+  FetchGeocodingByLocationInput,
+  FetchGeocodingByLocationOutput,
+  FetchGeocodingByZipCodeInput,
+  FetchGeocodingByZipCodeOutput,
 } from '@/weathers/dtos/fetch-geocoding.dto';
 
 @Resolver()
@@ -47,11 +49,19 @@ export class WeathersResolver {
     return this.weathersService.fetchAirPollution(input);
   }
 
-  @Query(() => FetchGeocodingOutput)
+  @Query(() => FetchGeocodingByLocationOutput)
   @UseGuards(AuthGuard)
-  async fetchGeocoding(
-    @Args('input') input: FetchGeocodingInput,
-  ): Promise<FetchGeocodingOutput> {
-    return this.weathersService.fetchGeocoding(input);
+  async fetchGeocodingByLocation(
+    @Args('input') input: FetchGeocodingByLocationInput,
+  ): Promise<FetchGeocodingByLocationOutput> {
+    return this.weathersService.fetchGeocodingByLocation(input);
+  }
+
+  @Query(() => FetchGeocodingByZipCodeOutput)
+  @UseGuards(AuthGuard)
+  async fetchGeocodingByZipCode(
+    @Args('input') input: FetchGeocodingByZipCodeInput,
+  ): Promise<FetchGeocodingByZipCodeOutput> {
+    return this.weathersService.fetchGeocodingByZipCode(input);
   }
 }

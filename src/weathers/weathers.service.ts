@@ -13,6 +13,7 @@ import {
 import {
   makeUrlWithQueryString,
   convertWeatherIcon,
+  makeQueryParameter,
 } from '@/weathers/utils/weather-helper';
 import type { FiveDayWeatherForecastResponse } from '@/weathers/types/five-day-weather.type';
 import {
@@ -21,10 +22,15 @@ import {
 } from '@/weathers/dtos/fetch-air-pollution.dto';
 import { AirPollutionResponse } from '@/weathers/types/air-pollution.type';
 import {
-  FetchGeocodingInput,
-  FetchGeocodingOutput,
+  FetchGeocodingByLocationInput,
+  FetchGeocodingByLocationOutput,
+  FetchGeocodingByZipCodeInput,
+  FetchGeocodingByZipCodeOutput,
 } from '@/weathers/dtos/fetch-geocoding.dto';
-import { GeocodingResponse } from '@/weathers/types/geocoding.type';
+import {
+  GeocodingByLocationResponse,
+  GeocodingByZipCodeResponse,
+} from '@/weathers/types/geocoding.type';
 
 @Injectable()
 export class WeathersService {
@@ -94,7 +100,7 @@ export class WeathersService {
         },
       });
 
-      // Fetch current weather.
+      // Fetch.
       const forecast = await got
         .get(url)
         .json<FiveDayWeatherForecastResponse>();
@@ -145,7 +151,7 @@ export class WeathersService {
         },
       });
 
-      // Fetch current weather.
+      // Fetch.
       const airPollution = await got.get(url).json<AirPollutionResponse>();
       if (!airPollution) throw new Error('Failed fetch air pollution.');
 
@@ -163,19 +169,17 @@ export class WeathersService {
   }
 
   /**
-   * Fetch geocoding information.
+   * Fetch geocoding information by location.
    */
-  async fetchGeocoding({
+  async fetchGeocodingByLocation({
     cityName,
     countryCode,
     stateCode,
     limit = 5,
-  }: FetchGeocodingInput): Promise<FetchGeocodingOutput> {
+  }: FetchGeocodingByLocationInput): Promise<FetchGeocodingByLocationOutput> {
     try {
-      // Making q parameter.
-      const q = [cityName, countryCode, stateCode]
-        .filter((isExist) => !!isExist)
-        .join(',');
+      // Making query parameter.
+      const q = makeQueryParameter([cityName, countryCode, stateCode]);
 
       // Make url.
       const url = makeUrlWithQueryString({
@@ -187,8 +191,10 @@ export class WeathersService {
         },
       });
 
-      // Fetch current weather.
-      const geocoding = await got.get(url).json<GeocodingResponse[]>();
+      // Fetch.
+      const geocoding = await got
+        .get(url)
+        .json<GeocodingByLocationResponse[]>();
       if (!geocoding) throw new Error('Failed fetch geocoding.');
 
       return {
@@ -196,10 +202,47 @@ export class WeathersService {
         geocoding,
       };
     } catch (error) {
-      console.error('[fetchGeocoding]', error);
+      console.error('[fetchGeocodingByLocation]', error);
       return {
         ok: false,
-        error: 'Failed fetch geocoding information.',
+        error: 'Failed fetch geocoding by location information.',
+      };
+    }
+  }
+
+  /**
+   * Fetch geocoding information by zip code.
+   */
+  async fetchGeocodingByZipCode({
+    zipCode,
+    countryCode,
+  }: FetchGeocodingByZipCodeInput): Promise<FetchGeocodingByZipCodeOutput> {
+    try {
+      // Making query parameter.
+      const zip = makeQueryParameter([zipCode, countryCode]);
+
+      // Make url.
+      const url = makeUrlWithQueryString({
+        configService: this.configService,
+        path: '/geo/1.0/zip',
+        queries: {
+          zip,
+        },
+      });
+
+      // Fetch.
+      const geocoding = await got.get(url).json<GeocodingByZipCodeResponse>();
+      if (!geocoding) throw new Error('Failed fetch geocoding.');
+
+      return {
+        ok: true,
+        geocoding,
+      };
+    } catch (error) {
+      console.error('[fetchGeocodingByZipCode]', error);
+      return {
+        ok: false,
+        error: 'Failed fetch geocoding information by zip code.',
       };
     }
   }
