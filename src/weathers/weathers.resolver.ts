@@ -15,6 +15,10 @@ import {
   FetchCurrentAirPollutionOutput,
 } from '@/weathers/dtos/fetch-current-air-pollution.dto';
 import {
+  FetchForecastAirPollutionInput,
+  FetchForecastAirPollutionOutput,
+} from '@/weathers/dtos/fetch-forecast-air-pollution.dto';
+import {
   FetchGeocodingByLocationInput,
   FetchGeocodingByLocationOutput,
 } from '@/weathers/dtos/fetch-geocoding-by-location.dto';
@@ -53,6 +57,14 @@ export class WeathersResolver {
     @Args('input') input: FetchCurrentAirPollutionInput,
   ): Promise<FetchCurrentAirPollutionOutput> {
     return this.weathersService.fetchCurrentAirPollution(input);
+  }
+
+  @Query(() => FetchForecastAirPollutionOutput)
+  @UseGuards(AuthGuard)
+  async fetchForecastAirPollution(
+    @Args('input') input: FetchForecastAirPollutionInput,
+  ): Promise<FetchForecastAirPollutionOutput> {
+    return this.weathersService.fetchForecastAirPollution(input);
   }
 
   @Query(() => FetchGeocodingByLocationOutput)

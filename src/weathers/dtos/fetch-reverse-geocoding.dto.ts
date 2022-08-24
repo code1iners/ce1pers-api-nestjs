@@ -1,17 +1,10 @@
 import { Field, Float, InputType, ObjectType } from '@nestjs/graphql';
 import { CoreOutput } from '@/core/dtos/core.dto';
 import { ReverseGeocodingResponse } from '@/weathers/types/geocoding.type';
+import { CommonWeatherInput } from '@/weathers/types/common-weather.type';
 
 @InputType()
-export class FetchReverseGeocodingInput {
-  @Field(() => Float, {
-    description: 'Geographical coordinates latitude',
-  })
-  latitude: number;
-
-  @Field(() => Float, { description: 'Geographical coordinates longitude' })
-  longitude: number;
-
+export class FetchReverseGeocodingInput extends CommonWeatherInput {
   @Field(() => Number, {
     nullable: true,
     description:

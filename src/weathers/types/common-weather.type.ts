@@ -19,10 +19,10 @@ registerEnumType(FiveDayWeatherForecastPartOfDay, {
 
 @InputType()
 export class CommonWeatherInput {
-  @Field(() => Float)
+  @Field(() => Float, { description: 'Geographical coordinates latitude' })
   latitude: number;
 
-  @Field(() => Float)
+  @Field(() => Float, { description: 'Geographical coordinates longitude' })
   longitude: number;
 }
 

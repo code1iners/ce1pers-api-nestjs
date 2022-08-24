@@ -21,6 +21,11 @@ import {
   FetchCurrentAirPollutionOutput,
 } from '@/weathers/dtos/fetch-current-air-pollution.dto';
 import { CurrentAirPollutionResponse } from '@/weathers/types/air-pollution.type';
+
+import {
+  FetchForecastAirPollutionInput,
+  FetchForecastAirPollutionOutput,
+} from '@/weathers/dtos/fetch-forecast-air-pollution.dto';
 import {
   FetchGeocodingByLocationInput,
   FetchGeocodingByLocationOutput,
@@ -173,6 +178,43 @@ export class WeathersService {
       return {
         ok: false,
         error: 'Failed getting air pollution information.',
+      };
+    }
+  }
+
+  /**
+   * Fetch forecast air pollution information.
+   */
+  async fetchForecastAirPollution({
+    latitude: lat,
+    longitude: lon,
+  }: FetchForecastAirPollutionInput): Promise<FetchForecastAirPollutionOutput> {
+    try {
+      // Make url.
+      const url = makeUrlWithQueryString({
+        configService: this.configService,
+        path: '/data/2.5/air_pollution/forecast',
+        queries: {
+          lat,
+          lon,
+        },
+      });
+
+      // Fetch.
+      const airPollution = await got
+        .get(url)
+        .json<CurrentAirPollutionResponse>();
+      if (!airPollution) throw new Error('Failed fetch air pollution.');
+
+      return {
+        ok: true,
+        airPollution,
+      };
+    } catch (error) {
+      console.error('[fetchForecastAirPollution]', error);
+      return {
+        ok: false,
+        error: 'Failed fetch forecast air pollution information.',
       };
     }
   }
