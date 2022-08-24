@@ -17,10 +17,10 @@ import {
 } from '@/weathers/utils/weather-helper';
 import type { FiveDayWeatherForecastResponse } from '@/weathers/types/five-day-weather.type';
 import {
-  FetchAirPollutionInput,
-  FetchAirPollutionOutput,
-} from '@/weathers/dtos/fetch-air-pollution.dto';
-import { AirPollutionResponse } from '@/weathers/types/air-pollution.type';
+  FetchCurrentAirPollutionInput,
+  FetchCurrentAirPollutionOutput,
+} from '@/weathers/dtos/fetch-current-air-pollution.dto';
+import { CurrentAirPollutionResponse } from '@/weathers/types/air-pollution.type';
 import {
   FetchGeocodingByLocationInput,
   FetchGeocodingByLocationOutput,
@@ -141,12 +141,12 @@ export class WeathersService {
   }
 
   /**
-   * Fetch air pollution information.
+   * Fetch current air pollution information.
    */
-  async fetchAirPollution({
+  async fetchCurrentAirPollution({
     latitude: lat,
     longitude: lon,
-  }: FetchAirPollutionInput): Promise<FetchAirPollutionOutput> {
+  }: FetchCurrentAirPollutionInput): Promise<FetchCurrentAirPollutionOutput> {
     try {
       // Make url.
       const url = makeUrlWithQueryString({
@@ -159,7 +159,9 @@ export class WeathersService {
       });
 
       // Fetch.
-      const airPollution = await got.get(url).json<AirPollutionResponse>();
+      const airPollution = await got
+        .get(url)
+        .json<CurrentAirPollutionResponse>();
       if (!airPollution) throw new Error('Failed fetch air pollution.');
 
       return {

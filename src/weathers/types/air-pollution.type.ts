@@ -68,7 +68,7 @@ export class AirPollutionItem {
 }
 
 @ObjectType()
-export class AirPollutionResponse {
+export class CurrentAirPollutionResponse {
   @Field(() => WeatherCoord)
   coord: WeatherCoord;
 
