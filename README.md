@@ -23,7 +23,7 @@ This project serve various API services.
   - Current weather.
   - 5 Day / 3 Hour weather forecast.
   - Air pollution.
-  - Geocoding (Pending).
+  - Geocoding.
   - Weather widget (Pending).
 
 - Movies / Tv (Draft)

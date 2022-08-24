@@ -2,24 +2,29 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import got from 'got';
 import {
-  CurrentWeatherInput,
-  CurrentWeatherOutput,
-} from '@/weathers/dtos/current-weather.dto';
+  FetchCurrentWeatherInput,
+  FetchCurrentWeatherOutput,
+} from '@/weathers/dtos/fetch-current-weather.dto';
 import { CurrentWeatherResponse } from '@/weathers/types/current-weather.type';
 import {
   FiveDayWeatherForecastInput,
   FiveDayWeatherForecastOutput,
-} from '@/weathers/dtos/five-day-weather-forecast.dto';
+} from '@/weathers/dtos/fetch-five-day-weather-forecast.dto';
 import {
   makeUrlWithQueryString,
   convertWeatherIcon,
 } from '@/weathers/utils/weather-helper';
 import type { FiveDayWeatherForecastResponse } from '@/weathers/types/five-day-weather.type';
 import {
-  AirPollutionInput,
-  AirPollutionOutput,
-} from '@/weathers/dtos/air-pollution.dto';
+  FetchAirPollutionInput,
+  FetchAirPollutionOutput,
+} from '@/weathers/dtos/fetch-air-pollution.dto';
 import { AirPollutionResponse } from '@/weathers/types/air-pollution.type';
+import {
+  FetchGeocodingInput,
+  FetchGeocodingOutput,
+} from '@/weathers/dtos/fetch-geocoding.dto';
+import { GeocodingResponse } from '@/weathers/types/geocoding.type';
 
 @Injectable()
 export class WeathersService {
@@ -28,12 +33,12 @@ export class WeathersService {
   /**
    * Getting current weather information.
    */
-  async getCurrentWeather({
+  async fetchCurrentWeather({
     latitude: lat,
     longitude: lon,
     units,
     language: lang,
-  }: CurrentWeatherInput): Promise<CurrentWeatherOutput> {
+  }: FetchCurrentWeatherInput): Promise<FetchCurrentWeatherOutput> {
     try {
       // Make url.
       const url = makeUrlWithQueryString({
@@ -57,6 +62,7 @@ export class WeathersService {
         current,
       };
     } catch (error) {
+      console.error('[fetchCurrentWeather]', error);
       return {
         ok: false,
         error,
@@ -65,9 +71,9 @@ export class WeathersService {
   }
 
   /**
-   * Getting 5day/3hour weather forecast information.
+   * Getting 5 day each 3 hour weather forecast information.
    */
-  async getFiveDayWeatherForecast({
+  async fetchFiveDayWeatherForecast({
     latitude: lat,
     longitude: lon,
     count: cnt,
@@ -113,7 +119,7 @@ export class WeathersService {
         forecast,
       };
     } catch (error) {
-      console.error('[getFiveDayWeatherForecast]', error);
+      console.error('[fetchFiveDayWeatherForecast]', error);
       return {
         ok: false,
         error: 'Failed getting five day weather forecast information.',
@@ -121,10 +127,13 @@ export class WeathersService {
     }
   }
 
-  async getAirPollution({
+  /**
+   * Fetch air pollution information.
+   */
+  async fetchAirPollution({
     latitude: lat,
     longitude: lon,
-  }: AirPollutionInput): Promise<AirPollutionOutput> {
+  }: FetchAirPollutionInput): Promise<FetchAirPollutionOutput> {
     try {
       // Make url.
       const url = makeUrlWithQueryString({
@@ -145,10 +154,52 @@ export class WeathersService {
         airPollution,
       };
     } catch (error) {
-      console.error('[getAirPollution]', error);
+      console.error('[fetchAirPollution]', error);
       return {
         ok: false,
         error: 'Failed getting air pollution information.',
+      };
+    }
+  }
+
+  /**
+   * Fetch geocoding information.
+   */
+  async fetchGeocoding({
+    cityName,
+    countryCode,
+    stateCode,
+    limit = 5,
+  }: FetchGeocodingInput): Promise<FetchGeocodingOutput> {
+    try {
+      // Making q parameter.
+      const q = [cityName, countryCode, stateCode]
+        .filter((isExist) => !!isExist)
+        .join(',');
+
+      // Make url.
+      const url = makeUrlWithQueryString({
+        configService: this.configService,
+        path: '/geo/1.0/direct',
+        queries: {
+          q,
+          limit,
+        },
+      });
+
+      // Fetch current weather.
+      const geocoding = await got.get(url).json<GeocodingResponse[]>();
+      if (!geocoding) throw new Error('Failed fetch geocoding.');
+
+      return {
+        ok: true,
+        geocoding,
+      };
+    } catch (error) {
+      console.error('[fetchGeocoding]', error);
+      return {
+        ok: false,
+        error: 'Failed fetch geocoding information.',
       };
     }
   }

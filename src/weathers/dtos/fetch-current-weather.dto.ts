@@ -1,4 +1,4 @@
-import { Field, Float, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsEnum } from 'class-validator';
 import { CoreOutput } from '@/core/dtos/core.dto';
 import {
@@ -9,7 +9,7 @@ import { CurrentWeatherResponse } from '@/weathers/types/current-weather.type';
 import { CommonWeatherInput } from '@/weathers/types/common-weather.type';
 
 @InputType()
-export class CurrentWeatherInput extends CommonWeatherInput {
+export class FetchCurrentWeatherInput extends CommonWeatherInput {
   @Field(() => CommonWeatherUnit, {
     nullable: true,
     defaultValue: CommonWeatherUnit.Metric,
@@ -29,7 +29,7 @@ export class CurrentWeatherInput extends CommonWeatherInput {
 }
 
 @ObjectType()
-export class CurrentWeatherOutput extends CoreOutput {
+export class FetchCurrentWeatherOutput extends CoreOutput {
   @Field(() => CurrentWeatherResponse, { nullable: true })
   current?: CurrentWeatherResponse;
 }

@@ -4,10 +4,10 @@ import { AirPollutionResponse } from '@/weathers/types/air-pollution.type';
 import { CommonWeatherInput } from '@/weathers/types/common-weather.type';
 
 @InputType()
-export class AirPollutionInput extends CommonWeatherInput {}
+export class FetchAirPollutionInput extends CommonWeatherInput {}
 
 @ObjectType()
-export class AirPollutionOutput extends CoreOutput {
+export class FetchAirPollutionOutput extends CoreOutput {
   @Field(() => AirPollutionResponse, { nullable: true })
   airPollution?: AirPollutionResponse;
 }
