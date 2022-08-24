@@ -24,13 +24,20 @@ import { AirPollutionResponse } from '@/weathers/types/air-pollution.type';
 import {
   FetchGeocodingByLocationInput,
   FetchGeocodingByLocationOutput,
+} from '@/weathers/dtos/fetch-geocoding-by-location.dto';
+import {
   FetchGeocodingByZipCodeInput,
   FetchGeocodingByZipCodeOutput,
-} from '@/weathers/dtos/fetch-geocoding.dto';
+} from '@/weathers/dtos/fetch-geocoding-by-zip-code.dto';
 import {
   GeocodingByLocationResponse,
   GeocodingByZipCodeResponse,
+  ReverseGeocodingResponse,
 } from '@/weathers/types/geocoding.type';
+import {
+  FetchReverseGeocodingInput,
+  FetchReverseGeocodingOutput,
+} from '@/weathers/dtos/fetch-reverse-geocoding.dto';
 
 @Injectable()
 export class WeathersService {
@@ -195,7 +202,7 @@ export class WeathersService {
       const geocoding = await got
         .get(url)
         .json<GeocodingByLocationResponse[]>();
-      if (!geocoding) throw new Error('Failed fetch geocoding.');
+      if (!geocoding) throw new Error('Failed fetch geocoding by location.');
 
       return {
         ok: true,
@@ -232,7 +239,7 @@ export class WeathersService {
 
       // Fetch.
       const geocoding = await got.get(url).json<GeocodingByZipCodeResponse>();
-      if (!geocoding) throw new Error('Failed fetch geocoding.');
+      if (!geocoding) throw new Error('Failed fetch geocoding by zip code.');
 
       return {
         ok: true,
@@ -243,6 +250,39 @@ export class WeathersService {
       return {
         ok: false,
         error: 'Failed fetch geocoding information by zip code.',
+      };
+    }
+  }
+
+  /**
+   * Fetch reverse geocoding information.
+   */
+  async fetchReverseGeocoding({
+    latitude: lat,
+    longitude: lon,
+    limit = 5,
+  }: FetchReverseGeocodingInput): Promise<FetchReverseGeocodingOutput> {
+    try {
+      // Make url.
+      const url = makeUrlWithQueryString({
+        configService: this.configService,
+        path: '/geo/1.0/reverse',
+        queries: { lat, lon, limit },
+      });
+
+      // Fetch.
+      const geocoding = await got.get(url).json<ReverseGeocodingResponse[]>();
+      if (!geocoding) throw new Error('Failed fetch reverse geocoding.');
+
+      return {
+        ok: true,
+        geocoding,
+      };
+    } catch (error) {
+      console.error('[fetchReverseGeocoding]', error);
+      return {
+        ok: false,
+        error: 'Failed fetch reverse geocoding information.',
       };
     }
   }

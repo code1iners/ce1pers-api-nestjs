@@ -35,3 +35,6 @@ export class GeocodingByZipCodeResponse {
   @Field(() => String)
   country: string;
 }
+
+@ObjectType()
+export class ReverseGeocodingResponse extends GeocodingByLocationResponse {}

@@ -17,9 +17,15 @@ import {
 import {
   FetchGeocodingByLocationInput,
   FetchGeocodingByLocationOutput,
+} from '@/weathers/dtos/fetch-geocoding-by-location.dto';
+import {
   FetchGeocodingByZipCodeInput,
   FetchGeocodingByZipCodeOutput,
-} from '@/weathers/dtos/fetch-geocoding.dto';
+} from '@/weathers/dtos/fetch-geocoding-by-zip-code.dto';
+import {
+  FetchReverseGeocodingInput,
+  FetchReverseGeocodingOutput,
+} from '@/weathers/dtos/fetch-reverse-geocoding.dto';
 
 @Resolver()
 export class WeathersResolver {
@@ -63,5 +69,12 @@ export class WeathersResolver {
     @Args('input') input: FetchGeocodingByZipCodeInput,
   ): Promise<FetchGeocodingByZipCodeOutput> {
     return this.weathersService.fetchGeocodingByZipCode(input);
+  }
+
+  @Query(() => FetchReverseGeocodingOutput)
+  async fetchReverseGeocoding(
+    @Args('input') input: FetchReverseGeocodingInput,
+  ): Promise<FetchReverseGeocodingOutput> {
+    return this.weathersService.fetchReverseGeocoding(input);
   }
 }
