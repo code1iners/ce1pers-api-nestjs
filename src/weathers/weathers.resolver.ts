@@ -10,8 +10,9 @@ import {
 import { AuthGuard } from '@/auth/auth.guard';
 import { WeathersService } from '@/weathers/weathers.service';
 import {
-  FiveDayWeatherForecastInput,
-  FiveDayWeatherForecastOutput,
+  FiveDayWeatherForecastInputByCoordinates,
+  FetchFiveDayWeatherForecastOutput,
+  FetchFiveDayWeatherForecastByLocationInput,
 } from '@/weathers/dtos/fetch-five-day-weather-forecast.dto';
 import {
   FetchCurrentAirPollutionInput,
@@ -78,15 +79,25 @@ export class WeathersResolver {
     return this.weatherService.fetchCurrentWeatherByZipCode(input);
   }
 
-  @Query(() => FiveDayWeatherForecastOutput, {
+  @Query(() => FetchFiveDayWeatherForecastOutput, {
     description:
-      'Getting five days / three hours weather forecast information.',
+      'Getting five days / three hours weather forecast information by coordinates.',
   })
   @UseGuards(AuthGuard)
-  async fiveDayWeatherForecast(
-    @Args('input') input: FiveDayWeatherForecastInput,
-  ): Promise<FiveDayWeatherForecastOutput> {
-    return this.weatherService.fetchFiveDayWeatherForecast(input);
+  async fiveDayWeatherForecastByCoordinates(
+    @Args('input') input: FiveDayWeatherForecastInputByCoordinates,
+  ): Promise<FetchFiveDayWeatherForecastOutput> {
+    return this.weatherService.fetchFiveDayWeatherForecastByCoordinates(input);
+  }
+
+  @Query(() => FetchFiveDayWeatherForecastOutput, {
+    description:
+      'Getting five days / three hours weather forecast information by locations.',
+  })
+  async fiveDayWeatherForecastByLocations(
+    @Args('input') input: FetchFiveDayWeatherForecastByLocationInput,
+  ): Promise<FetchFiveDayWeatherForecastOutput> {
+    return this.weatherService.fetchFiveDayWeatherForecastByLocations(input);
   }
 
   @Query(() => FetchCurrentAirPollutionOutput, {

@@ -10,13 +10,16 @@ import {
 } from '@/weathers/dtos/fetch-current-weather.dto';
 import { CurrentWeatherResponse } from '@/weathers/types/current-weather.type';
 import {
-  FiveDayWeatherForecastInput,
-  FiveDayWeatherForecastOutput,
+  FetchFiveDayWeatherForecastByLocationInput,
+  FiveDayWeatherForecastInputByCoordinates,
+  FetchFiveDayWeatherForecastOutput,
 } from '@/weathers/dtos/fetch-five-day-weather-forecast.dto';
 import {
   makeUrlWithQueryString,
   convertWeatherIcon,
   makeQueryParameter,
+  makeWeatherForecastRequest,
+  convertWeatherForecastListIcons,
 } from '@/weathers/utils/weather-helper';
 import type { FiveDayWeatherForecastResponse } from '@/weathers/types/five-day-weather.type';
 import {
@@ -52,7 +55,7 @@ export class WeathersService {
   constructor(private readonly configService: ConfigService) {}
 
   /**
-   * Getting current weather information by coordinates.
+   * Fetch current weather information by coordinates.
    */
   async fetchCurrentWeatherByCoordinates({
     latitude: lat,
@@ -92,7 +95,7 @@ export class WeathersService {
   }
 
   /**
-   * Getting current weather information by location.
+   * Fetch current weather information by location.
    */
   async fetchCurrentWeatherByLocation({
     cityName,
@@ -136,7 +139,7 @@ export class WeathersService {
   }
 
   /**
-   * Getting current weather information by city id.
+   * Fetch current weather information by city id.
    */
   async fetchCurrentWeatherByCityId({
     cityId: id,
@@ -175,7 +178,7 @@ export class WeathersService {
   }
 
   /**
-   * Getting current weather information by zip code.
+   * Fetch current weather information by zip code.
    */
   async fetchCurrentWeatherByZipCode({
     zipCode: zip,
@@ -214,48 +217,71 @@ export class WeathersService {
   }
 
   /**
-   * Getting 5 day each 3 hour weather forecast information.
+   * Fetch 5 day each 3 hour weather forecast information.
    */
-  async fetchFiveDayWeatherForecast({
+  async fetchFiveDayWeatherForecastByCoordinates({
     latitude: lat,
     longitude: lon,
     count: cnt,
     units,
     language: lang,
-  }: FiveDayWeatherForecastInput): Promise<FiveDayWeatherForecastOutput> {
+  }: FiveDayWeatherForecastInputByCoordinates): Promise<FetchFiveDayWeatherForecastOutput> {
     try {
-      // Make url.
-      const url = makeUrlWithQueryString({
-        configService: this.configService,
+      // Make request.
+      const request = makeWeatherForecastRequest({
         path: '/data/2.5/forecast',
-        queries: {
-          lat,
-          lon,
+        configService: this.configService,
+        query: { lat, lon, lang, units, cnt },
+      });
+
+      // Fetch.
+      const forecast = await request.json<FiveDayWeatherForecastResponse>();
+      if (!forecast) throw new Error('Failed fetch five day weather forecast.');
+
+      // Weather icon & apply.
+      forecast.list = convertWeatherForecastListIcons({ forecast });
+
+      return {
+        ok: true,
+        forecast,
+      };
+    } catch (error) {
+      console.error('[fetchFiveDayWeatherForecast]', error);
+      return {
+        ok: false,
+        error: 'Failed getting five day weather forecast information.',
+      };
+    }
+  }
+
+  /**
+   * Fetch 5 day each 3 hour weather forecast information by locations.
+   */
+  async fetchFiveDayWeatherForecastByLocations({
+    cityName,
+    countryCode,
+    stateCode,
+    language: lang,
+    units,
+  }: FetchFiveDayWeatherForecastByLocationInput): Promise<FetchFiveDayWeatherForecastOutput> {
+    try {
+      // Make request.
+      const request = makeWeatherForecastRequest({
+        path: '/data/2.5/forecast',
+        configService: this.configService,
+        qList: [cityName, countryCode, stateCode],
+        query: {
           lang,
           units,
-          cnt,
         },
       });
 
       // Fetch.
-      const forecast = await got
-        .get(url)
-        .json<FiveDayWeatherForecastResponse>();
+      const forecast = await request.json<FiveDayWeatherForecastResponse>();
       if (!forecast) throw new Error('Failed fetch five day weather forecast.');
 
       // Weather icon & apply.
-      forecast.list = forecast.list.map((item) => {
-        // Convert weather as icon url.
-        const weather = item.weather.map((w) => ({
-          ...w,
-          icon: convertWeatherIcon(w.icon),
-        }));
-
-        return {
-          ...item,
-          weather,
-        };
-      });
+      forecast.list = convertWeatherForecastListIcons({ forecast });
 
       return {
         ok: true,

@@ -6,3 +6,14 @@ export interface MakeWithQueryStringProps {
   path: string;
   queries?: StringifiableRecord;
 }
+
+export interface MakeWeatherForecastRequestProps {
+  qList?: string[];
+  query: object;
+  path: string;
+  configService: ConfigService;
+}
+
+interface ConvertWeatherForecastListIconsProps {
+  forecast: FiveDayWeatherForecastResponse;
+}
