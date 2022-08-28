@@ -20,7 +20,7 @@ This project serve various API services.
 
 - Weathers (Processing)
 
-  - Current weather.
+  - Current weather by coordinates/locations.
   - 5 Day / 3 Hour weather forecast.
   - Air pollution.
   - Geocoding.

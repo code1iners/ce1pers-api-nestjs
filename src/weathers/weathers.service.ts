@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import got from 'got';
 import {
-  FetchCurrentWeatherInput,
+  FetchCurrentWeatherByLocationInput,
+  FetchCurrentWeatherByCoordinatesInput,
   FetchCurrentWeatherOutput,
 } from '@/weathers/dtos/fetch-current-weather.dto';
 import { CurrentWeatherResponse } from '@/weathers/types/current-weather.type';
@@ -49,14 +50,14 @@ export class WeathersService {
   constructor(private readonly configService: ConfigService) {}
 
   /**
-   * Getting current weather information.
+   * Getting current weather information by coordinates.
    */
-  async fetchCurrentWeather({
+  async fetchCurrentWeatherByCoordinates({
     latitude: lat,
     longitude: lon,
     units,
     language: lang,
-  }: FetchCurrentWeatherInput): Promise<FetchCurrentWeatherOutput> {
+  }: FetchCurrentWeatherByCoordinatesInput): Promise<FetchCurrentWeatherOutput> {
     try {
       // Make url.
       const url = makeUrlWithQueryString({
@@ -83,7 +84,49 @@ export class WeathersService {
       console.error('[fetchCurrentWeather]', error);
       return {
         ok: false,
-        error,
+        error: 'Failed fetching current weather by coordinates.',
+      };
+    }
+  }
+
+  /**
+   * Getting current weather information by location.
+   */
+  async fetchCurrentWeatherByLocation({
+    cityName,
+    countryCode,
+    stateCode,
+  }: FetchCurrentWeatherByLocationInput): Promise<FetchCurrentWeatherOutput> {
+    try {
+      // Making query parameter.
+      const q = makeQueryParameter([cityName, countryCode, stateCode]);
+
+      // Make url.
+      const url = makeUrlWithQueryString({
+        configService: this.configService,
+        path: '/data/2.5/weather',
+        queries: { q },
+      });
+
+      // Fetch current weather.
+      const current = await got.get(url).json<CurrentWeatherResponse>();
+      if (!current) throw new Error('Failed fetch current weather.');
+
+      // Weather icon & apply.
+      current.weather = current.weather.map((weather) => ({
+        ...weather,
+        icon: convertWeatherIcon(weather.icon),
+      }));
+
+      return {
+        ok: true,
+        current,
+      };
+    } catch (error) {
+      console.error('[fetchCurrentWeatherByLocation]', error);
+      return {
+        ok: false,
+        error: 'Failed fetching current weather by location.',
       };
     }
   }
