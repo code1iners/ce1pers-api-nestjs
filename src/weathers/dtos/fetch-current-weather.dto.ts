@@ -1,33 +1,13 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { IsEnum } from 'class-validator';
 import { CoreOutput } from '@/core/dtos/core.dto';
-import { CommonFetchLocationInput } from '@/weathers/dtos/common-weather.dto';
 import {
-  CommonWeatherUnit,
-  CommonWeatherLanguage,
-} from '@/weathers/types/common-enums.type';
+  CommonFetchLocationInput,
+  CommonFetchWeatherCoordinatesInput,
+} from '@/weathers/dtos/common-weather.dto';
 import { CurrentWeatherResponse } from '@/weathers/types/current-weather.type';
-import { CommonWeatherInput } from '@/weathers/types/common-weather.type';
 
 @InputType()
-export class FetchCurrentWeatherByCoordinatesInput extends CommonWeatherInput {
-  @Field(() => CommonWeatherUnit, {
-    nullable: true,
-    defaultValue: CommonWeatherUnit.Metric,
-    description: 'Units of measurement.',
-  })
-  @IsEnum(CommonWeatherUnit)
-  units?: CommonWeatherUnit;
-
-  @Field(() => CommonWeatherLanguage, {
-    nullable: true,
-    defaultValue: CommonWeatherLanguage.kr,
-    description:
-      'You can use this parameter to get the output in your language.',
-  })
-  @IsEnum(CommonWeatherLanguage)
-  language?: CommonWeatherLanguage;
-}
+export class FetchCurrentWeatherByCoordinatesInput extends CommonFetchWeatherCoordinatesInput {}
 
 @ObjectType()
 export class FetchCurrentWeatherOutput extends CoreOutput {

@@ -96,6 +96,8 @@ export class WeathersService {
     cityName,
     countryCode,
     stateCode,
+    units,
+    language: lang,
   }: FetchCurrentWeatherByLocationInput): Promise<FetchCurrentWeatherOutput> {
     try {
       // Making query parameter.
@@ -105,7 +107,7 @@ export class WeathersService {
       const url = makeUrlWithQueryString({
         configService: this.configService,
         path: '/data/2.5/weather',
-        queries: { q },
+        queries: { q, units, lang },
       });
 
       // Fetch current weather.

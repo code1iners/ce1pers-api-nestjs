@@ -1,10 +1,10 @@
-import { Field, Float, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { CoreOutput } from '@/core/dtos/core.dto';
+import { CommonFetchWeatherCoordinatesInput } from '@/weathers/dtos/common-weather.dto';
 import { ReverseGeocodingResponse } from '@/weathers/types/geocoding.type';
-import { CommonWeatherInput } from '@/weathers/types/common-weather.type';
 
 @InputType()
-export class FetchReverseGeocodingInput extends CommonWeatherInput {
+export class FetchReverseGeocodingInput extends CommonFetchWeatherCoordinatesInput {
   @Field(() => Number, {
     nullable: true,
     description:
