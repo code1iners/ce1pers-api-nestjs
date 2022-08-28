@@ -10,9 +10,10 @@ import {
 } from '@/weathers/dtos/fetch-current-weather.dto';
 import { CurrentWeatherResponse } from '@/weathers/types/current-weather.type';
 import {
-  FetchFiveDayWeatherForecastByLocationInput,
-  FiveDayWeatherForecastInputByCoordinates,
+  FetchFiveDayWeatherForecastByLocationsInput,
+  FiveDayWeatherForecastInputByCoordinatesInput,
   FetchFiveDayWeatherForecastOutput,
+  FetchFiveDayWeatherForecastByCityIdInput,
 } from '@/weathers/dtos/fetch-five-day-weather-forecast.dto';
 import {
   makeUrlWithQueryString,
@@ -225,7 +226,7 @@ export class WeathersService {
     count: cnt,
     units,
     language: lang,
-  }: FiveDayWeatherForecastInputByCoordinates): Promise<FetchFiveDayWeatherForecastOutput> {
+  }: FiveDayWeatherForecastInputByCoordinatesInput): Promise<FetchFiveDayWeatherForecastOutput> {
     try {
       // Make request.
       const request = makeWeatherForecastRequest({
@@ -263,7 +264,7 @@ export class WeathersService {
     stateCode,
     language: lang,
     units,
-  }: FetchFiveDayWeatherForecastByLocationInput): Promise<FetchFiveDayWeatherForecastOutput> {
+  }: FetchFiveDayWeatherForecastByLocationsInput): Promise<FetchFiveDayWeatherForecastOutput> {
     try {
       // Make request.
       const request = makeWeatherForecastRequest({
@@ -271,6 +272,46 @@ export class WeathersService {
         configService: this.configService,
         qList: [cityName, countryCode, stateCode],
         query: {
+          lang,
+          units,
+        },
+      });
+
+      // Fetch.
+      const forecast = await request.json<FiveDayWeatherForecastResponse>();
+      if (!forecast) throw new Error('Failed fetch five day weather forecast.');
+
+      // Weather icon & apply.
+      forecast.list = convertWeatherForecastListIcons({ forecast });
+
+      return {
+        ok: true,
+        forecast,
+      };
+    } catch (error) {
+      console.error('[fetchFiveDayWeatherForecast]', error);
+      return {
+        ok: false,
+        error: 'Failed getting five day weather forecast information.',
+      };
+    }
+  }
+
+  /**
+   * Fetch 5 day each 3 hour weather forecast information by locations.
+   */
+  async fetchFiveDayWeatherForecastByCityId({
+    cityId: id,
+    language: lang,
+    units,
+  }: FetchFiveDayWeatherForecastByCityIdInput): Promise<FetchFiveDayWeatherForecastOutput> {
+    try {
+      // Make request.
+      const request = makeWeatherForecastRequest({
+        path: '/data/2.5/forecast',
+        configService: this.configService,
+        query: {
+          id,
           lang,
           units,
         },
