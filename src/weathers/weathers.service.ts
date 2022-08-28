@@ -4,8 +4,9 @@ import got from 'got';
 import {
   FetchCurrentWeatherByLocationInput,
   FetchCurrentWeatherByCoordinatesInput,
+  FetchCurrentWeatherByCityIdInput,
   FetchCurrentWeatherOutput,
-  FetchCurrentWeatherByCityId,
+  FetchCurrentWeatherByZipCodeInput,
 } from '@/weathers/dtos/fetch-current-weather.dto';
 import { CurrentWeatherResponse } from '@/weathers/types/current-weather.type';
 import {
@@ -141,7 +142,7 @@ export class WeathersService {
     cityId: id,
     units,
     language: lang,
-  }: FetchCurrentWeatherByCityId): Promise<FetchCurrentWeatherOutput> {
+  }: FetchCurrentWeatherByCityIdInput): Promise<FetchCurrentWeatherOutput> {
     try {
       // Make url.
       const url = makeUrlWithQueryString({
@@ -169,6 +170,45 @@ export class WeathersService {
       return {
         ok: false,
         error: 'Failed fetching current weather by city id.',
+      };
+    }
+  }
+
+  /**
+   * Getting current weather information by zip code.
+   */
+  async fetchCurrentWeatherByZipCode({
+    zipCode: zip,
+    units,
+    language: lang,
+  }: FetchCurrentWeatherByZipCodeInput): Promise<FetchCurrentWeatherOutput> {
+    try {
+      // Make url.
+      const url = makeUrlWithQueryString({
+        configService: this.configService,
+        path: '/data/2.5/weather',
+        queries: { zip, units, lang },
+      });
+
+      // Fetch current weather.
+      const current = await got.get(url).json<CurrentWeatherResponse>();
+      if (!current) throw new Error('Failed fetch current weather.');
+
+      // Weather icon & apply.
+      current.weather = current.weather.map((weather) => ({
+        ...weather,
+        icon: convertWeatherIcon(weather.icon),
+      }));
+
+      return {
+        ok: true,
+        current,
+      };
+    } catch (error) {
+      console.error('[fetchCurrentWeatherByZipCode]', error?.message);
+      return {
+        ok: false,
+        error: 'Failed fetching current weather by zip code.',
       };
     }
   }

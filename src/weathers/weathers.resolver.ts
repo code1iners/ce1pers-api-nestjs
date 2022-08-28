@@ -1,10 +1,11 @@
-import { FetchCurrentWeatherByCityId } from './dtos/fetch-current-weather.dto';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import {
   FetchCurrentWeatherByLocationInput,
   FetchCurrentWeatherByCoordinatesInput,
+  FetchCurrentWeatherByCityIdInput,
   FetchCurrentWeatherOutput,
+  FetchCurrentWeatherByZipCodeInput,
 } from '@/weathers/dtos/fetch-current-weather.dto';
 import { AuthGuard } from '@/auth/auth.guard';
 import { WeathersService } from '@/weathers/weathers.service';
@@ -37,7 +38,9 @@ import {
 export class WeathersResolver {
   constructor(private readonly weatherService: WeathersService) {}
 
-  @Query(() => FetchCurrentWeatherOutput)
+  @Query(() => FetchCurrentWeatherOutput, {
+    description: 'Getting current weather information by coordinates.',
+  })
   @UseGuards(AuthGuard)
   async currentWeatherByCoordinates(
     @Args('input') input: FetchCurrentWeatherByCoordinatesInput,
@@ -45,7 +48,9 @@ export class WeathersResolver {
     return this.weatherService.fetchCurrentWeatherByCoordinates(input);
   }
 
-  @Query(() => FetchCurrentWeatherOutput)
+  @Query(() => FetchCurrentWeatherOutput, {
+    description: 'Getting current weather information by locations.',
+  })
   @UseGuards(AuthGuard)
   async currentWeatherByLocation(
     @Args('input') input: FetchCurrentWeatherByLocationInput,
@@ -53,15 +58,30 @@ export class WeathersResolver {
     return this.weatherService.fetchCurrentWeatherByLocation(input);
   }
 
-  @Query(() => FetchCurrentWeatherOutput)
+  @Query(() => FetchCurrentWeatherOutput, {
+    description: 'Getting current weather information by city ID.',
+  })
   @UseGuards(AuthGuard)
   async currentWeatherByCityId(
-    @Args('input') input: FetchCurrentWeatherByCityId,
+    @Args('input') input: FetchCurrentWeatherByCityIdInput,
   ): Promise<FetchCurrentWeatherOutput> {
     return this.weatherService.fetchCurrentWeatherByCityId(input);
   }
 
-  @Query(() => FiveDayWeatherForecastOutput)
+  @Query(() => FetchCurrentWeatherOutput, {
+    description: 'Getting current weather information by zip code.',
+  })
+  @UseGuards(AuthGuard)
+  async currentWeatherByZipCode(
+    @Args('input') input: FetchCurrentWeatherByZipCodeInput,
+  ): Promise<FetchCurrentWeatherOutput> {
+    return this.weatherService.fetchCurrentWeatherByZipCode(input);
+  }
+
+  @Query(() => FiveDayWeatherForecastOutput, {
+    description:
+      'Getting five days / three hours weather forecast information.',
+  })
   @UseGuards(AuthGuard)
   async fiveDayWeatherForecast(
     @Args('input') input: FiveDayWeatherForecastInput,
@@ -69,7 +89,9 @@ export class WeathersResolver {
     return this.weatherService.fetchFiveDayWeatherForecast(input);
   }
 
-  @Query(() => FetchCurrentAirPollutionOutput)
+  @Query(() => FetchCurrentAirPollutionOutput, {
+    description: 'Getting current air pollution information.',
+  })
   @UseGuards(AuthGuard)
   async currentAirPollution(
     @Args('input') input: FetchCurrentAirPollutionInput,
@@ -77,7 +99,9 @@ export class WeathersResolver {
     return this.weatherService.fetchCurrentAirPollution(input);
   }
 
-  @Query(() => FetchForecastAirPollutionOutput)
+  @Query(() => FetchForecastAirPollutionOutput, {
+    description: 'Getting forecast air pollution information.',
+  })
   @UseGuards(AuthGuard)
   async forecastAirPollution(
     @Args('input') input: FetchForecastAirPollutionInput,
@@ -85,7 +109,9 @@ export class WeathersResolver {
     return this.weatherService.fetchForecastAirPollution(input);
   }
 
-  @Query(() => FetchGeocodingByLocationOutput)
+  @Query(() => FetchGeocodingByLocationOutput, {
+    description: 'Getting geocoding information by locations.',
+  })
   @UseGuards(AuthGuard)
   async geocodingByLocation(
     @Args('input') input: FetchGeocodingByLocationInput,
@@ -93,7 +119,9 @@ export class WeathersResolver {
     return this.weatherService.fetchGeocodingByLocation(input);
   }
 
-  @Query(() => FetchGeocodingByZipCodeOutput)
+  @Query(() => FetchGeocodingByZipCodeOutput, {
+    description: 'Getting geocoding information by zip code.',
+  })
   @UseGuards(AuthGuard)
   async geocodingByZipCode(
     @Args('input') input: FetchGeocodingByZipCodeInput,
@@ -101,7 +129,9 @@ export class WeathersResolver {
     return this.weatherService.fetchGeocodingByZipCode(input);
   }
 
-  @Query(() => FetchReverseGeocodingOutput)
+  @Query(() => FetchReverseGeocodingOutput, {
+    description: 'Getting reverse geocoding information by coordinates.',
+  })
   async reverseGeocoding(
     @Args('input') input: FetchReverseGeocodingInput,
   ): Promise<FetchReverseGeocodingOutput> {

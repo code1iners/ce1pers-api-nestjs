@@ -17,7 +17,7 @@ export class CommonFetchWeatherInput {
 
   @Field(() => CommonWeatherLanguage, {
     nullable: true,
-    defaultValue: CommonWeatherLanguage.kr,
+    defaultValue: CommonWeatherLanguage.Korean,
     description:
       'You can use this parameter to get the output in your language.',
   })
