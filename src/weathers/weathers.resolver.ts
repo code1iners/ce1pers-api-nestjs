@@ -1,29 +1,27 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@/auth/auth.guard';
+import { WeathersService } from '@/weathers/weathers.service';
 import {
   FetchCurrentWeatherByLocationInput,
   FetchCurrentWeatherByCoordinatesInput,
   FetchCurrentWeatherByCityIdInput,
-  FetchCurrentWeatherOutput,
   FetchCurrentWeatherByZipCodeInput,
+  FetchCurrentWeatherOutput,
 } from '@/weathers/dtos/fetch-current-weather.dto';
-import { AuthGuard } from '@/auth/auth.guard';
-import { WeathersService } from '@/weathers/weathers.service';
 import {
   FiveDayWeatherForecastInputByCoordinatesInput,
   FetchFiveDayWeatherForecastByLocationsInput,
-  FetchFiveDayWeatherForecastOutput,
   FetchFiveDayWeatherForecastByCityIdInput,
   FetchFiveDayWeatherForecastByZipCodeInput,
+  FetchFiveDayWeatherForecastOutput,
 } from '@/weathers/dtos/fetch-five-day-weather-forecast.dto';
 import {
+  FetchAirPollutionForecastInput,
   FetchCurrentAirPollutionInput,
-  FetchCurrentAirPollutionOutput,
-} from '@/weathers/dtos/fetch-current-air-pollution.dto';
-import {
-  FetchForecastAirPollutionInput,
-  FetchForecastAirPollutionOutput,
-} from '@/weathers/dtos/fetch-forecast-air-pollution.dto';
+  FetchAirPollutionOutput,
+  FetchAirPollutionHistoricalInput,
+} from '@/weathers/dtos/fetch-air-pollution.dto';
 import {
   FetchGeocodingByLocationInput,
   FetchGeocodingByLocationOutput,
@@ -122,24 +120,34 @@ export class WeathersResolver {
     return this.weatherService.fetchFiveDayWeatherForecastByZipCode(input);
   }
 
-  @Query(() => FetchCurrentAirPollutionOutput, {
+  @Query(() => FetchAirPollutionOutput, {
     description: 'Getting current air pollution information.',
   })
   @UseGuards(AuthGuard)
-  async currentAirPollution(
+  async airPollutionCurrent(
     @Args('input') input: FetchCurrentAirPollutionInput,
-  ): Promise<FetchCurrentAirPollutionOutput> {
+  ): Promise<FetchAirPollutionOutput> {
     return this.weatherService.fetchCurrentAirPollution(input);
   }
 
-  @Query(() => FetchForecastAirPollutionOutput, {
+  @Query(() => FetchAirPollutionOutput, {
     description: 'Getting forecast air pollution information.',
   })
   @UseGuards(AuthGuard)
-  async forecastAirPollution(
-    @Args('input') input: FetchForecastAirPollutionInput,
-  ): Promise<FetchForecastAirPollutionOutput> {
-    return this.weatherService.fetchForecastAirPollution(input);
+  async airPollutionForecast(
+    @Args('input') input: FetchAirPollutionForecastInput,
+  ): Promise<FetchAirPollutionOutput> {
+    return this.weatherService.fetchAirPollutionForecast(input);
+  }
+
+  @Query(() => FetchAirPollutionOutput, {
+    description: 'Getting forecast air pollution information.',
+  })
+  @UseGuards(AuthGuard)
+  async airPollutionHistorical(
+    @Args('input') input: FetchAirPollutionHistoricalInput,
+  ): Promise<FetchAirPollutionOutput> {
+    return this.weatherService.fetchAirPollutionHistorical(input);
   }
 
   @Query(() => FetchGeocodingByLocationOutput, {

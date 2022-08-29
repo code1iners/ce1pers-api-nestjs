@@ -2,21 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import got from 'got';
 import {
-  FetchCurrentWeatherByLocationInput,
-  FetchCurrentWeatherByCoordinatesInput,
-  FetchCurrentWeatherByCityIdInput,
-  FetchCurrentWeatherOutput,
-  FetchCurrentWeatherByZipCodeInput,
-} from '@/weathers/dtos/fetch-current-weather.dto';
-import { CurrentWeatherResponse } from '@/weathers/types/current-weather.type';
-import {
-  FetchFiveDayWeatherForecastByLocationsInput,
-  FiveDayWeatherForecastInputByCoordinatesInput,
-  FetchFiveDayWeatherForecastOutput,
-  FetchFiveDayWeatherForecastByCityIdInput,
-  FetchFiveDayWeatherForecastByZipCodeInput,
-} from '@/weathers/dtos/fetch-five-day-weather-forecast.dto';
-import {
   makeUrlWithQueryString,
   convertWeatherIcon,
   makeQueryParameter,
@@ -24,16 +9,33 @@ import {
   convertWeatherForecastListIcons,
 } from '@/weathers/utils/weather-helper';
 import type { FiveDayWeatherForecastResponse } from '@/weathers/types/five-day-weather.type';
+import { CurrentWeatherResponse } from '@/weathers/types/current-weather.type';
 import {
-  FetchCurrentAirPollutionInput,
-  FetchCurrentAirPollutionOutput,
-} from '@/weathers/dtos/fetch-current-air-pollution.dto';
+  GeocodingByLocationResponse,
+  GeocodingByZipCodeResponse,
+  ReverseGeocodingResponse,
+} from '@/weathers/types/geocoding.type';
 import { CurrentAirPollutionResponse } from '@/weathers/types/air-pollution.type';
-
 import {
-  FetchForecastAirPollutionInput,
-  FetchForecastAirPollutionOutput,
-} from '@/weathers/dtos/fetch-forecast-air-pollution.dto';
+  FetchCurrentWeatherByLocationInput,
+  FetchCurrentWeatherByCoordinatesInput,
+  FetchCurrentWeatherByCityIdInput,
+  FetchCurrentWeatherByZipCodeInput,
+  FetchCurrentWeatherOutput,
+} from '@/weathers/dtos/fetch-current-weather.dto';
+import {
+  FetchFiveDayWeatherForecastByLocationsInput,
+  FiveDayWeatherForecastInputByCoordinatesInput,
+  FetchFiveDayWeatherForecastByCityIdInput,
+  FetchFiveDayWeatherForecastByZipCodeInput,
+  FetchFiveDayWeatherForecastOutput,
+} from '@/weathers/dtos/fetch-five-day-weather-forecast.dto';
+import {
+  FetchAirPollutionForecastInput,
+  FetchCurrentAirPollutionInput,
+  FetchAirPollutionOutput,
+  FetchAirPollutionHistoricalInput,
+} from '@/weathers/dtos/fetch-air-pollution.dto';
 import {
   FetchGeocodingByLocationInput,
   FetchGeocodingByLocationOutput,
@@ -42,11 +44,6 @@ import {
   FetchGeocodingByZipCodeInput,
   FetchGeocodingByZipCodeOutput,
 } from '@/weathers/dtos/fetch-geocoding-by-zip-code.dto';
-import {
-  GeocodingByLocationResponse,
-  GeocodingByZipCodeResponse,
-  ReverseGeocodingResponse,
-} from '@/weathers/types/geocoding.type';
 import {
   FetchReverseGeocodingInput,
   FetchReverseGeocodingOutput,
@@ -273,10 +270,7 @@ export class WeathersService {
         path: '/data/2.5/forecast',
         configService: this.configService,
         qList: [cityName, countryCode, stateCode],
-        query: {
-          lang,
-          units,
-        },
+        query: { lang, units },
       });
 
       // Fetch.
@@ -313,11 +307,7 @@ export class WeathersService {
       const request = makeWeatherForecastRequest({
         path: '/data/2.5/forecast',
         configService: this.configService,
-        query: {
-          id,
-          lang,
-          units,
-        },
+        query: { id, lang, units },
       });
 
       // Fetch.
@@ -357,11 +347,7 @@ export class WeathersService {
         path: '/data/2.5/forecast',
         configService: this.configService,
         qList: [zipCode, countryCode],
-        query: {
-          cnt,
-          lang,
-          units,
-        },
+        query: { cnt, lang, units },
       });
 
       // Fetch.
@@ -391,16 +377,13 @@ export class WeathersService {
   async fetchCurrentAirPollution({
     latitude: lat,
     longitude: lon,
-  }: FetchCurrentAirPollutionInput): Promise<FetchCurrentAirPollutionOutput> {
+  }: FetchCurrentAirPollutionInput): Promise<FetchAirPollutionOutput> {
     try {
       // Make url.
       const url = makeUrlWithQueryString({
         configService: this.configService,
         path: '/data/2.5/air_pollution',
-        queries: {
-          lat,
-          lon,
-        },
+        queries: { lat, lon },
       });
 
       // Fetch.
@@ -425,19 +408,16 @@ export class WeathersService {
   /**
    * Fetch forecast air pollution information.
    */
-  async fetchForecastAirPollution({
+  async fetchAirPollutionForecast({
     latitude: lat,
     longitude: lon,
-  }: FetchForecastAirPollutionInput): Promise<FetchForecastAirPollutionOutput> {
+  }: FetchAirPollutionForecastInput): Promise<FetchAirPollutionOutput> {
     try {
       // Make url.
       const url = makeUrlWithQueryString({
         configService: this.configService,
         path: '/data/2.5/air_pollution/forecast',
-        queries: {
-          lat,
-          lon,
-        },
+        queries: { lat, lon },
       });
 
       // Fetch.
@@ -451,10 +431,48 @@ export class WeathersService {
         airPollution,
       };
     } catch (error) {
-      console.error('[fetchForecastAirPollution]', error);
+      console.error('[fetchAirPollutionForecast]', error);
       return {
         ok: false,
-        error: 'Failed fetch forecast air pollution information.',
+        error: 'Failed fetch air pollution forecast information.',
+      };
+    }
+  }
+
+  /**
+   * Fetch air pollution historical information.
+   */
+  async fetchAirPollutionHistorical({
+    latitude: lat,
+    longitude: lon,
+    start,
+    end,
+    units,
+    language: lang,
+  }: FetchAirPollutionHistoricalInput): Promise<FetchAirPollutionOutput> {
+    try {
+      // Make url.
+      const url = makeUrlWithQueryString({
+        configService: this.configService,
+        path: '/data/2.5/air_pollution/history',
+        queries: { lat, lon, start, end, units, lang },
+      });
+
+      // Fetch.
+      const airPollution = await got
+        .get(url)
+        .json<CurrentAirPollutionResponse>();
+      if (!airPollution) throw new Error('Failed fetch air pollution.');
+
+      return {
+        ok: true,
+        airPollution,
+      };
+    } catch (error) {
+      console.error('[fetchAirPollutionHistorical]', error);
+      return {
+        ok: false,
+        error: 'Failed fetch air pollution historical information.',
       };
     }
   }
