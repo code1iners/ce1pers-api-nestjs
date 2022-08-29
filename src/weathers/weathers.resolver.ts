@@ -14,6 +14,7 @@ import {
   FetchFiveDayWeatherForecastByLocationsInput,
   FetchFiveDayWeatherForecastOutput,
   FetchFiveDayWeatherForecastByCityIdInput,
+  FetchFiveDayWeatherForecastByZipCodeInput,
 } from '@/weathers/dtos/fetch-five-day-weather-forecast.dto';
 import {
   FetchCurrentAirPollutionInput,
@@ -109,6 +110,16 @@ export class WeathersResolver {
     @Args('input') input: FetchFiveDayWeatherForecastByCityIdInput,
   ): Promise<FetchFiveDayWeatherForecastOutput> {
     return this.weatherService.fetchFiveDayWeatherForecastByCityId(input);
+  }
+
+  @Query(() => FetchFiveDayWeatherForecastOutput, {
+    description:
+      'Getting five days / three hours weather forecast information by zip code.',
+  })
+  async fiveDayWeatherForecastByZipCode(
+    @Args('input') input: FetchFiveDayWeatherForecastByZipCodeInput,
+  ): Promise<FetchFiveDayWeatherForecastOutput> {
+    return this.weatherService.fetchFiveDayWeatherForecastByZipCode(input);
   }
 
   @Query(() => FetchCurrentAirPollutionOutput, {

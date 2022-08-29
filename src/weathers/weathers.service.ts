@@ -14,6 +14,7 @@ import {
   FiveDayWeatherForecastInputByCoordinatesInput,
   FetchFiveDayWeatherForecastOutput,
   FetchFiveDayWeatherForecastByCityIdInput,
+  FetchFiveDayWeatherForecastByZipCodeInput,
 } from '@/weathers/dtos/fetch-five-day-weather-forecast.dto';
 import {
   makeUrlWithQueryString,
@@ -247,10 +248,11 @@ export class WeathersService {
         forecast,
       };
     } catch (error) {
-      console.error('[fetchFiveDayWeatherForecast]', error);
+      console.error('[fetchFiveDayWeatherForecastByCoordinates]', error);
       return {
         ok: false,
-        error: 'Failed getting five day weather forecast information.',
+        error:
+          'Failed getting five day weather forecast information by coordinates.',
       };
     }
   }
@@ -289,16 +291,17 @@ export class WeathersService {
         forecast,
       };
     } catch (error) {
-      console.error('[fetchFiveDayWeatherForecast]', error);
+      console.error('[fetchFiveDayWeatherForecastByLocations]', error);
       return {
         ok: false,
-        error: 'Failed getting five day weather forecast information.',
+        error:
+          'Failed getting five day weather forecast information by locations.',
       };
     }
   }
 
   /**
-   * Fetch 5 day each 3 hour weather forecast information by locations.
+   * Fetch 5 day each 3 hour weather forecast information by city ID.
    */
   async fetchFiveDayWeatherForecastByCityId({
     cityId: id,
@@ -329,10 +332,55 @@ export class WeathersService {
         forecast,
       };
     } catch (error) {
-      console.error('[fetchFiveDayWeatherForecast]', error);
+      console.error('[fetchFiveDayWeatherForecastByCityId]', error);
       return {
         ok: false,
-        error: 'Failed getting five day weather forecast information.',
+        error:
+          'Failed getting five day weather forecast information by city ID.',
+      };
+    }
+  }
+
+  /**
+   * Fetch 5 day each 3 hour weather forecast information by zip code.
+   */
+  async fetchFiveDayWeatherForecastByZipCode({
+    zipCode,
+    countryCode,
+    cnt = 5,
+    language: lang,
+    units,
+  }: FetchFiveDayWeatherForecastByZipCodeInput): Promise<FetchFiveDayWeatherForecastOutput> {
+    try {
+      // Make request.
+      const request = makeWeatherForecastRequest({
+        path: '/data/2.5/forecast',
+        configService: this.configService,
+        qList: [zipCode, countryCode],
+        query: {
+          cnt,
+          lang,
+          units,
+        },
+      });
+
+      // Fetch.
+      const forecast = await request.json<FiveDayWeatherForecastResponse>();
+      if (!forecast) throw new Error('Failed fetch five day weather forecast.');
+
+      // Weather icon & apply.
+      forecast.list = convertWeatherForecastListIcons({ forecast });
+
+      return {
+        ok: true,
+        forecast,
+      };
+    } catch (error) {
+      console.error('[fetchFiveDayWeatherForecastByZipCode]', error);
+      return {
+        ok: false,
+        error:
+          'Failed getting five day weather forecast information by zip code.',
       };
     }
   }

@@ -53,8 +53,15 @@ This project serve various API services.
   npm install
   ```
 
+- Start database.
+
+  ```bash
+  npm run db:open # Open database.
+  npm run db:studio # (Optional) database visualization.
+  ```
+
 - Start server as development mode.
 
   ```bash
-  npm run dev
+  npm run dev # or npm run dev
   ```

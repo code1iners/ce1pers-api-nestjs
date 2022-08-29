@@ -28,8 +28,24 @@ export class FetchFiveDayWeatherForecastByCityIdInput extends CommonFetchWeather
   cityId: number;
 }
 
+@InputType({ description: 'Input which five days weather by zip code.' })
+export class FetchFiveDayWeatherForecastByZipCodeInput extends CommonFetchWeatherInput {
+  @Field(() => String, { description: 'Zip code.' })
+  zipCode: string;
+
+  @Field(() => String, { description: 'Country code of zip code.' })
+  countryCode: string;
+
+  @Field(() => Number, {
+    nullable: true,
+    description:
+      'A number of timestamps, which will be returned in the API response.',
+  })
+  cnt: number;
+}
+
 @ObjectType({ description: 'Output which five days weather forecast.' })
 export class FetchFiveDayWeatherForecastOutput extends CoreOutput {
-  @Field(() => FiveDayWeatherForecastResponse)
+  @Field(() => FiveDayWeatherForecastResponse, { nullable: true })
   forecast?: FiveDayWeatherForecastResponse;
 }
