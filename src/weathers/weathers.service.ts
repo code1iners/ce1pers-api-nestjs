@@ -7,7 +7,7 @@ import {
   makeQueryParameter,
   makeWeatherForecastRequest,
   convertWeatherForecastListIcons,
-} from '@/weathers/utils/weather-helper';
+} from '@/weathers/utils/weathers-helper';
 import type { FiveDayWeatherForecastResponse } from '@/weathers/types/five-day-weather.type';
 import { CurrentWeatherResponse } from '@/weathers/types/current-weather.type';
 import {

@@ -16,7 +16,7 @@ export const makeUrlWithQueryString = ({
   queries,
 }: MakeWithQueryStringProps) => {
   const origin = configService.get('OPEN_WEATHER_ORIGIN');
-  const appId = configService.get('OPEN_WEATHER_KEY');
+  const appId = configService.get('OPEN_WEATHER_API_KEY');
   return qs.stringifyUrl({
     url: `${origin}${path}`,
     query: {

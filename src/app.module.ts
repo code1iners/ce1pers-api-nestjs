@@ -15,6 +15,7 @@ import { EnvKeys } from '@/core/constants/env-keys';
 import { AuthModule } from './auth/auth.module';
 import { AuthMiddleWare } from './auth/auth.middleware';
 import { WeathersModule } from './weathers/weathers.module';
+import { MoviesModule } from './movies/movies.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { WeathersModule } from './weathers/weathers.module';
     CoreModule,
     RepositoriesModule,
     WeathersModule,
+    MoviesModule,
   ],
   controllers: [],
   providers: [],
