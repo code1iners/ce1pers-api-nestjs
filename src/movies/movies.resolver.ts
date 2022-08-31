@@ -13,6 +13,6 @@ export class MoviesResolver {
   async availableRegions(
     @Args('input') input: FetchAvailableRegionsInput,
   ): Promise<FetchAvailableRegionsOutput> {
-    return this.movieService.fetchAvailableRegions(input);
+    return this.movieService.providers.fetchAvailableRegions(input);
   }
 }
