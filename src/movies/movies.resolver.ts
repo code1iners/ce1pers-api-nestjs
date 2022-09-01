@@ -5,9 +5,9 @@ import {
   FetchAvailableRegionsOutput,
 } from '@/movies/dtos/watch-providers/fetch-available-regions.dto';
 import {
-  FetchMovieProvidersInput,
-  FetchMovieProvidersOutput,
-} from '@/movies/dtos/watch-providers/fetch-movie-providers.dto';
+  FetchContentProvidersInput,
+  FetchContentProvidersOutput,
+} from '@/movies/dtos/watch-providers/fetch-content-providers.dto';
 
 @Resolver()
 export class MoviesResolver {
@@ -20,10 +20,10 @@ export class MoviesResolver {
     return this.movieService.providers.fetchAvailableRegions(input);
   }
 
-  @Query(() => FetchMovieProvidersOutput)
-  async movieProviders(
-    @Args('input') input: FetchMovieProvidersInput,
-  ): Promise<FetchMovieProvidersOutput> {
-    return this.movieService.providers.fetchMovieProviders(input);
+  @Query(() => FetchContentProvidersOutput)
+  async contentProviders(
+    @Args('input') input: FetchContentProvidersInput,
+  ): Promise<FetchContentProvidersOutput> {
+    return this.movieService.providers.fetchContentProviders(input);
   }
 }

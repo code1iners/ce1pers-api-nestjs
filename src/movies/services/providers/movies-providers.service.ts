@@ -7,10 +7,10 @@ import {
   FetchAvailableRegionsOutput,
 } from '@/movies/dtos/watch-providers/fetch-available-regions.dto';
 import {
-  FetchMovieProvidersInput,
-  FetchMovieProvidersOutput,
-} from '@/movies/dtos/watch-providers/fetch-movie-providers.dto';
-import { FetchMovieProvidersResponse } from '@/movies/types/watch-providers/fetch-movie-providers.type';
+  FetchContentProvidersInput,
+  FetchContentProvidersOutput,
+} from '@/movies/dtos/watch-providers/fetch-content-providers.dto';
+import { FetchContentProvidersResponse } from '@/movies/types/watch-providers/fetch-content-providers.type';
 
 @Injectable()
 export class MovieProviderService {
@@ -48,22 +48,23 @@ export class MovieProviderService {
   }
 
   /**
-   * Fetch movie providers.
+   * Fetch movie or tv providers.
    */
-  async fetchMovieProviders({
+  async fetchContentProviders({
     language,
-    watch_region,
-  }: FetchMovieProvidersInput): Promise<FetchMovieProvidersOutput> {
+    watchRegion: watch_region,
+    mediaContentType,
+  }: FetchContentProvidersInput): Promise<FetchContentProvidersOutput> {
     try {
       // Make request.
       const request = makeMoviesRequest({
         configService: this.configService,
-        path: '/watch/providers/movie',
+        path: `/watch/providers/${mediaContentType.toLowerCase()}`,
         queries: { language, watch_region },
       });
 
       // Fetching.
-      const { results } = await request.json<FetchMovieProvidersResponse>();
+      const { results } = await request.json<FetchContentProvidersResponse>();
       if (!results) throw new Error('Failed fetching.');
 
       return {
