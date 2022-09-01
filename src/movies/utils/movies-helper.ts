@@ -19,7 +19,7 @@ export const makeMoviesRequest = ({
   const origin = configService.get('MOVIE_DATABASE_ORIGIN');
   const api_key = configService.get('MOVIE_DATABASE_API_KEY');
   const url = qs.stringifyUrl({
-    url: `${origin}/${path}`,
+    url: `${origin}${path}`,
     query: {
       api_key,
       ...queries,
