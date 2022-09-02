@@ -16,14 +16,14 @@ export interface FetchContentProvidersResponse {
 })
 export class ContentProvidersResult {
   @Field(() => Int)
-  'display_priority': number;
+  display_priority: number;
 
   @Field(() => String)
-  'logo_path': string;
+  logo_path: string;
 
   @Field(() => String)
-  'provider_name': string;
+  provider_name: string;
 
   @Field(() => Int)
-  'provider_id': number;
+  provider_id: number;
 }

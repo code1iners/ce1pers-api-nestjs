@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { convertSnakeToCamel } from '@/libs/case-styles-transformers';
 import { makeMoviesRequest } from '@/movies/utils/movies-helper';
-import { FetchAvailableRegionResponse } from '@/movies/types/watch-providers/fetch-available-regions.type';
+import {
+  AvailableRegionResultCamelCase,
+  FetchAvailableRegionResponse,
+} from '@/movies/types/watch-providers/fetch-available-regions.type';
 import {
   FetchAvailableRegionsInput,
   FetchAvailableRegionsOutput,
@@ -31,8 +35,12 @@ export class MovieProviderService {
       });
 
       // Fetching.
-      const { results } = await request.json<FetchAvailableRegionResponse>();
-      if (!results) throw new Error('Failed fetching.');
+      const { results: originResults } =
+        await request.json<FetchAvailableRegionResponse>();
+      if (!originResults) throw new Error('Failed fetching.');
+      const results = originResults.map(
+        convertSnakeToCamel<AvailableRegionResultCamelCase>,
+      );
 
       return {
         ok: true,

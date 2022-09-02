@@ -1,13 +1,13 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 export interface FetchAvailableRegionResponse {
-  results: AvailableRegionResult[];
+  results: AvailableRegionResultSnakeCase[];
 }
 
 @ObjectType({
   description: 'Available region result.',
 })
-export class AvailableRegionResult {
+export class AvailableRegionResultSnakeCase {
   @Field(() => String)
   iso_3166_1: string;
 
@@ -16,4 +16,16 @@ export class AvailableRegionResult {
 
   @Field(() => String)
   native_name: string;
+}
+
+@ObjectType({ description: 'Available region results (Camel case).' })
+export class AvailableRegionResultCamelCase {
+  @Field(() => String)
+  iso31661: string;
+
+  @Field(() => String)
+  englishName: string;
+
+  @Field(() => String)
+  nativeName: string;
 }
