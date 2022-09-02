@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { convertSnakeToCamel } from '@/libs/case-styles-transformers';
+import { convertSnakeToCamel } from '@/libs/case-styles-transformers/camel-caser';
 import { makeMoviesRequest } from '@/movies/utils/movies-helper';
 import {
   AvailableRegionResultCamelCase,

@@ -12,6 +12,10 @@ import {
   FetchTrendingInput,
   FetchTrendingOutput,
 } from '@/movies/dtos/trendings/fetch-trending.dto';
+import {
+  FetchMoviePopularInput,
+  FetchMoviePopularOutput,
+} from '@/movies/dtos/movies/fetch-movies-popular.dto';
 
 @Resolver()
 export class MoviesResolver {
@@ -36,5 +40,12 @@ export class MoviesResolver {
     @Args('input') input: FetchTrendingInput,
   ): Promise<FetchTrendingOutput> {
     return this.movieService.trendings.fetchTrending(input);
+  }
+
+  @Query(() => FetchMoviePopularOutput)
+  async moviePopulars(
+    @Args('input') input: FetchMoviePopularInput,
+  ): Promise<FetchMoviePopularOutput> {
+    return this.movieService.movies.fetchMoviePopulars(input);
   }
 }
