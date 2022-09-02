@@ -15,7 +15,7 @@ import {
 import {
   FetchMoviePopularInput,
   FetchMoviePopularOutput,
-} from '@/movies/dtos/movies/fetch-movies-popular.dto';
+} from '@/movies/dtos/movie-contents/fetch-movies-popular.dto';
 
 @Resolver()
 export class MoviesResolver {

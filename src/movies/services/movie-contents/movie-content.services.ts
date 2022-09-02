@@ -4,9 +4,9 @@ import { convertSnakeToCamel } from '@/libs/case-styles-transformers/camel-caser
 import {
   FetchMoviePopularInput,
   FetchMoviePopularOutput,
-} from '@/movies/dtos/movies/fetch-movies-popular.dto';
+} from '@/movies/dtos/movie-contents/fetch-movies-popular.dto';
 import { makeMoviesRequest } from '@/movies/utils/movies-helper';
-import { FetchMoviePopularResponse } from '@/movies/types/movies/fetch-movie-popular.type';
+import { FetchMoviePopularResponse } from '@/movies/types/movie-contents/fetch-movie-popular.type';
 
 @Injectable()
 export class MovieContentService {

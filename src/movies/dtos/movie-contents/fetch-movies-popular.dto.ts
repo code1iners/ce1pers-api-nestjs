@@ -1,5 +1,5 @@
 import { CoreOutput } from '@/core/dtos/core.dto';
-import { FetchMoviePopularResponse } from '@/movies/types/movies/fetch-movie-popular.type';
+import { FetchMoviePopularResponse } from '@/movies/types/movie-contents/fetch-movie-popular.type';
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
 
 @InputType()
