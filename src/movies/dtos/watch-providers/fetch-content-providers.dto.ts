@@ -6,7 +6,7 @@ import {
   registerEnumType,
 } from '@nestjs/graphql';
 import { CoreOutput } from '@/core/dtos/core.dto';
-import { FetchMoviesCoreInput } from '@/movies/dtos/shared.dto';
+import { FetchMoviesLanguageInput } from '@/movies/dtos/shared.dto';
 import { IsEnum } from 'class-validator';
 
 export enum MediaContentType {
@@ -38,7 +38,7 @@ export class ContentProvidersResult {
 }
 
 @InputType()
-export class FetchContentProvidersInput extends FetchMoviesCoreInput {
+export class FetchContentProvidersInput extends FetchMoviesLanguageInput {
   @Field(() => String, {
     defaultValue: 'kr',
     description:

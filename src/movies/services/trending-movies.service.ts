@@ -35,10 +35,10 @@ export class MovieTrendingService {
         trending,
       };
     } catch (error) {
-      console.error('[fetchTrending]', error);
+      console.error('[fetchTrendingMovies]', error);
       return {
         ok: false,
-        error: 'Failed fetch trending.',
+        error: 'Failed fetch trending movies.',
       };
     }
   }
