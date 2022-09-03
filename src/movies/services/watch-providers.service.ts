@@ -5,16 +5,14 @@ import { makeMoviesRequest } from '@/movies/utils/movies-helper';
 import {
   AvailableRegionResultCamelCase,
   FetchAvailableRegionResponse,
-} from '@/movies/types/watch-providers/fetch-available-regions.type';
-import {
   FetchAvailableRegionsInput,
   FetchAvailableRegionsOutput,
 } from '@/movies/dtos/watch-providers/fetch-available-regions.dto';
 import {
   FetchContentProvidersInput,
   FetchContentProvidersOutput,
+  FetchContentProvidersResponse,
 } from '@/movies/dtos/watch-providers/fetch-content-providers.dto';
-import { FetchContentProvidersResponse } from '@/movies/types/watch-providers/fetch-content-providers.type';
 
 @Injectable()
 export class MovieProviderService {

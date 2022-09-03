@@ -1,11 +1,13 @@
 import {
   Field,
-  Float,
+  InputType,
   Int,
   ObjectType,
   registerEnumType,
 } from '@nestjs/graphql';
-import { MediaContentResult } from '@/movies/types';
+import { IsEnum } from 'class-validator';
+import { CoreOutput } from '@/core/dtos/core.dto';
+import { MediaContentResult } from '@/movies/dtos/shared.dto';
 
 export enum TrendingMediaType {
   All = 'ALL',
@@ -35,4 +37,21 @@ export class FetchTrendingResponse {
 
   @Field(() => [MediaContentResult])
   results: MediaContentResult[];
+}
+
+@InputType()
+export class FetchTrendingMoviesInput {
+  @Field(() => TrendingMediaType)
+  @IsEnum(TrendingMediaType)
+  mediaType: TrendingMediaType;
+
+  @Field(() => TrendingTimeWindow)
+  @IsEnum(TrendingTimeWindow)
+  timeWindow: TrendingTimeWindow;
+}
+
+@ObjectType()
+export class FetchTrendingMoviesOutput extends CoreOutput {
+  @Field(() => FetchTrendingResponse, { nullable: true })
+  trending?: FetchTrendingResponse;
 }

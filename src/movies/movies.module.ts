@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MoviesService } from '@/movies/movies.service';
 import { MoviesResolver } from '@/movies/movies.resolver';
-import { MovieProviderService } from '@/movies/services/watch-providers/movies-providers.service';
-import { MovieTrendingService } from '@/movies/services/trendings/movies-trendings.service';
-import { MovieContentService } from '@/movies/services/movie-contents/movie-content.services';
+import { MovieProviderService } from '@/movies/services/watch-providers.service';
+import { MovieTrendingService } from '@/movies/services/trending-movies.service';
+import { MovieContentService } from '@/movies/services/movie-content.service';
 
 @Module({
   providers: [

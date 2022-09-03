@@ -6,13 +6,13 @@ import {
   FetchMoviePopularOutput,
 } from '@/movies/dtos/movie-contents/fetch-movies-popular.dto';
 import { makeMoviesRequest } from '@/movies/utils/movies-helper';
-import { FetchMoviePopularResponse } from '@/movies/types/movie-contents/fetch-movie-popular.type';
+import { FetchMoviePopularResponse } from '@/movies/dtos/movie-contents/fetch-movies-popular.dto';
 
 @Injectable()
 export class MovieContentService {
   constructor(private readonly configService: ConfigService) {}
 
-  async fetchMoviePopulars({
+  async fetchPopularMovies({
     language,
     page,
     region,

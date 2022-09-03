@@ -9,9 +9,9 @@ import {
   FetchContentProvidersOutput,
 } from '@/movies/dtos/watch-providers/fetch-content-providers.dto';
 import {
-  FetchTrendingInput,
-  FetchTrendingOutput,
-} from '@/movies/dtos/trendings/fetch-trending.dto';
+  FetchTrendingMoviesInput,
+  FetchTrendingMoviesOutput,
+} from '@/movies/dtos/trending-movies/fetch-trending-movies.dto';
 import {
   FetchMoviePopularInput,
   FetchMoviePopularOutput,
@@ -35,17 +35,17 @@ export class MoviesResolver {
     return this.movieService.providers.fetchContentProviders(input);
   }
 
-  @Query(() => FetchTrendingOutput)
-  async moviesTrendings(
-    @Args('input') input: FetchTrendingInput,
-  ): Promise<FetchTrendingOutput> {
-    return this.movieService.trendings.fetchTrending(input);
+  @Query(() => FetchTrendingMoviesOutput)
+  async trendingMovies(
+    @Args('input') input: FetchTrendingMoviesInput,
+  ): Promise<FetchTrendingMoviesOutput> {
+    return this.movieService.trendings.fetchTrendingMovies(input);
   }
 
   @Query(() => FetchMoviePopularOutput)
-  async moviePopulars(
+  async popularMovies(
     @Args('input') input: FetchMoviePopularInput,
   ): Promise<FetchMoviePopularOutput> {
-    return this.movieService.movies.fetchMoviePopulars(input);
+    return this.movieService.movies.fetchPopularMovies(input);
   }
 }

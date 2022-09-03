@@ -2,20 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { convertSnakeToCamel } from '@/libs/case-styles-transformers/camel-caser';
 import {
-  FetchTrendingInput,
-  FetchTrendingOutput,
-} from '@/movies/dtos/trendings/fetch-trending.dto';
-import { FetchTrendingResponse } from '@/movies/types/trendings/fetch-trending.type';
+  FetchTrendingMoviesInput,
+  FetchTrendingMoviesOutput,
+  FetchTrendingResponse,
+} from '@/movies/dtos/trending-movies/fetch-trending-movies.dto';
 import { makeMoviesRequest } from '@/movies/utils/movies-helper';
 
 @Injectable()
 export class MovieTrendingService {
   constructor(private readonly configService: ConfigService) {}
 
-  async fetchTrending({
+  async fetchTrendingMovies({
     mediaType,
     timeWindow,
-  }: FetchTrendingInput): Promise<FetchTrendingOutput> {
+  }: FetchTrendingMoviesInput): Promise<FetchTrendingMoviesOutput> {
     try {
       // Make request.
       const request = makeMoviesRequest({

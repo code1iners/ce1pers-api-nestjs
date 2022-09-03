@@ -1,6 +1,21 @@
 import { CoreOutput } from '@/core/dtos/core.dto';
-import { FetchMoviePopularResponse } from '@/movies/types/movie-contents/fetch-movie-popular.type';
+import { MediaContentResult } from '@/movies/dtos/shared.dto';
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
+
+@ObjectType()
+export class FetchMoviePopularResponse {
+  @Field(() => Int)
+  page: number;
+
+  @Field(() => [MediaContentResult])
+  results: MediaContentResult[];
+
+  @Field(() => Int)
+  totalResults: number;
+
+  @Field(() => Int)
+  totalPages: number;
+}
 
 @InputType()
 export class FetchMoviePopularInput {

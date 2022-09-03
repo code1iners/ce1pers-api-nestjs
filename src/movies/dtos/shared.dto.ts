@@ -1,4 +1,15 @@
-import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Float, InputType, Int, ObjectType } from '@nestjs/graphql';
+
+@InputType()
+export class FetchMoviesCoreInput {
+  @Field(() => String, {
+    defaultValue: 'en-US',
+    nullable: true,
+    description:
+      'Pass a ISO 639-1 value to display translated data for the fields that support it.',
+  })
+  language?: string;
+}
 
 @ObjectType()
 export class MediaContentResult {
