@@ -1,5 +1,6 @@
+import { convertSnakeToCamel } from '@/libs/case-styles-transformers/camel-caser';
 import type { ConfigService } from '@nestjs/config';
-import got from 'got';
+import got, { CancelableRequest } from 'got';
 import * as qs from 'query-string';
 
 interface MakeMoviesRequest {
@@ -27,4 +28,29 @@ export const makeMoviesRequest = ({
   });
 
   return got.get(url);
+};
+
+interface FetchMoviesByRequestProps extends MakeMoviesRequest {}
+
+/**
+ * Fetch movies by request.
+ */
+export const fetchMoviesByRequest = async <T>({
+  configService,
+  path,
+  queries,
+}: FetchMoviesByRequestProps) => {
+  // Make request.
+  const request = makeMoviesRequest({
+    configService,
+    path,
+    queries,
+  });
+
+  // Fetching.
+  const origin = await request.json();
+  if (!origin) throw new Error('Failed fetching.');
+
+  // Convert case style.
+  return convertSnakeToCamel<T>(origin);
 };

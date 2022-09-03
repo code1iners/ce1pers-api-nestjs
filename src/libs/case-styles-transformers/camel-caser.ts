@@ -41,7 +41,7 @@ export const convertSnakeToCamel = <T>(object: any): T => {
       continue;
     }
 
-    // Object type.
+    // Array type.
     if (Array.isArray(value)) {
       const r = value.map((v) =>
         typeof v === 'object' ? convertSnakeToCamel(v) : v,
@@ -49,6 +49,9 @@ export const convertSnakeToCamel = <T>(object: any): T => {
       results[newProperty] = r;
       continue;
     }
+
+    // Object type.
+    results[newProperty] = value;
   }
 
   return results as T;
