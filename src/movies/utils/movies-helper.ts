@@ -35,7 +35,7 @@ interface FetchMoviesByRequestProps extends MakeMoviesRequest {}
 /**
  * Fetch movies by request.
  */
-export const fetchMoviesByRequest = async <T>({
+export const movieFetcher = async <T>({
   configService,
   path,
   queries,

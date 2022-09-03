@@ -1,14 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { convertSnakeToCamel } from '@/libs/case-styles-transformers/camel-caser';
 import {
   FetchMoviePopularInput,
   FetchMoviePopularOutput,
 } from '@/movies/dtos/movie-contents/fetch-movies-popular.dto';
-import {
-  fetchMoviesByRequest,
-  makeMoviesRequest,
-} from '@/movies/utils/movies-helper';
+import { movieFetcher } from '@/movies/utils/movies-helper';
 import { FetchMoviePopularResponse } from '@/movies/dtos/movie-contents/fetch-movies-popular.dto';
 import {
   FetchTopRatedMoviesInput,
@@ -19,7 +15,7 @@ import {
   FetchNowPlayingMoviesInput,
   FetchNowPlayingMoviesOutput,
   FetchNowPlayingMoviesResponse,
-} from '../dtos/movie-contents/fetch-now-playing-movies.dto';
+} from '@/movies/dtos/movie-contents/fetch-now-playing-movies.dto';
 
 @Injectable()
 export class MovieContentService {
@@ -35,7 +31,7 @@ export class MovieContentService {
   }: FetchMoviePopularInput): Promise<FetchMoviePopularOutput> {
     try {
       // Fetch movies.
-      const data = await fetchMoviesByRequest<FetchMoviePopularResponse>({
+      const data = await movieFetcher<FetchMoviePopularResponse>({
         configService: this.configService,
         path: `/movie/popular`,
         queries: { language, page, region },
@@ -64,7 +60,7 @@ export class MovieContentService {
   }: FetchTopRatedMoviesInput): Promise<FetchTopRatedMoviesOutput> {
     try {
       // Fetch movies.
-      const data = await fetchMoviesByRequest<FetchTopRatedMoviesResponse>({
+      const data = await movieFetcher<FetchTopRatedMoviesResponse>({
         configService: this.configService,
         path: `/movie/top_rated`,
         queries: { language, page, region },
@@ -94,7 +90,7 @@ export class MovieContentService {
   }: FetchNowPlayingMoviesInput): Promise<FetchNowPlayingMoviesOutput> {
     try {
       // Fetch movies.
-      const data = await fetchMoviesByRequest<FetchNowPlayingMoviesResponse>({
+      const data = await movieFetcher<FetchNowPlayingMoviesResponse>({
         configService: this.configService,
         path: `/movie/now_playing`,
         queries: { language, page, region },
