@@ -24,6 +24,10 @@ import {
   FetchNowPlayingMoviesInput,
   FetchNowPlayingMoviesOutput,
 } from './dtos/movie-contents/fetch-now-playing-movies.dto';
+import {
+  FetchLatestMovieInput,
+  FetchLatestMovieOutput,
+} from './dtos/movie-contents/fetch-latest-movie.dto';
 
 @Resolver()
 export class MoviesResolver {
@@ -69,5 +73,12 @@ export class MoviesResolver {
     @Args('input') input: FetchNowPlayingMoviesInput,
   ): Promise<FetchNowPlayingMoviesOutput> {
     return this.movieService.movies.fetchNowPlayingMovies(input);
+  }
+
+  @Query(() => FetchLatestMovieOutput)
+  async latestMovie(
+    @Args('input') input: FetchLatestMovieInput,
+  ): Promise<FetchLatestMovieOutput> {
+    return this.movieService.movies.fetchLatestMovie(input);
   }
 }

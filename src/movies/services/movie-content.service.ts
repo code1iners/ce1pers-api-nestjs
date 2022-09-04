@@ -16,6 +16,11 @@ import {
   FetchNowPlayingMoviesOutput,
   FetchNowPlayingMoviesResponse,
 } from '@/movies/dtos/movie-contents/fetch-now-playing-movies.dto';
+import {
+  FetchLatestMovieInput,
+  FetchLatestMovieOutput,
+  FetchLatestMovieResponse,
+} from '../dtos/movie-contents/fetch-latest-movie.dto';
 
 @Injectable()
 export class MovieContentService {
@@ -105,6 +110,33 @@ export class MovieContentService {
       return {
         ok: false,
         error: 'Failed fetch now playing movies.',
+      };
+    }
+  }
+
+  /**
+   * Get the most newly created movie. This is a live response and will continuously change.
+   */
+  async fetchLatestMovie({
+    language,
+  }: FetchLatestMovieInput): Promise<FetchLatestMovieOutput> {
+    try {
+      // Fetch movies.
+      const data = await movieFetcher<FetchLatestMovieResponse>({
+        configService: this.configService,
+        path: `/movie/latest`,
+        queries: { language },
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchLatestMovie]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch latest movie.',
       };
     }
   }
