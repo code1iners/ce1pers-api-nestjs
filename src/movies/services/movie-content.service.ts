@@ -20,7 +20,12 @@ import {
   FetchLatestMovieInput,
   FetchLatestMovieOutput,
   FetchLatestMovieResponse,
-} from '../dtos/movie-contents/fetch-latest-movie.dto';
+} from '@/movies/dtos/movie-contents/fetch-latest-movie.dto';
+import {
+  FetchUpcomingMoviesInput,
+  FetchUpcomingMoviesOutput,
+  FetchUpcomingMoviesResponse,
+} from '@/movies/dtos/movie-contents/fetch-upcoming-movies.dto';
 
 @Injectable()
 export class MovieContentService {
@@ -137,6 +142,35 @@ export class MovieContentService {
       return {
         ok: false,
         error: 'Failed fetch latest movie.',
+      };
+    }
+  }
+
+  /**
+   *
+   */
+  async fetchUpcomingMovies({
+    page,
+    region,
+    language,
+  }: FetchUpcomingMoviesInput): Promise<FetchUpcomingMoviesOutput> {
+    try {
+      // Fetch movies.
+      const data = await movieFetcher<FetchUpcomingMoviesResponse>({
+        configService: this.configService,
+        path: `/movie/upcoming`,
+        queries: { page, region, language },
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchUpcomingMovies]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch upcoming movies.',
       };
     }
   }

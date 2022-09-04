@@ -23,11 +23,15 @@ import {
 import {
   FetchNowPlayingMoviesInput,
   FetchNowPlayingMoviesOutput,
-} from './dtos/movie-contents/fetch-now-playing-movies.dto';
+} from '@/movies/dtos/movie-contents/fetch-now-playing-movies.dto';
 import {
   FetchLatestMovieInput,
   FetchLatestMovieOutput,
-} from './dtos/movie-contents/fetch-latest-movie.dto';
+} from '@/movies/dtos/movie-contents/fetch-latest-movie.dto';
+import {
+  FetchUpcomingMoviesInput,
+  FetchUpcomingMoviesOutput,
+} from '@/movies/dtos/movie-contents/fetch-upcoming-movies.dto';
 
 @Resolver()
 export class MoviesResolver {
@@ -80,5 +84,12 @@ export class MoviesResolver {
     @Args('input') input: FetchLatestMovieInput,
   ): Promise<FetchLatestMovieOutput> {
     return this.movieService.movies.fetchLatestMovie(input);
+  }
+
+  @Query(() => FetchUpcomingMoviesOutput)
+  async upcomingMovies(
+    @Args('input') input: FetchUpcomingMoviesInput,
+  ): Promise<FetchUpcomingMoviesOutput> {
+    return this.movieService.movies.fetchUpcomingMovies(input);
   }
 }

@@ -90,3 +90,12 @@ export class CommonFetchMoviesOutput {
   @Field(() => Int)
   totalPages: number;
 }
+
+@ObjectType()
+export class MovieDate {
+  @Field(() => String)
+  maximum: String;
+
+  @Field(() => String)
+  minimum: String;
+}

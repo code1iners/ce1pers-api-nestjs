@@ -1,23 +1,15 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { CoreOutput } from '@/core/dtos/core.dto';
 import {
   CommonFetchMoviesInput,
   CommonFetchMoviesOutput,
+  MovieDate,
 } from '@/movies/dtos/shared.dto';
-import { CoreOutput } from '@/core/dtos/core.dto';
-
-@ObjectType()
-class NowPlayingMoviesDate {
-  @Field(() => String)
-  maximum: String;
-
-  @Field(() => String)
-  minimum: String;
-}
 
 @ObjectType()
 export class FetchNowPlayingMoviesResponse extends CommonFetchMoviesOutput {
-  @Field(() => NowPlayingMoviesDate)
-  dates: NowPlayingMoviesDate;
+  @Field(() => MovieDate)
+  dates: MovieDate;
 }
 
 @InputType()
