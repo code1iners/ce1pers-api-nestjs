@@ -36,6 +36,10 @@ import {
   FetchMovieDetailsInput,
   FetchMovieDetailsOutput,
 } from './dtos/movie-contents/fetch-movie-details.dto';
+import {
+  FetchMovieKeywordsInput,
+  FetchMovieKeywordsOutput,
+} from './dtos/movie-contents/fetch-movie-keywords.dto';
 
 @Resolver()
 export class MoviesResolver {
@@ -101,6 +105,13 @@ export class MoviesResolver {
   async movieDetails(
     @Args('input') input: FetchMovieDetailsInput,
   ): Promise<FetchMovieDetailsOutput> {
-    return this.movieService.movies.fetchMovieDetails(input);
+    return this.movieService.movies.fetchMovieDetailsById(input);
+  }
+
+  @Query(() => FetchMovieKeywordsOutput)
+  async movieKeywords(
+    @Args('input') input: FetchMovieKeywordsInput,
+  ): Promise<FetchMovieKeywordsOutput> {
+    return this.movieService.movies.fetchMovieKeywordsById(input);
   }
 }

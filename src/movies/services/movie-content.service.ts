@@ -33,6 +33,11 @@ import {
   FetchMovieDetailsInput,
   FetchMovieDetailsOutput,
 } from '@/movies/dtos/movie-contents/fetch-movie-details.dto';
+import {
+  FetchMovieKeywordsInput,
+  FetchMovieKeywordsOutput,
+  FetchMovieKeywordsResponse,
+} from '../dtos/movie-contents/fetch-movie-keywords.dto';
 
 @Injectable()
 export class MovieContentService {
@@ -186,7 +191,7 @@ export class MovieContentService {
   /**
    * Get the primary information about a movie.
    */
-  async fetchMovieDetails({
+  async fetchMovieDetailsById({
     movieId,
     language,
     appendToResponse,
@@ -204,10 +209,36 @@ export class MovieContentService {
         data,
       };
     } catch (err) {
-      console.error('[fetchMovieDetails]', err);
+      console.error('[fetchMovieDetailsById]', err);
       return {
         ok: false,
-        error: 'Failed fetch movie details.',
+        error: 'Failed fetch movie details by ID.',
+      };
+    }
+  }
+
+  /**
+   * Get the keywords that have been added to a movie.
+   */
+  async fetchMovieKeywordsById({
+    movieId,
+  }: FetchMovieKeywordsInput): Promise<FetchMovieKeywordsOutput> {
+    try {
+      // Fetch movies.
+      const data = await movieFetcher<FetchMovieKeywordsResponse>({
+        configService: this.configService,
+        path: `/movie/${movieId}/keywords`,
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchMovieKeywordsById]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch movie keywords by ID.',
       };
     }
   }
