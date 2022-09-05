@@ -1,10 +1,10 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { CoreOutput } from '@/core/dtos/core.dto';
 import {
   CommonFetchMoviesInput,
   CommonFetchMoviesOutput,
   MovieDate,
 } from '@/movies/dtos/shared.dto';
-import { CoreOutput } from '@/core/dtos/core.dto';
 
 @InputType()
 export class FetchUpcomingMoviesInput extends CommonFetchMoviesInput {}

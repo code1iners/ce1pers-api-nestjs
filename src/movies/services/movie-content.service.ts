@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { movieFetcher } from '@/movies/utils/movies-helper';
+import {
+  FetchMovieDetailsAppendToResponse,
+  FetchMovieDetailsResponse,
+} from '@/movies/dtos/shared.dto';
 import {
   FetchMoviePopularInput,
   FetchMoviePopularOutput,
 } from '@/movies/dtos/movie-contents/fetch-movies-popular.dto';
-import { movieFetcher } from '@/movies/utils/movies-helper';
 import { FetchMoviePopularResponse } from '@/movies/dtos/movie-contents/fetch-movies-popular.dto';
 import {
   FetchTopRatedMoviesInput,
@@ -19,13 +23,16 @@ import {
 import {
   FetchLatestMovieInput,
   FetchLatestMovieOutput,
-  FetchLatestMovieResponse,
 } from '@/movies/dtos/movie-contents/fetch-latest-movie.dto';
 import {
   FetchUpcomingMoviesInput,
   FetchUpcomingMoviesOutput,
   FetchUpcomingMoviesResponse,
 } from '@/movies/dtos/movie-contents/fetch-upcoming-movies.dto';
+import {
+  FetchMovieDetailsInput,
+  FetchMovieDetailsOutput,
+} from '@/movies/dtos/movie-contents/fetch-movie-details.dto';
 
 @Injectable()
 export class MovieContentService {
@@ -127,7 +134,7 @@ export class MovieContentService {
   }: FetchLatestMovieInput): Promise<FetchLatestMovieOutput> {
     try {
       // Fetch movies.
-      const data = await movieFetcher<FetchLatestMovieResponse>({
+      const data = await movieFetcher<FetchMovieDetailsResponse>({
         configService: this.configService,
         path: `/movie/latest`,
         queries: { language },
@@ -147,7 +154,8 @@ export class MovieContentService {
   }
 
   /**
-   *
+   * Get a list of upcoming movies in theatres. This is a release type query that looks for all movies that have a release type of 2 or 3 within the specified date range.
+   * You can optionally specify a region prameter which will narrow the search to only look for theatrical release dates within the specified country.
    */
   async fetchUpcomingMovies({
     page,
@@ -171,6 +179,35 @@ export class MovieContentService {
       return {
         ok: false,
         error: 'Failed fetch upcoming movies.',
+      };
+    }
+  }
+
+  /**
+   * Get the primary information about a movie.
+   */
+  async fetchMovieDetails({
+    movieId,
+    language,
+    appendToResponse,
+  }: FetchMovieDetailsInput): Promise<FetchMovieDetailsOutput> {
+    try {
+      // Fetch movies.
+      const data = await movieFetcher<FetchMovieDetailsAppendToResponse>({
+        configService: this.configService,
+        path: `/movie/${movieId}`,
+        queries: { language, append_to_response: appendToResponse },
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchMovieDetails]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch movie details.',
       };
     }
   }

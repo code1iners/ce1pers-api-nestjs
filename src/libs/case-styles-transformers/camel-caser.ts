@@ -30,14 +30,16 @@ export const convertKey = (key: string) => {
  * @returns New object with camel case property key.
  */
 export const convertSnakeToCamel = <T>(object: any): T => {
+  if (!object) return null;
   const results = {};
   const properties = Object.keys(object);
   for (let property of properties) {
     const value = object[property];
     const newProperty = convertKey(property);
+
     // Primitive type.
     if (typeof value !== 'object') {
-      results[newProperty] = value;
+      results[newProperty] = value ?? undefined;
       continue;
     }
 
@@ -51,7 +53,8 @@ export const convertSnakeToCamel = <T>(object: any): T => {
     }
 
     // Object type.
-    results[newProperty] = value;
+    const camelValue = convertSnakeToCamel(value);
+    results[newProperty] = camelValue;
   }
 
   return results as T;

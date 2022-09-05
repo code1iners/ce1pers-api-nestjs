@@ -32,6 +32,10 @@ import {
   FetchUpcomingMoviesInput,
   FetchUpcomingMoviesOutput,
 } from '@/movies/dtos/movie-contents/fetch-upcoming-movies.dto';
+import {
+  FetchMovieDetailsInput,
+  FetchMovieDetailsOutput,
+} from './dtos/movie-contents/fetch-movie-details.dto';
 
 @Resolver()
 export class MoviesResolver {
@@ -91,5 +95,12 @@ export class MoviesResolver {
     @Args('input') input: FetchUpcomingMoviesInput,
   ): Promise<FetchUpcomingMoviesOutput> {
     return this.movieService.movies.fetchUpcomingMovies(input);
+  }
+
+  @Query(() => FetchMovieDetailsOutput)
+  async movieDetails(
+    @Args('input') input: FetchMovieDetailsInput,
+  ): Promise<FetchMovieDetailsOutput> {
+    return this.movieService.movies.fetchMovieDetails(input);
   }
 }

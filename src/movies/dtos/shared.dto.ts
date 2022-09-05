@@ -99,3 +99,155 @@ export class MovieDate {
   @Field(() => String)
   minimum: String;
 }
+
+@ObjectType()
+class FetchMovieDetailsGenre {
+  @Field(() => String)
+  id: number;
+
+  @Field(() => String)
+  name: string;
+}
+
+@ObjectType()
+class MovieSpokenLanguage {
+  @Field(() => String)
+  englishName: string;
+
+  @Field(() => String)
+  iso_639_1: string;
+
+  @Field(() => String)
+  name: string;
+}
+
+@ObjectType()
+export class FetchMovieDetailsResponse {
+  @Field(() => Boolean)
+  adult: boolean;
+
+  @Field(() => String, { nullable: true })
+  backdropPath?: string;
+
+  @Field(() => Int)
+  budget: number;
+
+  @Field(() => [FetchMovieDetailsGenre])
+  genres: FetchMovieDetailsGenre[];
+
+  @Field(() => String)
+  homepage: string;
+
+  @Field(() => Int)
+  id: number;
+
+  @Field(() => String, { nullable: true })
+  imdbId?: string;
+
+  @Field(() => String)
+  originalLanguage: string;
+
+  @Field(() => String)
+  originalTitle: string;
+
+  @Field(() => String)
+  overview: string;
+
+  @Field(() => Float)
+  popularity: number;
+
+  @Field(() => String, { nullable: true })
+  posterPath: string;
+
+  @Field(() => String)
+  releaseDate: string;
+
+  @Field(() => Int)
+  revenue: number;
+
+  @Field(() => Int)
+  runtime: number;
+
+  @Field(() => String)
+  status: string;
+
+  @Field(() => String)
+  tagline: string;
+
+  @Field(() => String)
+  title: string;
+
+  @Field(() => Boolean)
+  video: boolean;
+
+  @Field(() => Float)
+  voteAverage: 0.0;
+
+  @Field(() => Int)
+  voteCount: 0;
+
+  @Field(() => [MovieSpokenLanguage])
+  spokenLanguages: MovieSpokenLanguage[];
+
+  //     @Field(() => String, {nullable:true})
+  //   belongsToCollection: null;
+  //   productionCompanies: [];
+  //   productionCountries: [];
+}
+@ObjectType()
+class AppendToResponseVideosResult {
+  @Field(() => String)
+  iso6391: string;
+
+  @Field(() => String)
+  iso31661: string;
+
+  @Field(() => String)
+  name: string;
+
+  @Field(() => String)
+  key: string;
+
+  @Field(() => String)
+  site: string;
+
+  @Field(() => Int)
+  size: number;
+
+  @Field(() => String)
+  type: string;
+
+  @Field(() => Boolean)
+  official: boolean;
+
+  @Field(() => String)
+  publishedAt: string;
+
+  @Field(() => String)
+  id: string;
+}
+@ObjectType()
+class AppendToResponseVideos {
+  @Field(() => [AppendToResponseVideosResult])
+  results: AppendToResponseVideosResult[];
+}
+
+@ObjectType()
+class AppendToResponseImages {
+  @Field(() => [String])
+  backdrops: string[];
+
+  @Field(() => [String])
+  logos: string[];
+
+  @Field(() => [String])
+  posters: string[];
+}
+
+@ObjectType()
+export class FetchMovieDetailsAppendToResponse extends FetchMovieDetailsResponse {
+  @Field(() => AppendToResponseVideos, { nullable: true })
+  videos: AppendToResponseVideos;
+  @Field(() => AppendToResponseImages, { nullable: true })
+  images: AppendToResponseImages;
+}
