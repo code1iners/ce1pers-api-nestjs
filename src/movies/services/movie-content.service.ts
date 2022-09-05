@@ -48,6 +48,10 @@ import {
   FetchMovieVideosByIdOutput,
   FetchMovieVideosByIdResponse,
 } from '../dtos/movie-contents/fetch-movie-videos.dto';
+import {
+  FetchSimilarMoviesByIdInput,
+  FetchSimilarMoviesByIdOutput,
+} from '../dtos/movie-contents/fetch-similar-movies.dto';
 
 @Injectable()
 export class MovieContentService {
@@ -306,6 +310,36 @@ export class MovieContentService {
       return {
         ok: false,
         error: 'Failed fetch movie videos by ID.',
+      };
+    }
+  }
+
+  /**
+   * Get a list of similar movies. This is not the same as the "Recommendation" system you see on the website.
+   * These items are assembled by looking at keywords and genres.
+   */
+  async fetchSimilarMoviesById({
+    movieId,
+    page,
+    language,
+  }: FetchSimilarMoviesByIdInput): Promise<FetchSimilarMoviesByIdOutput> {
+    try {
+      // Fetch movies.
+      const data = await movieFetcher<CommonFetchMoviesOutput>({
+        configService: this.configService,
+        path: `/movie/${movieId}/similar`,
+        queries: { page, language },
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchSimilarMoviesById]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch similar movies by ID.',
       };
     }
   }
