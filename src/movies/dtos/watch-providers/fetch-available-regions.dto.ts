@@ -1,6 +1,6 @@
-import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType, PickType } from '@nestjs/graphql';
 import { CoreOutput } from '@/core/dtos/core.dto';
-import { FetchMoviesLanguageInput } from '@/movies/dtos/shared.dto';
+import { CommonFetchMoviesInput } from '@/movies/dtos/shared.dto';
 
 export interface FetchAvailableRegionResponse {
   results: AvailableRegionResultSnakeCase[];
@@ -33,7 +33,10 @@ export class AvailableRegionResultCamelCase {
 }
 
 @InputType()
-export class FetchAvailableRegionsInput extends FetchMoviesLanguageInput {}
+export class FetchAvailableRegionsInput extends PickType(
+  CommonFetchMoviesInput,
+  ['language'] as const,
+) {}
 
 @ObjectType()
 export class FetchAvailableRegionsOutput extends CoreOutput {

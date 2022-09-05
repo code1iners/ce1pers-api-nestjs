@@ -49,7 +49,7 @@ export class MediaContentResult {
 }
 
 @InputType()
-export class FetchMoviesLanguageInput {
+export class CommonFetchMoviesInput {
   @Field(() => String, {
     defaultValue: 'ko-kr',
     nullable: true,
@@ -57,10 +57,7 @@ export class FetchMoviesLanguageInput {
       'Pass a ISO 639-1 value to display translated data for the fields that support it. (minLength: 2, pattern: ([a-z]{2})-([A-Z]{2}), default: en-US)',
   })
   language?: string;
-}
 
-@InputType()
-export class CommonFetchMoviesInput extends FetchMoviesLanguageInput {
   @Field(() => Int, {
     defaultValue: 1,
     description:
@@ -74,6 +71,12 @@ export class CommonFetchMoviesInput extends FetchMoviesLanguageInput {
       'Specify a ISO 3166-1 code to filter release dates. Must be uppercase. (pattern: ^[A-Z]{2}$)',
   })
   region: string;
+}
+
+@InputType()
+export class CommonFetchMovieInput extends CommonFetchMoviesInput {
+  @Field(() => Int)
+  movieId: number;
 }
 
 @ObjectType()

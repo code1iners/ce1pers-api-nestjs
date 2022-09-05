@@ -1,12 +1,14 @@
-import { Field, InputType, ObjectType, Int, Float } from '@nestjs/graphql';
+import { Field, InputType, ObjectType, PickType } from '@nestjs/graphql';
 import { CoreOutput } from '@/core/dtos/core.dto';
 import {
   FetchMovieDetailsResponse,
-  FetchMoviesLanguageInput,
+  CommonFetchMoviesInput,
 } from '@/movies/dtos/shared.dto';
 
 @InputType()
-export class FetchLatestMovieInput extends FetchMoviesLanguageInput {}
+export class FetchLatestMovieInput extends PickType(CommonFetchMoviesInput, [
+  'language',
+] as const) {}
 
 @ObjectType()
 export class FetchLatestMovieOutput extends CoreOutput {

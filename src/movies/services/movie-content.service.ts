@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { movieFetcher } from '@/movies/utils/movies-helper';
 import {
+  CommonFetchMoviesOutput,
   FetchMovieDetailsAppendToResponse,
   FetchMovieDetailsResponse,
 } from '@/movies/dtos/shared.dto';
@@ -38,6 +39,10 @@ import {
   FetchMovieKeywordsOutput,
   FetchMovieKeywordsResponse,
 } from '../dtos/movie-contents/fetch-movie-keywords.dto';
+import {
+  FetchRecommendationMoviesInput,
+  FetchRecommendationMoviesOutput,
+} from '../dtos/movie-contents/fetch-recommendation-movies.dto';
 
 @Injectable()
 export class MovieContentService {
@@ -239,6 +244,35 @@ export class MovieContentService {
       return {
         ok: false,
         error: 'Failed fetch movie keywords by ID.',
+      };
+    }
+  }
+
+  /**
+   * Get a list of recommended movies for a movie.
+   */
+  async fetchRecommendationMoviesById({
+    movieId,
+    page,
+    language,
+  }: FetchRecommendationMoviesInput): Promise<FetchRecommendationMoviesOutput> {
+    try {
+      // Fetch movies.
+      const data = await movieFetcher<CommonFetchMoviesOutput>({
+        configService: this.configService,
+        path: `/movie/${movieId}/recommendations`,
+        queries: { page, language },
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchRecommendationMoviesById]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch recommendation movies by ID.',
       };
     }
   }

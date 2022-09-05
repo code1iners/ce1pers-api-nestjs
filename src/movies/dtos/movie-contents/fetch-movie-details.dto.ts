@@ -3,13 +3,14 @@ import {
   InputType,
   Int,
   ObjectType,
+  PickType,
   registerEnumType,
 } from '@nestjs/graphql';
 import { IsEnum } from 'class-validator';
 import { CoreOutput } from '@/core/dtos/core.dto';
 import {
   FetchMovieDetailsAppendToResponse,
-  FetchMoviesLanguageInput,
+  CommonFetchMovieInput,
 } from '@/movies/dtos/shared.dto';
 
 enum MovieDetailAppendToResponseType {
@@ -23,7 +24,9 @@ registerEnumType(MovieDetailAppendToResponseType, {
 });
 
 @InputType()
-export class FetchMovieDetailsInput extends FetchMoviesLanguageInput {
+export class FetchMovieDetailsInput extends PickType(CommonFetchMovieInput, [
+  'language',
+] as const) {
   @Field(() => Int)
   movieId: number;
 
