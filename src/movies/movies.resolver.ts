@@ -44,6 +44,10 @@ import {
   FetchRecommendationMoviesInput,
   FetchRecommendationMoviesOutput,
 } from './dtos/movie-contents/fetch-recommendation-movies.dto';
+import {
+  FetchMovieVideosByIdInput,
+  FetchMovieVideosByIdOutput,
+} from './dtos/movie-contents/fetch-movie-videos.dto';
 
 @Resolver()
 export class MoviesResolver {
@@ -124,5 +128,12 @@ export class MoviesResolver {
     @Args('input') input: FetchRecommendationMoviesInput,
   ): Promise<FetchRecommendationMoviesOutput> {
     return this.movieService.movies.fetchRecommendationMoviesById(input);
+  }
+
+  @Query(() => FetchMovieVideosByIdOutput)
+  async movieVideos(
+    @Args('input') input: FetchMovieVideosByIdInput,
+  ): Promise<FetchMovieVideosByIdOutput> {
+    return this.movieService.movies.fetchMovieVideosById(input);
   }
 }

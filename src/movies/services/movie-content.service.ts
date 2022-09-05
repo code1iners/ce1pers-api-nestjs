@@ -43,6 +43,11 @@ import {
   FetchRecommendationMoviesInput,
   FetchRecommendationMoviesOutput,
 } from '../dtos/movie-contents/fetch-recommendation-movies.dto';
+import {
+  FetchMovieVideosByIdInput,
+  FetchMovieVideosByIdOutput,
+  FetchMovieVideosByIdResponse,
+} from '../dtos/movie-contents/fetch-movie-videos.dto';
 
 @Injectable()
 export class MovieContentService {
@@ -273,6 +278,34 @@ export class MovieContentService {
       return {
         ok: false,
         error: 'Failed fetch recommendation movies by ID.',
+      };
+    }
+  }
+
+  /**
+   * Get the videos that have been added to a movie.
+   */
+  async fetchMovieVideosById({
+    movieId,
+    language,
+  }: FetchMovieVideosByIdInput): Promise<FetchMovieVideosByIdOutput> {
+    try {
+      // Fetch movies.
+      const data = await movieFetcher<FetchMovieVideosByIdResponse>({
+        configService: this.configService,
+        path: `/movie/${movieId}/videos`,
+        queries: { language },
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchMovieVideosById]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch movie videos by ID.',
       };
     }
   }

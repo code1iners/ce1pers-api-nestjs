@@ -198,7 +198,7 @@ export class FetchMovieDetailsResponse {
   //   productionCountries: [];
 }
 @ObjectType()
-class AppendToResponseVideosResult {
+export class AppendToResponseVideosResult {
   @Field(() => String)
   iso6391: string;
 
@@ -230,7 +230,7 @@ class AppendToResponseVideosResult {
   id: string;
 }
 @ObjectType()
-class AppendToResponseVideos {
+export class AppendToResponseVideos {
   @Field(() => [AppendToResponseVideosResult])
   results: AppendToResponseVideosResult[];
 }
