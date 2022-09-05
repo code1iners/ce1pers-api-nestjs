@@ -52,6 +52,11 @@ import {
   FetchSimilarMoviesByIdInput,
   FetchSimilarMoviesByIdOutput,
 } from '../dtos/movie-contents/fetch-similar-movies.dto';
+import {
+  FetchMovieImagesByIdInput,
+  FetchMovieImagesByIdOutput,
+  FetchMovieImagesResponse,
+} from '../dtos/movie-contents/fetch-movie-images.dto';
 
 @Injectable()
 export class MovieContentService {
@@ -340,6 +345,32 @@ export class MovieContentService {
       return {
         ok: false,
         error: 'Failed fetch similar movies by ID.',
+      };
+    }
+  }
+
+  /**
+   * Get the images that belong to a movie.
+   */
+  async fetchMovieImagesById({
+    movieId,
+  }: FetchMovieImagesByIdInput): Promise<FetchMovieImagesByIdOutput> {
+    try {
+      // Fetch movies.
+      const data = await movieFetcher<FetchMovieImagesResponse>({
+        configService: this.configService,
+        path: `/movie/${movieId}/images`,
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchMovieImagesById]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch movie images by ID.',
       };
     }
   }

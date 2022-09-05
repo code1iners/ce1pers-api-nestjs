@@ -236,15 +236,39 @@ export class AppendToResponseVideos {
 }
 
 @ObjectType()
+export class MovieImage {
+  @Field(() => Float)
+  aspectRatio: number;
+
+  @Field(() => Int)
+  height: number;
+
+  @Field(() => String, { nullable: true })
+  iso6391?: string;
+
+  @Field(() => String)
+  filePath: string;
+
+  @Field(() => Float)
+  voteAverage: number;
+
+  @Field(() => Int)
+  voteCount: number;
+
+  @Field(() => Int)
+  width: number;
+}
+
+@ObjectType()
 class AppendToResponseImages {
-  @Field(() => [String])
-  backdrops: string[];
+  @Field(() => [MovieImage])
+  backdrops: MovieImage[];
 
-  @Field(() => [String])
-  logos: string[];
+  @Field(() => [MovieImage])
+  logos: MovieImage[];
 
-  @Field(() => [String])
-  posters: string[];
+  @Field(() => [MovieImage])
+  posters: MovieImage[];
 }
 
 @ObjectType()
