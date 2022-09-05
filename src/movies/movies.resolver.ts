@@ -56,6 +56,10 @@ import {
   FetchMovieImagesByIdInput,
   FetchMovieImagesByIdOutput,
 } from './dtos/movie-contents/fetch-movie-images.dto';
+import {
+  FetchMovieCreditsByIdInput,
+  FetchMovieCreditsByIdOutput,
+} from './dtos/movie-contents/fetch-movie-credits.dto';
 
 @Resolver()
 export class MoviesResolver {
@@ -157,5 +161,12 @@ export class MoviesResolver {
     @Args('input') input: FetchMovieImagesByIdInput,
   ): Promise<FetchMovieImagesByIdOutput> {
     return this.movieService.movies.fetchMovieImagesById(input);
+  }
+
+  @Query(() => FetchMovieCreditsByIdOutput)
+  async movieCredits(
+    @Args('input') input: FetchMovieCreditsByIdInput,
+  ): Promise<FetchMovieCreditsByIdOutput> {
+    return this.movieService.movies.fetchMovieCreditsById(input);
   }
 }

@@ -1,4 +1,11 @@
-import { Field, Float, InputType, Int, ObjectType } from '@nestjs/graphql';
+import {
+  Field,
+  Float,
+  InputType,
+  Int,
+  ObjectType,
+  OmitType,
+} from '@nestjs/graphql';
 
 @ObjectType()
 export class MediaContentResult {
@@ -277,4 +284,55 @@ export class FetchMovieDetailsAppendToResponse extends FetchMovieDetailsResponse
   videos: AppendToResponseVideos;
   @Field(() => AppendToResponseImages, { nullable: true })
   images: AppendToResponseImages;
+}
+
+@ObjectType()
+export class CommonMovieCastAndCrew {
+  @Field(() => Boolean)
+  adult: boolean;
+
+  @Field(() => Int)
+  gender: number;
+
+  @Field(() => Int)
+  id: number;
+
+  @Field(() => String)
+  knownForDepartment: string;
+
+  @Field(() => String)
+  name: string;
+
+  @Field(() => String)
+  originalName: string;
+
+  @Field(() => Float)
+  popularity: number;
+
+  @Field(() => String, { nullable: true })
+  profilePath?: string;
+
+  @Field(() => String)
+  creditId: string;
+}
+
+@ObjectType()
+export class MovieCast extends CommonMovieCastAndCrew {
+  @Field(() => Int)
+  castId: number;
+
+  @Field(() => String)
+  character: string;
+
+  @Field(() => Int)
+  order: number;
+}
+
+@ObjectType()
+export class MovieCrew extends CommonMovieCastAndCrew {
+  @Field(() => String)
+  department: string;
+
+  @Field(() => String)
+  job: string;
 }

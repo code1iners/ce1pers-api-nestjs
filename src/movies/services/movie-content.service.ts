@@ -57,6 +57,11 @@ import {
   FetchMovieImagesByIdOutput,
   FetchMovieImagesResponse,
 } from '../dtos/movie-contents/fetch-movie-images.dto';
+import {
+  FetchMovieCreditsByIdInput,
+  FetchMovieCreditsByIdOutput,
+  FetchMovieCreditsResponse,
+} from '../dtos/movie-contents/fetch-movie-credits.dto';
 
 @Injectable()
 export class MovieContentService {
@@ -371,6 +376,34 @@ export class MovieContentService {
       return {
         ok: false,
         error: 'Failed fetch movie images by ID.',
+      };
+    }
+  }
+
+  /**
+   * Get the cast and crew for a movie.
+   */
+  async fetchMovieCreditsById({
+    movieId,
+    language,
+  }: FetchMovieCreditsByIdInput): Promise<FetchMovieCreditsByIdOutput> {
+    try {
+      // Fetch movies.
+      const data = await movieFetcher<FetchMovieCreditsResponse>({
+        configService: this.configService,
+        path: `/movie/${movieId}/credits`,
+        queries: { language },
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchMovieCreditsById]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch movie credits by ID.',
       };
     }
   }
