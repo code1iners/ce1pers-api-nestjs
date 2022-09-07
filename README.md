@@ -57,11 +57,11 @@ This project serve various API services.
 
   ```bash
   npm run db:open # Open database.
-  npm run db:studio # (Optional) database visualization.
+  npm run db:studio # (Optional) Database visualization.
   ```
 
 - Start server as development mode.
 
   ```bash
-  npm run dev # Stard app on development.
+  npm run dev # Start app on development.
   ```
