@@ -60,6 +60,10 @@ import {
   FetchMovieCreditsByIdInput,
   FetchMovieCreditsByIdOutput,
 } from './dtos/movie-contents/fetch-movie-credits.dto';
+import {
+  FetchMovieAlternativeTitlesInput,
+  FetchMovieAlternativeTitlesOutput,
+} from './dtos/movie-contents/fetch-movie-alternative-titles.dto';
 
 @Resolver()
 export class MoviesResolver {
@@ -168,5 +172,12 @@ export class MoviesResolver {
     @Args('input') input: FetchMovieCreditsByIdInput,
   ): Promise<FetchMovieCreditsByIdOutput> {
     return this.movieService.movies.fetchMovieCreditsById(input);
+  }
+
+  @Query(() => FetchMovieAlternativeTitlesOutput)
+  async movieAlternativeTitles(
+    @Args('input') input: FetchMovieAlternativeTitlesInput,
+  ): Promise<FetchMovieAlternativeTitlesOutput> {
+    return this.movieService.movies.fetchMovieAlternativeTitlesById(input);
   }
 }

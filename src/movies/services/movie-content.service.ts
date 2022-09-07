@@ -38,30 +38,35 @@ import {
   FetchMovieKeywordsInput,
   FetchMovieKeywordsOutput,
   FetchMovieKeywordsResponse,
-} from '../dtos/movie-contents/fetch-movie-keywords.dto';
+} from '@/movies/dtos/movie-contents/fetch-movie-keywords.dto';
 import {
   FetchRecommendationMoviesInput,
   FetchRecommendationMoviesOutput,
-} from '../dtos/movie-contents/fetch-recommendation-movies.dto';
+} from '@/movies/dtos/movie-contents/fetch-recommendation-movies.dto';
 import {
   FetchMovieVideosByIdInput,
   FetchMovieVideosByIdOutput,
   FetchMovieVideosByIdResponse,
-} from '../dtos/movie-contents/fetch-movie-videos.dto';
+} from '@/movies/dtos/movie-contents/fetch-movie-videos.dto';
 import {
   FetchSimilarMoviesByIdInput,
   FetchSimilarMoviesByIdOutput,
-} from '../dtos/movie-contents/fetch-similar-movies.dto';
+} from '@/movies/dtos/movie-contents/fetch-similar-movies.dto';
 import {
   FetchMovieImagesByIdInput,
   FetchMovieImagesByIdOutput,
   FetchMovieImagesResponse,
-} from '../dtos/movie-contents/fetch-movie-images.dto';
+} from '@/movies/dtos/movie-contents/fetch-movie-images.dto';
 import {
   FetchMovieCreditsByIdInput,
   FetchMovieCreditsByIdOutput,
   FetchMovieCreditsResponse,
-} from '../dtos/movie-contents/fetch-movie-credits.dto';
+} from '@/movies/dtos/movie-contents/fetch-movie-credits.dto';
+import {
+  FetchMovieAlternativeTitlesInput,
+  FetchMovieAlternativeTitlesOutput,
+  FetchMovieAlternativeTitlesResponse,
+} from '@/movies/dtos/movie-contents/fetch-movie-alternative-titles.dto';
 
 @Injectable()
 export class MovieContentService {
@@ -404,6 +409,29 @@ export class MovieContentService {
       return {
         ok: false,
         error: 'Failed fetch movie credits by ID.',
+      };
+    }
+  }
+
+  async fetchMovieAlternativeTitlesById({
+    movieId,
+  }: FetchMovieAlternativeTitlesInput): Promise<FetchMovieAlternativeTitlesOutput> {
+    try {
+      // Fetch movies.
+      const data = await movieFetcher<FetchMovieAlternativeTitlesResponse>({
+        configService: this.configService,
+        path: `/movie/${movieId}/alternative_titles`,
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchMovieAlternativeTitlesById]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch movie alternative titles by ID.',
       };
     }
   }
