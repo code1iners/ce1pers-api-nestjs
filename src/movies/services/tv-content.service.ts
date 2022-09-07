@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { movieDatabaseFetcher } from '@/movies/utils/movies-helper';
 import {
   FetchLatestTvInput,
   FetchLatestTvOutput,
   FetchLatestTvResponse,
 } from '@/movies/dtos/tv-contents/fetch-latest-tv.dto';
-import { movieDatabaseFetcher } from '@/movies/utils/movies-helper';
+import {
+  FetchPopularTvListInput,
+  FetchPopularTvListOutput,
+  FetchPopularTvListResponse,
+} from '@/movies/dtos/tv-contents/fetch-popular-tv.dto';
 
 @Injectable()
 export class TvContentService {
@@ -34,6 +39,34 @@ export class TvContentService {
       return {
         ok: false,
         error: 'Failed fetch latest tv.',
+      };
+    }
+  }
+
+  /**
+   * Get a list of the current popular TV shows on TMDB. This list updates daily.
+   */
+  async fetchPopularTvList({
+    page,
+    language,
+  }: FetchPopularTvListInput): Promise<FetchPopularTvListOutput> {
+    try {
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchPopularTvListResponse>({
+        configService: this.configService,
+        path: `/tv/popular`,
+        queries: { page, language },
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchPopularTvList]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch popular tv list.',
       };
     }
   }

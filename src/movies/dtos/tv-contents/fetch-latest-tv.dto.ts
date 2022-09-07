@@ -18,7 +18,7 @@ import { CoreOutput } from '@/core/dtos/core.dto';
 @InputType()
 export class FetchLatestTvInput extends PickType(CommonFetchTvInput, [
   'language',
-]) {}
+] as const) {}
 
 @ObjectType()
 export class FetchLatestTvResponse {

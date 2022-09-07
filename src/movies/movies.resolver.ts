@@ -66,6 +66,10 @@ import {
   FetchMovieAlternativeTitlesOutput,
 } from '@/movies/dtos/movie-contents/fetch-movie-alternative-titles.dto';
 import { FetchLatestTvOutput } from './dtos/tv-contents/fetch-latest-tv.dto';
+import {
+  FetchPopularTvListInput,
+  FetchPopularTvListOutput,
+} from './dtos/tv-contents/fetch-popular-tv.dto';
 
 @Resolver()
 export class MoviesResolver {
@@ -85,6 +89,7 @@ export class MoviesResolver {
     return this.movieService.providers.fetchContentProviders(input);
   }
 
+  // Movie content start.
   @Query(() => FetchTrendingMoviesOutput)
   async trendingMovies(
     @Args('input') input: FetchTrendingMoviesInput,
@@ -182,6 +187,7 @@ export class MoviesResolver {
   ): Promise<FetchMovieAlternativeTitlesOutput> {
     return this.movieService.movies.fetchMovieAlternativeTitlesById(input);
   }
+  // Movie content end.
 
   // Tv content start.
   @Query(() => FetchLatestTvOutput)
@@ -189,6 +195,13 @@ export class MoviesResolver {
     @Args('input') input: FetchLatestTvInput,
   ): Promise<FetchLatestTvOutput> {
     return this.movieService.tv.fetchLatestTv(input);
+  }
+
+  @Query(() => FetchPopularTvListOutput)
+  async popularTvList(
+    @Args('input') input: FetchPopularTvListInput,
+  ): Promise<FetchPopularTvListOutput> {
+    return this.movieService.tv.fetchPopularTvList(input);
   }
   // Tv content end.
 }

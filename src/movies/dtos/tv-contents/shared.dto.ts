@@ -93,3 +93,45 @@ export class TvGenre {
   @Field(() => String)
   name: string;
 }
+
+@ObjectType()
+export class TvListResult {
+  @Field(() => String)
+  backdropPath: string;
+
+  @Field(() => String)
+  firstAirDate: string;
+
+  @Field(() => [Int])
+  genreIds: number[];
+
+  @Field(() => Int)
+  id: number;
+
+  @Field(() => String)
+  name: string;
+
+  @Field(() => [String])
+  originCountry: string[];
+
+  @Field(() => String)
+  originalLanguage: string;
+
+  @Field(() => String)
+  originalName: string;
+
+  @Field(() => String)
+  overview: string;
+
+  @Field(() => Float)
+  popularity: number;
+
+  @Field(() => String)
+  posterPath: string;
+
+  @Field(() => Float)
+  voteAverage: number;
+
+  @Field(() => Int)
+  voteCount: number;
+}
