@@ -11,6 +11,10 @@ import {
   FetchPopularTvListOutput,
   FetchPopularTvListResponse,
 } from '@/movies/dtos/tv-contents/fetch-popular-tv.dto';
+import {
+  FetchTopRatedTvListInput,
+  FetchTopRatedTvListOutput,
+} from '../dtos/tv-contents/fetch-top-rated-tv.dto';
 
 @Injectable()
 export class TvContentService {
@@ -67,6 +71,34 @@ export class TvContentService {
       return {
         ok: false,
         error: 'Failed fetch popular tv list.',
+      };
+    }
+  }
+
+  /**
+   * Get a list of the top rated TV shows on TMDB.
+   */
+  async fetchTopRatedTvList({
+    page,
+    language,
+  }: FetchTopRatedTvListInput): Promise<FetchTopRatedTvListOutput> {
+    try {
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchPopularTvListResponse>({
+        configService: this.configService,
+        path: `/tv/top_rated`,
+        queries: { page, language },
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchTopRatedTvList]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch top rated tv list.',
       };
     }
   }

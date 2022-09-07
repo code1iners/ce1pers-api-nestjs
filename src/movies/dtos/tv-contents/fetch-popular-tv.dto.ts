@@ -2,7 +2,7 @@ import { Field, InputType, Int, ObjectType, OmitType } from '@nestjs/graphql';
 import { CoreOutput } from '@/core/dtos/core.dto';
 import {
   CommonFetchTvInput,
-  TvListResult,
+  FetchTvListResponse,
 } from '@/movies/dtos/tv-contents/shared.dto';
 
 @InputType()
@@ -11,13 +11,7 @@ export class FetchPopularTvListInput extends OmitType(CommonFetchTvInput, [
 ] as const) {}
 
 @ObjectType()
-export class FetchPopularTvListResponse {
-  @Field(() => Int)
-  page: number;
-
-  @Field(() => [TvListResult])
-  results: TvListResult[];
-}
+export class FetchPopularTvListResponse extends FetchTvListResponse {}
 
 @ObjectType()
 export class FetchPopularTvListOutput extends CoreOutput {

@@ -135,3 +135,18 @@ export class TvListResult {
   @Field(() => Int)
   voteCount: number;
 }
+
+@ObjectType()
+export class FetchTvListResponse {
+  @Field(() => Int)
+  page: number;
+
+  @Field(() => [TvListResult])
+  results: TvListResult[];
+
+  @Field(() => Int)
+  totalPages: number;
+
+  @Field(() => Int)
+  totalResults: number;
+}
