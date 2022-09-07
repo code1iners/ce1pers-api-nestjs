@@ -27,11 +27,27 @@ This project serve various API services.
   - Weather widget (Pending).
 
 - Movies / Tv (Processing)
+  - Movie services (Done).
+    - Latest movie.
+    - Movie alternative titles.
+    - Movie credits.
+    - Movie details.
+    - Movie images.
+    - Movie keywords.
+    - Movie videos.
+    - Popular movies.
+    - Recommendation movies.
+    - Similar movies.
+    - Top rated movies.
+    - Upcoming movies.
+  - Tv (Processing)
+    - Latest Tv.
 
 ## Main tech stacks
 
 - Nest.js
 - TypeScript
+- GraphQL
 - Prisma
 - Planet Scale
 - Heroku

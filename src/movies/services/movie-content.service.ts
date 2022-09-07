@@ -7,10 +7,10 @@ import {
   FetchMovieDetailsResponse,
 } from '@/movies/dtos/shared.dto';
 import {
-  FetchMoviePopularInput,
-  FetchMoviePopularOutput,
-} from '@/movies/dtos/movie-contents/fetch-movies-popular.dto';
-import { FetchMoviePopularResponse } from '@/movies/dtos/movie-contents/fetch-movies-popular.dto';
+  FetchPopularMoviesInput,
+  FetchPopularMoviesOutput,
+} from '@/movies/dtos/movie-contents/fetch-popular-movies.dto';
+import { FetchPopularMoviesResponse } from '@/movies/dtos/movie-contents/fetch-popular-movies.dto';
 import {
   FetchTopRatedMoviesInput,
   FetchTopRatedMoviesOutput,
@@ -79,10 +79,10 @@ export class MovieContentService {
     language,
     page,
     region,
-  }: FetchMoviePopularInput): Promise<FetchMoviePopularOutput> {
+  }: FetchPopularMoviesInput): Promise<FetchPopularMoviesOutput> {
     try {
       // Fetch movies.
-      const data = await movieFetcher<FetchMoviePopularResponse>({
+      const data = await movieFetcher<FetchPopularMoviesResponse>({
         configService: this.configService,
         path: `/movie/popular`,
         queries: { language, page, region },

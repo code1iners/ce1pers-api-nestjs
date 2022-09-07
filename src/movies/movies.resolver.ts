@@ -13,9 +13,9 @@ import {
   FetchTrendingMoviesOutput,
 } from '@/movies/dtos/trending-movies/fetch-trending-movies.dto';
 import {
-  FetchMoviePopularInput,
-  FetchMoviePopularOutput,
-} from '@/movies/dtos/movie-contents/fetch-movies-popular.dto';
+  FetchPopularMoviesInput,
+  FetchPopularMoviesOutput,
+} from '@/movies/dtos/movie-contents/fetch-popular-movies.dto';
 import {
   FetchTopRatedMoviesInput,
   FetchTopRatedMoviesOutput,
@@ -35,35 +35,35 @@ import {
 import {
   FetchMovieDetailsInput,
   FetchMovieDetailsOutput,
-} from './dtos/movie-contents/fetch-movie-details.dto';
+} from '@/movies/dtos/movie-contents/fetch-movie-details.dto';
 import {
   FetchMovieKeywordsInput,
   FetchMovieKeywordsOutput,
-} from './dtos/movie-contents/fetch-movie-keywords.dto';
+} from '@/movies/dtos/movie-contents/fetch-movie-keywords.dto';
 import {
   FetchRecommendationMoviesInput,
   FetchRecommendationMoviesOutput,
-} from './dtos/movie-contents/fetch-recommendation-movies.dto';
+} from '@/movies/dtos/movie-contents/fetch-recommendation-movies.dto';
 import {
   FetchMovieVideosByIdInput,
   FetchMovieVideosByIdOutput,
-} from './dtos/movie-contents/fetch-movie-videos.dto';
+} from '@/movies/dtos/movie-contents/fetch-movie-videos.dto';
 import {
   FetchSimilarMoviesByIdInput,
   FetchSimilarMoviesByIdOutput,
-} from './dtos/movie-contents/fetch-similar-movies.dto';
+} from '@/movies/dtos/movie-contents/fetch-similar-movies.dto';
 import {
   FetchMovieImagesByIdInput,
   FetchMovieImagesByIdOutput,
-} from './dtos/movie-contents/fetch-movie-images.dto';
+} from '@/movies/dtos/movie-contents/fetch-movie-images.dto';
 import {
   FetchMovieCreditsByIdInput,
   FetchMovieCreditsByIdOutput,
-} from './dtos/movie-contents/fetch-movie-credits.dto';
+} from '@/movies/dtos/movie-contents/fetch-movie-credits.dto';
 import {
   FetchMovieAlternativeTitlesInput,
   FetchMovieAlternativeTitlesOutput,
-} from './dtos/movie-contents/fetch-movie-alternative-titles.dto';
+} from '@/movies/dtos/movie-contents/fetch-movie-alternative-titles.dto';
 
 @Resolver()
 export class MoviesResolver {
@@ -90,10 +90,10 @@ export class MoviesResolver {
     return this.movieService.trendings.fetchTrendingMovies(input);
   }
 
-  @Query(() => FetchMoviePopularOutput)
+  @Query(() => FetchPopularMoviesOutput)
   async popularMovies(
-    @Args('input') input: FetchMoviePopularInput,
-  ): Promise<FetchMoviePopularOutput> {
+    @Args('input') input: FetchPopularMoviesInput,
+  ): Promise<FetchPopularMoviesOutput> {
     return this.movieService.movies.fetchPopularMovies(input);
   }
 
