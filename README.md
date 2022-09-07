@@ -18,7 +18,7 @@ This project serve various API services.
   - Implement Auth Guard for authorization.
   - Implement Auth Member decorator.
 
-- Weathers (Processing)
+- Weathers (Done)
 
   - Current weather by coordinates/locations.
   - 5 Day / 3 Hour weather forecast.
@@ -26,7 +26,7 @@ This project serve various API services.
   - Geocoding.
   - Weather widget (Pending).
 
-- Movies / Tv (Draft)
+- Movies / Tv (Processing)
 
 ## Main tech stacks
 
@@ -63,5 +63,5 @@ This project serve various API services.
 - Start server as development mode.
 
   ```bash
-  npm run dev # or npm run dev
+  npm run dev # Stard app on development.
   ```
