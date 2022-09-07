@@ -1,22 +1,22 @@
 import { convertSnakeToCamel } from '@/libs/case-styles-transformers/camel-caser';
 import type { ConfigService } from '@nestjs/config';
-import got, { CancelableRequest } from 'got';
+import got from 'got';
 import * as qs from 'query-string';
 
-interface MakeMoviesRequest {
+interface MakeMovieDatabaseRequestProps {
   configService: ConfigService;
   path: string;
   queries?: any;
 }
 
 /**
- * Make movies request.
+ * Make movie database request.
  */
-export const makeMoviesRequest = ({
+export const makeMovieDatabaseRequest = ({
   configService,
   path,
   queries,
-}: MakeMoviesRequest) => {
+}: MakeMovieDatabaseRequestProps) => {
   const origin = configService.get('MOVIE_DATABASE_ORIGIN');
   const api_key = configService.get('MOVIE_DATABASE_API_KEY');
   const url = qs.stringifyUrl({
@@ -30,18 +30,18 @@ export const makeMoviesRequest = ({
   return got.get(url);
 };
 
-interface FetchMoviesByRequestProps extends MakeMoviesRequest {}
+interface MovieDatabaseFetcherProps extends MakeMovieDatabaseRequestProps {}
 
 /**
- * Fetch movies by request.
+ * Fetch movies database contents by request.
  */
-export const movieFetcher = async <T>({
+export const movieDatabaseFetcher = async <T>({
   configService,
   path,
   queries,
-}: FetchMoviesByRequestProps) => {
+}: MovieDatabaseFetcherProps) => {
   // Make request.
-  const request = makeMoviesRequest({
+  const request = makeMovieDatabaseRequest({
     configService,
     path,
     queries,

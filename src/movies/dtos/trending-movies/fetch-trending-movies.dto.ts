@@ -7,7 +7,7 @@ import {
 } from '@nestjs/graphql';
 import { IsEnum } from 'class-validator';
 import { CoreOutput } from '@/core/dtos/core.dto';
-import { MediaContentResult } from '@/movies/dtos/shared.dto';
+import { MovieMediaContentResult } from '@/movies/dtos/movie-contents/shared.dto';
 
 export enum TrendingMediaType {
   All = 'ALL',
@@ -35,8 +35,8 @@ export class FetchTrendingResponse {
   @Field(() => Int)
   totalResults: number;
 
-  @Field(() => [MediaContentResult])
-  results: MediaContentResult[];
+  @Field(() => [MovieMediaContentResult])
+  results: MovieMediaContentResult[];
 }
 
 @InputType()
@@ -53,5 +53,5 @@ export class FetchTrendingMoviesInput {
 @ObjectType()
 export class FetchTrendingMoviesOutput extends CoreOutput {
   @Field(() => FetchTrendingResponse, { nullable: true })
-  trending?: FetchTrendingResponse;
+  data?: FetchTrendingResponse;
 }

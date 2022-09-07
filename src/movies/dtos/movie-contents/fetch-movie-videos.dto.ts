@@ -3,7 +3,7 @@ import { Field, InputType, Int, ObjectType, PickType } from '@nestjs/graphql';
 import {
   AppendToResponseVideosResult,
   CommonFetchMovieInput,
-} from '@/movies/dtos/shared.dto';
+} from '@/movies/dtos/movie-contents/shared.dto';
 
 @InputType()
 export class FetchMovieVideosByIdInput extends PickType(CommonFetchMovieInput, [

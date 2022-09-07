@@ -6,7 +6,10 @@ import {
   FetchTrendingMoviesOutput,
   FetchTrendingResponse,
 } from '@/movies/dtos/trending-movies/fetch-trending-movies.dto';
-import { makeMoviesRequest } from '@/movies/utils/movies-helper';
+import {
+  makeMovieDatabaseRequest,
+  movieDatabaseFetcher,
+} from '@/movies/utils/movies-helper';
 
 @Injectable()
 export class MovieTrendingService {
@@ -17,22 +20,15 @@ export class MovieTrendingService {
     timeWindow,
   }: FetchTrendingMoviesInput): Promise<FetchTrendingMoviesOutput> {
     try {
-      // Make request.
-      const request = makeMoviesRequest({
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchTrendingResponse>({
         configService: this.configService,
         path: `/trending/${mediaType}/${timeWindow}`,
       });
 
-      // Fetching.
-      const originTrending = await request.json<FetchTrendingResponse>();
-      if (!originTrending) throw new Error('Failed fetching.');
-
-      const trending =
-        convertSnakeToCamel<FetchTrendingResponse>(originTrending);
-
       return {
         ok: true,
-        trending,
+        data,
       };
     } catch (error) {
       console.error('[fetchTrendingMovies]', error);

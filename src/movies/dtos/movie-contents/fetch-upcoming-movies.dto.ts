@@ -4,7 +4,7 @@ import {
   CommonFetchMoviesInput,
   CommonFetchMoviesOutput,
   MovieDate,
-} from '@/movies/dtos/shared.dto';
+} from '@/movies/dtos/movie-contents/shared.dto';
 
 @InputType()
 export class FetchUpcomingMoviesInput extends CommonFetchMoviesInput {}

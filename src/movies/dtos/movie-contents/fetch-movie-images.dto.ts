@@ -1,6 +1,9 @@
 import { CoreOutput } from '@/core/dtos/core.dto';
 import { Field, InputType, Int, ObjectType, PickType } from '@nestjs/graphql';
-import { CommonFetchMovieInput, MovieImage } from '@/movies/dtos/shared.dto';
+import {
+  CommonFetchMovieInput,
+  MovieImage,
+} from '@/movies/dtos/movie-contents/shared.dto';
 
 @InputType()
 export class FetchMovieImagesByIdInput extends PickType(CommonFetchMovieInput, [

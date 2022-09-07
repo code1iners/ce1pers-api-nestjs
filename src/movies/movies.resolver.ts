@@ -1,3 +1,4 @@
+import { FetchLatestTvInput } from '@/movies/dtos/tv-contents/fetch-latest-tv.dto';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { MoviesService } from '@/movies/movies.service';
 import {
@@ -64,6 +65,7 @@ import {
   FetchMovieAlternativeTitlesInput,
   FetchMovieAlternativeTitlesOutput,
 } from '@/movies/dtos/movie-contents/fetch-movie-alternative-titles.dto';
+import { FetchLatestTvOutput } from './dtos/tv-contents/fetch-latest-tv.dto';
 
 @Resolver()
 export class MoviesResolver {
@@ -180,4 +182,13 @@ export class MoviesResolver {
   ): Promise<FetchMovieAlternativeTitlesOutput> {
     return this.movieService.movies.fetchMovieAlternativeTitlesById(input);
   }
+
+  // Tv content start.
+  @Query(() => FetchLatestTvOutput)
+  async latestTv(
+    @Args('input') input: FetchLatestTvInput,
+  ): Promise<FetchLatestTvOutput> {
+    return this.movieService.tv.fetchLatestTv(input);
+  }
+  // Tv content end.
 }

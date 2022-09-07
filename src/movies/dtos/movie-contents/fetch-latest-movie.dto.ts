@@ -3,7 +3,7 @@ import { CoreOutput } from '@/core/dtos/core.dto';
 import {
   FetchMovieDetailsResponse,
   CommonFetchMoviesInput,
-} from '@/movies/dtos/shared.dto';
+} from '@/movies/dtos/movie-contents/shared.dto';
 
 @InputType()
 export class FetchLatestMovieInput extends PickType(CommonFetchMoviesInput, [

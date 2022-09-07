@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { movieFetcher } from '@/movies/utils/movies-helper';
+import { movieDatabaseFetcher } from '@/movies/utils/movies-helper';
 import {
   CommonFetchMoviesOutput,
   FetchMovieDetailsAppendToResponse,
   FetchMovieDetailsResponse,
-} from '@/movies/dtos/shared.dto';
+} from '@/movies/dtos/movie-contents/shared.dto';
 import {
   FetchPopularMoviesInput,
   FetchPopularMoviesOutput,
@@ -81,8 +81,8 @@ export class MovieContentService {
     region,
   }: FetchPopularMoviesInput): Promise<FetchPopularMoviesOutput> {
     try {
-      // Fetch movies.
-      const data = await movieFetcher<FetchPopularMoviesResponse>({
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchPopularMoviesResponse>({
         configService: this.configService,
         path: `/movie/popular`,
         queries: { language, page, region },
@@ -110,8 +110,8 @@ export class MovieContentService {
     language,
   }: FetchTopRatedMoviesInput): Promise<FetchTopRatedMoviesOutput> {
     try {
-      // Fetch movies.
-      const data = await movieFetcher<FetchTopRatedMoviesResponse>({
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchTopRatedMoviesResponse>({
         configService: this.configService,
         path: `/movie/top_rated`,
         queries: { language, page, region },
@@ -140,8 +140,8 @@ export class MovieContentService {
     language,
   }: FetchNowPlayingMoviesInput): Promise<FetchNowPlayingMoviesOutput> {
     try {
-      // Fetch movies.
-      const data = await movieFetcher<FetchNowPlayingMoviesResponse>({
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchNowPlayingMoviesResponse>({
         configService: this.configService,
         path: `/movie/now_playing`,
         queries: { language, page, region },
@@ -167,8 +167,8 @@ export class MovieContentService {
     language,
   }: FetchLatestMovieInput): Promise<FetchLatestMovieOutput> {
     try {
-      // Fetch movies.
-      const data = await movieFetcher<FetchMovieDetailsResponse>({
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchMovieDetailsResponse>({
         configService: this.configService,
         path: `/movie/latest`,
         queries: { language },
@@ -197,8 +197,8 @@ export class MovieContentService {
     language,
   }: FetchUpcomingMoviesInput): Promise<FetchUpcomingMoviesOutput> {
     try {
-      // Fetch movies.
-      const data = await movieFetcher<FetchUpcomingMoviesResponse>({
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchUpcomingMoviesResponse>({
         configService: this.configService,
         path: `/movie/upcoming`,
         queries: { page, region, language },
@@ -226,12 +226,13 @@ export class MovieContentService {
     appendToResponse,
   }: FetchMovieDetailsInput): Promise<FetchMovieDetailsOutput> {
     try {
-      // Fetch movies.
-      const data = await movieFetcher<FetchMovieDetailsAppendToResponse>({
-        configService: this.configService,
-        path: `/movie/${movieId}`,
-        queries: { language, append_to_response: appendToResponse },
-      });
+      // Data fetching.
+      const data =
+        await movieDatabaseFetcher<FetchMovieDetailsAppendToResponse>({
+          configService: this.configService,
+          path: `/movie/${movieId}`,
+          queries: { language, append_to_response: appendToResponse },
+        });
 
       return {
         ok: true,
@@ -253,8 +254,8 @@ export class MovieContentService {
     movieId,
   }: FetchMovieKeywordsInput): Promise<FetchMovieKeywordsOutput> {
     try {
-      // Fetch movies.
-      const data = await movieFetcher<FetchMovieKeywordsResponse>({
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchMovieKeywordsResponse>({
         configService: this.configService,
         path: `/movie/${movieId}/keywords`,
       });
@@ -281,8 +282,8 @@ export class MovieContentService {
     language,
   }: FetchRecommendationMoviesInput): Promise<FetchRecommendationMoviesOutput> {
     try {
-      // Fetch movies.
-      const data = await movieFetcher<CommonFetchMoviesOutput>({
+      // Data fetching.
+      const data = await movieDatabaseFetcher<CommonFetchMoviesOutput>({
         configService: this.configService,
         path: `/movie/${movieId}/recommendations`,
         queries: { page, language },
@@ -309,8 +310,8 @@ export class MovieContentService {
     language,
   }: FetchMovieVideosByIdInput): Promise<FetchMovieVideosByIdOutput> {
     try {
-      // Fetch movies.
-      const data = await movieFetcher<FetchMovieVideosByIdResponse>({
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchMovieVideosByIdResponse>({
         configService: this.configService,
         path: `/movie/${movieId}/videos`,
         queries: { language },
@@ -339,8 +340,8 @@ export class MovieContentService {
     language,
   }: FetchSimilarMoviesByIdInput): Promise<FetchSimilarMoviesByIdOutput> {
     try {
-      // Fetch movies.
-      const data = await movieFetcher<CommonFetchMoviesOutput>({
+      // Data fetching.
+      const data = await movieDatabaseFetcher<CommonFetchMoviesOutput>({
         configService: this.configService,
         path: `/movie/${movieId}/similar`,
         queries: { page, language },
@@ -366,8 +367,8 @@ export class MovieContentService {
     movieId,
   }: FetchMovieImagesByIdInput): Promise<FetchMovieImagesByIdOutput> {
     try {
-      // Fetch movies.
-      const data = await movieFetcher<FetchMovieImagesResponse>({
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchMovieImagesResponse>({
         configService: this.configService,
         path: `/movie/${movieId}/images`,
       });
@@ -393,8 +394,8 @@ export class MovieContentService {
     language,
   }: FetchMovieCreditsByIdInput): Promise<FetchMovieCreditsByIdOutput> {
     try {
-      // Fetch movies.
-      const data = await movieFetcher<FetchMovieCreditsResponse>({
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchMovieCreditsResponse>({
         configService: this.configService,
         path: `/movie/${movieId}/credits`,
         queries: { language },
@@ -417,11 +418,12 @@ export class MovieContentService {
     movieId,
   }: FetchMovieAlternativeTitlesInput): Promise<FetchMovieAlternativeTitlesOutput> {
     try {
-      // Fetch movies.
-      const data = await movieFetcher<FetchMovieAlternativeTitlesResponse>({
-        configService: this.configService,
-        path: `/movie/${movieId}/alternative_titles`,
-      });
+      // Data fetching.
+      const data =
+        await movieDatabaseFetcher<FetchMovieAlternativeTitlesResponse>({
+          configService: this.configService,
+          path: `/movie/${movieId}/alternative_titles`,
+        });
 
       return {
         ok: true,

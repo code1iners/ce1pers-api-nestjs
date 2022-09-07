@@ -1,27 +1,9 @@
 import { Field, InputType, ObjectType, PickType } from '@nestjs/graphql';
 import { CoreOutput } from '@/core/dtos/core.dto';
-import { CommonFetchMoviesInput } from '@/movies/dtos/shared.dto';
-
-export interface FetchAvailableRegionResponse {
-  results: AvailableRegionResultSnakeCase[];
-}
-
-@ObjectType({
-  description: 'Available region result.',
-})
-export class AvailableRegionResultSnakeCase {
-  @Field(() => String)
-  iso_3166_1: string;
-
-  @Field(() => String)
-  english_name: string;
-
-  @Field(() => String)
-  native_name: string;
-}
+import { CommonFetchMoviesInput } from '@/movies/dtos/movie-contents/shared.dto';
 
 @ObjectType({ description: 'Available region results (Camel case).' })
-export class AvailableRegionResultCamelCase {
+export class AvailableRegionResult {
   @Field(() => String)
   iso31661: string;
 
@@ -30,6 +12,11 @@ export class AvailableRegionResultCamelCase {
 
   @Field(() => String)
   nativeName: string;
+}
+@ObjectType()
+export class FetchAvailableRegionResponse {
+  @Field(() => [AvailableRegionResult])
+  results: AvailableRegionResult[];
 }
 
 @InputType()
@@ -40,6 +27,6 @@ export class FetchAvailableRegionsInput extends PickType(
 
 @ObjectType()
 export class FetchAvailableRegionsOutput extends CoreOutput {
-  @Field(() => [AvailableRegionResultCamelCase], { nullable: true })
-  results?: AvailableRegionResultCamelCase[];
+  @Field(() => FetchAvailableRegionResponse, { nullable: true })
+  data?: FetchAvailableRegionResponse;
 }

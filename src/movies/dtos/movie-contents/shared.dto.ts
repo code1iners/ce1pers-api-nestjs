@@ -1,14 +1,7 @@
-import {
-  Field,
-  Float,
-  InputType,
-  Int,
-  ObjectType,
-  OmitType,
-} from '@nestjs/graphql';
+import { Field, Float, InputType, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class MediaContentResult {
+export class MovieMediaContentResult {
   @Field(() => Int)
   id: number;
 
@@ -91,8 +84,8 @@ export class CommonFetchMoviesOutput {
   @Field(() => Int)
   page: number;
 
-  @Field(() => [MediaContentResult])
-  results: MediaContentResult[];
+  @Field(() => [MovieMediaContentResult])
+  results: MovieMediaContentResult[];
 
   @Field(() => Int)
   totalResults: number;
@@ -198,11 +191,6 @@ export class FetchMovieDetailsResponse {
 
   @Field(() => [MovieSpokenLanguage])
   spokenLanguages: MovieSpokenLanguage[];
-
-  //     @Field(() => String, {nullable:true})
-  //   belongsToCollection: null;
-  //   productionCompanies: [];
-  //   productionCountries: [];
 }
 @ObjectType()
 export class AppendToResponseVideosResult {

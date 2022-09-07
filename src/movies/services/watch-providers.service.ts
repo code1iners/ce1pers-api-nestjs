@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { convertSnakeToCamel } from '@/libs/case-styles-transformers/camel-caser';
-import { makeMoviesRequest } from '@/movies/utils/movies-helper';
 import {
-  AvailableRegionResultCamelCase,
+  makeMovieDatabaseRequest,
+  movieDatabaseFetcher,
+} from '@/movies/utils/movies-helper';
+import {
   FetchAvailableRegionResponse,
   FetchAvailableRegionsInput,
   FetchAvailableRegionsOutput,
@@ -25,24 +26,16 @@ export class MovieProviderService {
     language,
   }: FetchAvailableRegionsInput): Promise<FetchAvailableRegionsOutput> {
     try {
-      // Make request.
-      const request = makeMoviesRequest({
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchAvailableRegionResponse>({
         configService: this.configService,
         path: '/watch/providers/regions',
         queries: { language },
       });
 
-      // Fetching.
-      const { results: originResults } =
-        await request.json<FetchAvailableRegionResponse>();
-      if (!originResults) throw new Error('Failed fetching.');
-      const results = originResults.map(
-        convertSnakeToCamel<AvailableRegionResultCamelCase>,
-      );
-
       return {
         ok: true,
-        results,
+        data,
       };
     } catch (error) {
       console.error('[fetchAvailableRegions]', error);
@@ -63,7 +56,7 @@ export class MovieProviderService {
   }: FetchContentProvidersInput): Promise<FetchContentProvidersOutput> {
     try {
       // Make request.
-      const request = makeMoviesRequest({
+      const request = makeMovieDatabaseRequest({
         configService: this.configService,
         path: `/watch/providers/${mediaContentType.toLowerCase()}`,
         queries: { language, watch_region },

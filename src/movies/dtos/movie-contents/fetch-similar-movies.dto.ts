@@ -3,7 +3,7 @@ import { Field, InputType, ObjectType, OmitType } from '@nestjs/graphql';
 import {
   CommonFetchMovieInput,
   CommonFetchMoviesOutput,
-} from '@/movies/dtos/shared.dto';
+} from '@/movies/dtos/movie-contents/shared.dto';
 
 @InputType()
 export class FetchSimilarMoviesByIdInput extends OmitType(

@@ -2,7 +2,7 @@ import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import {
   CommonFetchMoviesInput,
   CommonFetchMoviesOutput,
-} from '@/movies/dtos/shared.dto';
+} from '@/movies/dtos/movie-contents/shared.dto';
 import { CoreOutput } from '@/core/dtos/core.dto';
 
 @ObjectType()
