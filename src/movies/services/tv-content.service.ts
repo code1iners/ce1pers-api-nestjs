@@ -15,6 +15,11 @@ import {
   FetchTopRatedTvListInput,
   FetchTopRatedTvListOutput,
 } from '../dtos/tv-contents/fetch-top-rated-tv.dto';
+import {
+  FetchTvOnTheAirListInput,
+  FetchTvOnTheAirListOutput,
+  FetchTvOnTheAirListResponse,
+} from '../dtos/tv-contents/fetch-tv-on-the-air.dto';
 
 @Injectable()
 export class TvContentService {
@@ -99,6 +104,35 @@ export class TvContentService {
       return {
         ok: false,
         error: 'Failed fetch top rated tv list.',
+      };
+    }
+  }
+
+  /**
+   * Get a list of shows that are currently on the air.
+   * This query looks for any TV show that has an episode with an air date in the next 7 days.
+   */
+  async fetchTvOnTheAirList({
+    page,
+    language,
+  }: FetchTvOnTheAirListInput): Promise<FetchTvOnTheAirListOutput> {
+    try {
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchTvOnTheAirListResponse>({
+        configService: this.configService,
+        path: `/tv/on_the_air`,
+        queries: { page, language },
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchTvOnTheAirList]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch tv on the air list.',
       };
     }
   }

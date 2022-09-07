@@ -74,6 +74,10 @@ import {
   FetchTopRatedTvListInput,
   FetchTopRatedTvListOutput,
 } from './dtos/tv-contents/fetch-top-rated-tv.dto';
+import {
+  FetchTvOnTheAirListInput,
+  FetchTvOnTheAirListOutput,
+} from './dtos/tv-contents/fetch-tv-on-the-air.dto';
 
 @Resolver()
 export class MoviesResolver {
@@ -213,6 +217,13 @@ export class MoviesResolver {
     @Args('input') input: FetchTopRatedTvListInput,
   ): Promise<FetchTopRatedTvListOutput> {
     return this.movieService.tv.fetchTopRatedTvList(input);
+  }
+
+  @Query(() => FetchTvOnTheAirListOutput)
+  async tvOnTheAirList(
+    @Args('input') input: FetchTvOnTheAirListInput,
+  ): Promise<FetchTvOnTheAirListOutput> {
+    return this.movieService.tv.fetchTvOnTheAirList(input);
   }
   // Tv content end.
 }
