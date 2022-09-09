@@ -7,7 +7,7 @@ import {
   PickType,
 } from '@nestjs/graphql';
 import {
-  CommonFetchTvInput,
+  CommonFetchTvListInput,
   TvCreatedBy,
   TvGenre,
   TvLastEpisodeToAir,
@@ -16,7 +16,7 @@ import {
 import { CoreOutput } from '@/core/dtos/core.dto';
 
 @InputType()
-export class FetchLatestTvInput extends PickType(CommonFetchTvInput, [
+export class FetchLatestTvInput extends PickType(CommonFetchTvListInput, [
   'language',
 ] as const) {}
 

@@ -1,12 +1,12 @@
 import { Field, InputType, Int, ObjectType, OmitType } from '@nestjs/graphql';
 import { CoreOutput } from '@/core/dtos/core.dto';
 import {
-  CommonFetchTvInput,
+  CommonFetchTvListInput,
   FetchTvListResponse,
 } from '@/movies/dtos/tv-contents/shared.dto';
 
 @InputType()
-export class FetchPopularTvListInput extends OmitType(CommonFetchTvInput, [
+export class FetchPopularTvListInput extends OmitType(CommonFetchTvListInput, [
   'region',
 ] as const) {}
 

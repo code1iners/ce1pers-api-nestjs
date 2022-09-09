@@ -78,6 +78,10 @@ import {
   FetchTvOnTheAirListInput,
   FetchTvOnTheAirListOutput,
 } from './dtos/tv-contents/fetch-tv-on-the-air.dto';
+import {
+  FetchTvWatchProvidersInput,
+  FetchTvWatchProvidersOutput,
+} from './dtos/tv-contents/fetch-tv-watch-providers.dto';
 
 @Resolver()
 export class MoviesResolver {
@@ -224,6 +228,13 @@ export class MoviesResolver {
     @Args('input') input: FetchTvOnTheAirListInput,
   ): Promise<FetchTvOnTheAirListOutput> {
     return this.movieService.tv.fetchTvOnTheAirList(input);
+  }
+
+  @Query(() => FetchTvWatchProvidersOutput)
+  async tvWatchProviders(
+    @Args('input') input: FetchTvWatchProvidersInput,
+  ): Promise<FetchTvWatchProvidersOutput> {
+    return this.movieService.tv.fetchTvWatchProvidersById(input);
   }
   // Tv content end.
 }

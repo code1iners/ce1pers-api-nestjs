@@ -2,7 +2,13 @@ import { Field, Float, InputType, Int, ObjectType } from '@nestjs/graphql';
 import { CommonFetchMoviesInput } from '@/movies/dtos/movie-contents/shared.dto';
 
 @InputType()
-export class CommonFetchTvInput extends CommonFetchMoviesInput {}
+export class CommonFetchTvListInput extends CommonFetchMoviesInput {}
+
+@InputType()
+export class CommonFetchTvInput {
+  @Field(() => Int)
+  tvId: number;
+}
 
 @ObjectType()
 export class TvLastEpisodeToAir {

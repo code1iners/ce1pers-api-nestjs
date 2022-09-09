@@ -1,3 +1,8 @@
+import {
+  FetchTvWatchProvidersInput,
+  FetchTvWatchProvidersOutput,
+  FetchTvWatchProvidersResponse,
+} from './../dtos/tv-contents/fetch-tv-watch-providers.dto';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { movieDatabaseFetcher } from '@/movies/utils/movies-helper';
@@ -133,6 +138,35 @@ export class TvContentService {
       return {
         ok: false,
         error: 'Failed fetch tv on the air list.',
+      };
+    }
+  }
+
+  /**
+   * Powered by our partnership with JustWatch, you can query this method to get a list of the availabilities per country by provider.
+   * This is not going to return full deep links, but rather, it's just enough information to display what's available where.
+   * You can link to the provided TMDB URL to help support TMDB and provide the actual deep links to the content.
+   * Please note: In order to use this data you must attribute the source of the data as JustWatch. If we find any usage not complying with these terms we will revoke access to the API.
+   */
+  async fetchTvWatchProvidersById({
+    tvId,
+  }: FetchTvWatchProvidersInput): Promise<FetchTvWatchProvidersOutput> {
+    try {
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchTvWatchProvidersResponse>({
+        configService: this.configService,
+        path: `/tv/${tvId}/watch/providers`,
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchTvWatchProvidersById]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch tv watch providers by ID.',
       };
     }
   }
