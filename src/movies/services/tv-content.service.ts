@@ -55,6 +55,11 @@ import {
   FetchTvKeywordsOutput,
   FetchTvKeywordsResponse,
 } from '../dtos/tv-contents/fetch-tv-keywords.dto';
+import {
+  FetchTvShowCreditsInput,
+  FetchTvShowCreditsOutput,
+  FetchTvShowCreditsResponse,
+} from '../dtos/tv-contents/fetch-tv-show-credits.dto';
 
 @Injectable()
 export class TvContentService {
@@ -363,6 +368,34 @@ export class TvContentService {
       return {
         ok: false,
         error: 'Failed fetch tv keywords by ID.',
+      };
+    }
+  }
+
+  /**
+   * Get the credits (cast and crew) that have been added to a TV show.
+   */
+  async fetchTvShowCreditsById({
+    tvId,
+    language,
+  }: FetchTvShowCreditsInput): Promise<FetchTvShowCreditsOutput> {
+    try {
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchTvShowCreditsResponse>({
+        configService: this.configService,
+        path: `/tv/${tvId}/credits`,
+        queries: { language },
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchTvShowCreditsById]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch tv show credits by ID.',
       };
     }
   }
