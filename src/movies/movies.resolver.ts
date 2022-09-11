@@ -90,6 +90,10 @@ import {
   FetchTvTranslationsInput,
   FetchTvTranslationsOutput,
 } from './dtos/tv-contents/fetch-tv-translation.dto';
+import {
+  FetchSimilarTvShowsInput,
+  FetchSimilarTvShowsOutput,
+} from './dtos/tv-contents/fetch-similar-tv-shows.dto';
 
 @Resolver()
 export class MoviesResolver {
@@ -257,6 +261,13 @@ export class MoviesResolver {
     @Args('input') input: FetchTvTranslationsInput,
   ): Promise<FetchTvTranslationsOutput> {
     return this.movieService.tv.fetchTvTranslationsById(input);
+  }
+
+  @Query(() => FetchSimilarTvShowsOutput)
+  async similarTvShows(
+    @Args('input') input: FetchSimilarTvShowsInput,
+  ): Promise<FetchSimilarTvShowsOutput> {
+    return this.movieService.tv.fetchSimilarTvShowsById(input);
   }
   // Tv content end.
 }

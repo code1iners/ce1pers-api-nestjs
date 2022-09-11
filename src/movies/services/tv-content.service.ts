@@ -35,6 +35,11 @@ import {
   FetchTvTranslationsOutput,
   FetchTvTranslationsResponse,
 } from '../dtos/tv-contents/fetch-tv-translation.dto';
+import {
+  FetchSimilarTvShowsInput,
+  FetchSimilarTvShowsOutput,
+  FetchSimilarTvShowsResponse,
+} from '../dtos/tv-contents/fetch-similar-tv-shows.dto';
 
 @Injectable()
 export class TvContentService {
@@ -231,6 +236,34 @@ export class TvContentService {
       return {
         ok: false,
         error: 'Failed fetch tv translations by ID.',
+      };
+    }
+  }
+
+  /**
+   * Get a list of similar TV shows. These items are assembled by looking at keywords and genres.
+   */
+  async fetchSimilarTvShowsById({
+    tvId,
+    language,
+  }: FetchSimilarTvShowsInput): Promise<FetchSimilarTvShowsOutput> {
+    try {
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchSimilarTvShowsResponse>({
+        configService: this.configService,
+        path: `/tv/${tvId}/similar`,
+        queries: { language },
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchSimilarTvShowsById]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch similar tv shows by ID.',
       };
     }
   }

@@ -105,8 +105,8 @@ export class TvGenre {
 
 @ObjectType()
 export class TvListResult {
-  @Field(() => String)
-  backdropPath: string;
+  @Field(() => String, { nullable: true })
+  backdropPath?: string;
 
   @Field(() => String)
   firstAirDate: string;
