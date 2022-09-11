@@ -102,6 +102,10 @@ import {
   FetchRecommendationTvShowsInput,
   FetchRecommendationTvShowsOutput,
 } from './dtos/tv-contents/fetch-recommendation-tv-shows.dto';
+import {
+  FetchTvKeywordsInput,
+  FetchTvKeywordsOutput,
+} from './dtos/tv-contents/fetch-tv-keywords.dto';
 
 @Resolver()
 export class MoviesResolver {
@@ -290,6 +294,13 @@ export class MoviesResolver {
     @Args('input') input: FetchRecommendationTvShowsInput,
   ): Promise<FetchRecommendationTvShowsOutput> {
     return this.movieService.tv.fetchRecommendationTvShowsById(input);
+  }
+
+  @Query(() => FetchTvKeywordsOutput)
+  async tvKeywords(
+    @Args('input') input: FetchTvKeywordsInput,
+  ): Promise<FetchTvKeywordsOutput> {
+    return this.movieService.tv.fetchTvKeywordsById(input);
   }
   // Tv content end.
 }

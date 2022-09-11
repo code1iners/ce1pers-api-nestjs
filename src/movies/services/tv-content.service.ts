@@ -50,6 +50,11 @@ import {
   FetchRecommendationTvShowsOutput,
   FetchRecommendationTvShowsResponse,
 } from '../dtos/tv-contents/fetch-recommendation-tv-shows.dto';
+import {
+  FetchTvKeywordsInput,
+  FetchTvKeywordsOutput,
+  FetchTvKeywordsResponse,
+} from '../dtos/tv-contents/fetch-tv-keywords.dto';
 
 @Injectable()
 export class TvContentService {
@@ -332,6 +337,32 @@ export class TvContentService {
       return {
         ok: false,
         error: 'Failed fetch recommendation tv shows by ID.',
+      };
+    }
+  }
+
+  /**
+   * Get the keywords that have been added to a TV show.
+   */
+  async fetchTvKeywordsById({
+    tvId,
+  }: FetchTvKeywordsInput): Promise<FetchTvKeywordsOutput> {
+    try {
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchTvKeywordsResponse>({
+        configService: this.configService,
+        path: `/tv/${tvId}/keywords`,
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchTvKeywordsById]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch tv keywords by ID.',
       };
     }
   }
