@@ -40,6 +40,11 @@ import {
   FetchSimilarTvShowsOutput,
   FetchSimilarTvShowsResponse,
 } from '../dtos/tv-contents/fetch-similar-tv-shows.dto';
+import {
+  FetchTvReviewsInput,
+  FetchTvReviewsOutput,
+  FetchTvReviewsResponse,
+} from '../dtos/tv-contents/fetch-tv-reviews.dto';
 
 @Injectable()
 export class TvContentService {
@@ -264,6 +269,34 @@ export class TvContentService {
       return {
         ok: false,
         error: 'Failed fetch similar tv shows by ID.',
+      };
+    }
+  }
+
+  /**
+   * Get the reviews for a TV show.
+   */
+  async fetchTvReviewsById({
+    tvId,
+    language,
+  }: FetchTvReviewsInput): Promise<FetchTvReviewsOutput> {
+    try {
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchTvReviewsResponse>({
+        configService: this.configService,
+        path: `/tv/${tvId}/reviews`,
+        queries: { language },
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchTvReviewsById]', err);
+      return {
+        ok: false,
+        error: 'Fetch tv reviews by ID.',
       };
     }
   }

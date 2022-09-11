@@ -9,8 +9,8 @@ export class CommonFetchTvInput {
   @Field(() => Int)
   tvId: number;
 
-  @Field(() => String)
-  language: string;
+  @Field(() => String, { nullable: true, defaultValue: 'ko-kr' })
+  language?: string;
 }
 
 @ObjectType()
