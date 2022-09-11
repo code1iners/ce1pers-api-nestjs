@@ -25,6 +25,11 @@ import {
   FetchTvOnTheAirListOutput,
   FetchTvOnTheAirListResponse,
 } from '../dtos/tv-contents/fetch-tv-on-the-air.dto';
+import {
+  FetchTvVideosInput,
+  FetchTvVideosOutput,
+  FetchTvVideosResponse,
+} from '../dtos/tv-contents/fetch-tv-videos.dto';
 
 @Injectable()
 export class TvContentService {
@@ -167,6 +172,34 @@ export class TvContentService {
       return {
         ok: false,
         error: 'Failed fetch tv watch providers by ID.',
+      };
+    }
+  }
+
+  /**
+   * Get the videos that have been added to a TV show.
+   */
+  async fetchTvVideosById({
+    tvId,
+    language,
+  }: FetchTvVideosInput): Promise<FetchTvVideosOutput> {
+    try {
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchTvVideosResponse>({
+        configService: this.configService,
+        path: `/tv/${tvId}/videos`,
+        queries: { language },
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchTvVideosById]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch tv videos by ID.',
       };
     }
   }

@@ -8,6 +8,9 @@ export class CommonFetchTvListInput extends CommonFetchMoviesInput {}
 export class CommonFetchTvInput {
   @Field(() => Int)
   tvId: number;
+
+  @Field(() => String)
+  language: string;
 }
 
 @ObjectType()

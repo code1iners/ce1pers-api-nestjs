@@ -82,6 +82,10 @@ import {
   FetchTvWatchProvidersInput,
   FetchTvWatchProvidersOutput,
 } from './dtos/tv-contents/fetch-tv-watch-providers.dto';
+import {
+  FetchTvVideosInput,
+  FetchTvVideosOutput,
+} from './dtos/tv-contents/fetch-tv-videos.dto';
 
 @Resolver()
 export class MoviesResolver {
@@ -235,6 +239,13 @@ export class MoviesResolver {
     @Args('input') input: FetchTvWatchProvidersInput,
   ): Promise<FetchTvWatchProvidersOutput> {
     return this.movieService.tv.fetchTvWatchProvidersById(input);
+  }
+
+  @Query(() => FetchTvVideosOutput)
+  async tvVideos(
+    @Args('input') input: FetchTvVideosInput,
+  ): Promise<FetchTvVideosOutput> {
+    return this.movieService.tv.fetchTvVideosById(input);
   }
   // Tv content end.
 }
