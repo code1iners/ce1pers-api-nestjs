@@ -1,4 +1,3 @@
-import { CoreOutput } from '@/core/dtos/core.dto';
 import {
   Field,
   Float,
@@ -7,7 +6,8 @@ import {
   ObjectType,
   PickType,
 } from '@nestjs/graphql';
-import { CommonFetchTvInput, FetchTvListResponse } from './shared.dto';
+import { CoreOutput } from '@/core/dtos/core.dto';
+import { CommonFetchTvInput } from '@/movies/dtos/tv-contents/shared.dto';
 
 @InputType()
 export class FetchTvReviewsInput extends PickType(CommonFetchTvInput, [

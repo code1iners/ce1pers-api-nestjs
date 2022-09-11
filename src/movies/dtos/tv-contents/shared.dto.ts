@@ -11,6 +11,9 @@ export class CommonFetchTvInput {
 
   @Field(() => String, { nullable: true, defaultValue: 'ko-kr' })
   language?: string;
+
+  @Field(() => Int, { nullable: true, defaultValue: 1 })
+  page?: number;
 }
 
 @ObjectType()

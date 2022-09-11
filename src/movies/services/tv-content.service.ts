@@ -45,6 +45,11 @@ import {
   FetchTvReviewsOutput,
   FetchTvReviewsResponse,
 } from '../dtos/tv-contents/fetch-tv-reviews.dto';
+import {
+  FetchRecommendationTvShowsInput,
+  FetchRecommendationTvShowsOutput,
+  FetchRecommendationTvShowsResponse,
+} from '../dtos/tv-contents/fetch-recommendation-tv-shows.dto';
 
 @Injectable()
 export class TvContentService {
@@ -297,6 +302,36 @@ export class TvContentService {
       return {
         ok: false,
         error: 'Fetch tv reviews by ID.',
+      };
+    }
+  }
+
+  /**
+   * Get the list of TV show recommendations for this item.
+   */
+  async fetchRecommendationTvShowsById({
+    tvId,
+    language,
+    page,
+  }: FetchRecommendationTvShowsInput): Promise<FetchRecommendationTvShowsOutput> {
+    try {
+      // Data fetching.
+      const data =
+        await movieDatabaseFetcher<FetchRecommendationTvShowsResponse>({
+          configService: this.configService,
+          path: `/tv/${tvId}/recommendations`,
+          queries: { language, page },
+        });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchRecommendationTvShowsById]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch recommendation tv shows by ID.',
       };
     }
   }
