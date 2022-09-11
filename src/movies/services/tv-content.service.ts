@@ -60,6 +60,11 @@ import {
   FetchTvShowCreditsOutput,
   FetchTvShowCreditsResponse,
 } from '../dtos/tv-contents/fetch-tv-show-credits.dto';
+import {
+  FetchTvShowContentRatingsInput,
+  FetchTvShowContentRatingsOutput,
+  FetchTvShowContentRatingsResponse,
+} from '../dtos/tv-contents/fetch-tv-show-content-ratings.dto';
 
 @Injectable()
 export class TvContentService {
@@ -396,6 +401,35 @@ export class TvContentService {
       return {
         ok: false,
         error: 'Failed fetch tv show credits by ID.',
+      };
+    }
+  }
+
+  /**
+   * Get the list of content ratings (certifications) that have been added to a TV show.
+   */
+  async fetchTvShowContentRatingsById({
+    tvId,
+    language,
+  }: FetchTvShowContentRatingsInput): Promise<FetchTvShowContentRatingsOutput> {
+    try {
+      // Data fetching.
+      const data =
+        await movieDatabaseFetcher<FetchTvShowContentRatingsResponse>({
+          configService: this.configService,
+          path: `/tv/${tvId}/content_ratings`,
+          queries: { language },
+        });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchTvShowContentRatingsById]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch tv show content ratings by ID.',
       };
     }
   }

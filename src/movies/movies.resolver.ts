@@ -110,6 +110,10 @@ import {
   FetchTvShowCreditsInput,
   FetchTvShowCreditsOutput,
 } from './dtos/tv-contents/fetch-tv-show-credits.dto';
+import {
+  FetchTvShowContentRatingsInput,
+  FetchTvShowContentRatingsOutput,
+} from './dtos/tv-contents/fetch-tv-show-content-ratings.dto';
 
 @Resolver()
 export class MoviesResolver {
@@ -312,6 +316,13 @@ export class MoviesResolver {
     @Args('input') input: FetchTvShowCreditsInput,
   ): Promise<FetchTvShowCreditsOutput> {
     return this.movieService.tv.fetchTvShowCreditsById(input);
+  }
+
+  @Query(() => FetchTvShowContentRatingsOutput)
+  async tvShowContentRatings(
+    @Args('input') input: FetchTvShowContentRatingsInput,
+  ): Promise<FetchTvShowContentRatingsOutput> {
+    return this.movieService.tv.fetchTvShowContentRatingsById(input);
   }
   // Tv content end.
 }
