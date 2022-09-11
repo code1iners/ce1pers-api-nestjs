@@ -30,6 +30,11 @@ import {
   FetchTvVideosOutput,
   FetchTvVideosResponse,
 } from '../dtos/tv-contents/fetch-tv-videos.dto';
+import {
+  FetchTvTranslationsInput,
+  FetchTvTranslationsOutput,
+  FetchTvTranslationsResponse,
+} from '../dtos/tv-contents/fetch-tv-translation.dto';
 
 @Injectable()
 export class TvContentService {
@@ -200,6 +205,32 @@ export class TvContentService {
       return {
         ok: false,
         error: 'Failed fetch tv videos by ID.',
+      };
+    }
+  }
+
+  /**
+   * Get a list of the translations that exist for a TV show.
+   */
+  async fetchTvTranslationsById({
+    tvId,
+  }: FetchTvTranslationsInput): Promise<FetchTvTranslationsOutput> {
+    try {
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchTvTranslationsResponse>({
+        configService: this.configService,
+        path: `/tv/${tvId}/translations`,
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchTvTranslationsById]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch tv translations by ID.',
       };
     }
   }
