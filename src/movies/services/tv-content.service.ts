@@ -70,6 +70,12 @@ import {
   FetchTvShowAlternativeTitlesOutput,
   FetchTvShowAlternativeTitlesResponse,
 } from '../dtos/tv-contents/fetch-tv-show-alternative-titles.dto';
+import {
+  FetchTvShowDetailsAppendToResponse,
+  FetchTvShowDetailsInput,
+  FetchTvShowDetailsOutput,
+  FetchTvShowDetailsResponse,
+} from '../dtos/tv-contents/fetch-tv-show-details.dto';
 
 @Injectable()
 export class TvContentService {
@@ -464,6 +470,36 @@ export class TvContentService {
       return {
         ok: false,
         error: 'Failed fetch tv show alternative titles by ID.',
+      };
+    }
+  }
+
+  /**
+   * Get the primary TV show details by id.
+   */
+  async fetchTvShowDetailsById({
+    tvId,
+    language,
+    appendToResponse,
+  }: FetchTvShowDetailsInput): Promise<FetchTvShowDetailsOutput> {
+    try {
+      // Data fetching.
+      const data =
+        await movieDatabaseFetcher<FetchTvShowDetailsAppendToResponse>({
+          configService: this.configService,
+          path: `/tv/${tvId}`,
+          queries: { language, append_to_response: appendToResponse },
+        });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchTvShowDetailsById]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch tv show details by ID.',
       };
     }
   }

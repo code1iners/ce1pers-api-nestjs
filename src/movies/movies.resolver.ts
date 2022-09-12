@@ -118,6 +118,10 @@ import {
   FetchTvShowAlternativeTitlesInput,
   FetchTvShowAlternativeTitlesOutput,
 } from './dtos/tv-contents/fetch-tv-show-alternative-titles.dto';
+import {
+  FetchTvShowDetailsInput,
+  FetchTvShowDetailsOutput,
+} from './dtos/tv-contents/fetch-tv-show-details.dto';
 
 @Resolver()
 export class MoviesResolver {
@@ -334,6 +338,13 @@ export class MoviesResolver {
     @Args('input') input: FetchTvShowAlternativeTitlesInput,
   ): Promise<FetchTvShowAlternativeTitlesOutput> {
     return this.movieService.tv.fetchTvShowAlternativeTitlesById(input);
+  }
+
+  @Query(() => FetchTvShowDetailsOutput)
+  async tvShowDetails(
+    @Args('input') input: FetchTvShowDetailsInput,
+  ): Promise<FetchTvShowDetailsOutput> {
+    return this.movieService.tv.fetchTvShowDetailsById(input);
   }
   // Tv content end.
 }

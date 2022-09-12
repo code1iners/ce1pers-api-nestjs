@@ -13,7 +13,7 @@ import {
   CommonFetchMovieInput,
 } from '@/movies/dtos/movie-contents/shared.dto';
 
-enum MovieDetailAppendToResponseType {
+export enum MovieDetailAppendToResponseType {
   Videos = 'videos',
   Images = 'images',
   Both = 'videos,images',

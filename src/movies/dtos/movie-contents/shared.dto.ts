@@ -255,7 +255,7 @@ export class MovieImage {
 }
 
 @ObjectType()
-class AppendToResponseImages {
+export class AppendToResponseImages {
   @Field(() => [MovieImage])
   backdrops: MovieImage[];
 
@@ -269,9 +269,9 @@ class AppendToResponseImages {
 @ObjectType()
 export class FetchMovieDetailsAppendToResponse extends FetchMovieDetailsResponse {
   @Field(() => AppendToResponseVideos, { nullable: true })
-  videos: AppendToResponseVideos;
+  videos?: AppendToResponseVideos;
   @Field(() => AppendToResponseImages, { nullable: true })
-  images: AppendToResponseImages;
+  images?: AppendToResponseImages;
 }
 
 @ObjectType()
