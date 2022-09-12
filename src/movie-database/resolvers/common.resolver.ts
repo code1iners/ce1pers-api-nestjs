@@ -4,6 +4,10 @@ import {
   GetImageUrlInput,
   GetImageUrlOutput,
 } from '@/movie-database/dtos/commons/get-image-url.dto';
+import {
+  FetchMoviesByKeywordInput,
+  FetchMoviesByKeywordOutput,
+} from '../dtos/commons/fetch-movies-by-keyword.dto';
 
 @Resolver()
 export class MovieDatabaseCommonResolver {
@@ -12,5 +16,12 @@ export class MovieDatabaseCommonResolver {
   @Query(() => GetImageUrlOutput)
   imageUrl(@Args('input') input: GetImageUrlInput): GetImageUrlOutput {
     return this.commonService.makeImageUrl(input);
+  }
+
+  @Query(() => FetchMoviesByKeywordOutput)
+  async moviesByKeyword(
+    @Args('input') input: FetchMoviesByKeywordInput,
+  ): Promise<FetchMoviesByKeywordOutput> {
+    return this.commonService.fetchMoviesByKeyword(input);
   }
 }
