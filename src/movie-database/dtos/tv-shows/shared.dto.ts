@@ -1,5 +1,5 @@
 import { Field, Float, InputType, Int, ObjectType } from '@nestjs/graphql';
-import { CommonFetchMoviesInput } from '@/movie-database/dtos/movie-contents/shared.dto';
+import { CommonFetchMoviesInput } from '@/movie-database/dtos/movies/shared.dto';
 
 @InputType()
 export class CommonFetchTvListInput extends CommonFetchMoviesInput {}

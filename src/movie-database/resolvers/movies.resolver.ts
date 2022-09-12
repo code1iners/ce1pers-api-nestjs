@@ -3,55 +3,59 @@ import { MoviesService } from '@/movie-database/services/movies.service';
 import {
   FetchPopularMoviesInput,
   FetchPopularMoviesOutput,
-} from '@/movie-database/dtos/movie-contents/fetch-popular-movies.dto';
+} from '@/movie-database/dtos/movies/fetch-popular-movies.dto';
 import {
   FetchTopRatedMoviesInput,
   FetchTopRatedMoviesOutput,
-} from '@/movie-database/dtos/movie-contents/fetch-top-rated-movies.dto';
+} from '@/movie-database/dtos/movies/fetch-top-rated-movies.dto';
 import {
   FetchNowPlayingMoviesInput,
   FetchNowPlayingMoviesOutput,
-} from '@/movie-database/dtos/movie-contents/fetch-now-playing-movies.dto';
+} from '@/movie-database/dtos/movies/fetch-now-playing-movies.dto';
 import {
   FetchLatestMovieInput,
   FetchLatestMovieOutput,
-} from '@/movie-database/dtos/movie-contents/fetch-latest-movie.dto';
+} from '@/movie-database/dtos/movies/fetch-latest-movie.dto';
 import {
   FetchUpcomingMoviesInput,
   FetchUpcomingMoviesOutput,
-} from '@/movie-database/dtos/movie-contents/fetch-upcoming-movies.dto';
+} from '@/movie-database/dtos/movies/fetch-upcoming-movies.dto';
 import {
   FetchMovieDetailsInput,
   FetchMovieDetailsOutput,
-} from '@/movie-database/dtos/movie-contents/fetch-movie-details.dto';
+} from '@/movie-database/dtos/movies/fetch-movie-details.dto';
 import {
   FetchMovieKeywordsInput,
   FetchMovieKeywordsOutput,
-} from '@/movie-database/dtos/movie-contents/fetch-movie-keywords.dto';
+} from '@/movie-database/dtos/movies/fetch-movie-keywords.dto';
 import {
   FetchRecommendationMoviesInput,
   FetchRecommendationMoviesOutput,
-} from '@/movie-database/dtos/movie-contents/fetch-recommendation-movies.dto';
+} from '@/movie-database/dtos/movies/fetch-recommendation-movies.dto';
 import {
   FetchMovieVideosByIdInput,
   FetchMovieVideosByIdOutput,
-} from '@/movie-database/dtos/movie-contents/fetch-movie-videos.dto';
+} from '@/movie-database/dtos/movies/fetch-movie-videos.dto';
 import {
   FetchSimilarMoviesByIdInput,
   FetchSimilarMoviesByIdOutput,
-} from '@/movie-database/dtos/movie-contents/fetch-similar-movies.dto';
+} from '@/movie-database/dtos/movies/fetch-similar-movies.dto';
 import {
   FetchMovieImagesByIdInput,
   FetchMovieImagesByIdOutput,
-} from '@/movie-database/dtos/movie-contents/fetch-movie-images.dto';
+} from '@/movie-database/dtos/movies/fetch-movie-images.dto';
 import {
   FetchMovieCreditsByIdInput,
   FetchMovieCreditsByIdOutput,
-} from '@/movie-database/dtos/movie-contents/fetch-movie-credits.dto';
+} from '@/movie-database/dtos/movies/fetch-movie-credits.dto';
 import {
   FetchMovieAlternativeTitlesInput,
   FetchMovieAlternativeTitlesOutput,
-} from '@/movie-database/dtos/movie-contents/fetch-movie-alternative-titles.dto';
+} from '@/movie-database/dtos/movies/fetch-movie-alternative-titles.dto';
+import {
+  FetchMovieGenreListInput,
+  FetchMovieGenreListOutput,
+} from '../dtos/movies/fetch-movie-genre-list.dto';
 
 @Resolver()
 export class MoviesResolver {
@@ -149,5 +153,11 @@ export class MoviesResolver {
   ): Promise<FetchMovieAlternativeTitlesOutput> {
     return this.moviesService.fetchMovieAlternativeTitlesById(input);
   }
-  // Movie content end.
+
+  @Query(() => FetchMovieGenreListOutput)
+  async movieGenreList(
+    @Args('input') input: FetchMovieGenreListInput,
+  ): Promise<FetchMovieGenreListOutput> {
+    return this.moviesService.fetchMovieGenreList(input);
+  }
 }

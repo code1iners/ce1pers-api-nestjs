@@ -5,68 +5,73 @@ import {
   CommonFetchMoviesOutput,
   FetchMovieDetailsAppendToResponse,
   FetchMovieDetailsResponse,
-} from '@/movie-database/dtos/movie-contents/shared.dto';
+} from '@/movie-database/dtos/movies/shared.dto';
 import {
   FetchPopularMoviesInput,
   FetchPopularMoviesOutput,
-} from '@/movie-database/dtos/movie-contents/fetch-popular-movies.dto';
-import { FetchPopularMoviesResponse } from '@/movie-database/dtos/movie-contents/fetch-popular-movies.dto';
+} from '@/movie-database/dtos/movies/fetch-popular-movies.dto';
+import { FetchPopularMoviesResponse } from '@/movie-database/dtos/movies/fetch-popular-movies.dto';
 import {
   FetchTopRatedMoviesInput,
   FetchTopRatedMoviesOutput,
   FetchTopRatedMoviesResponse,
-} from '@/movie-database/dtos/movie-contents/fetch-top-rated-movies.dto';
+} from '@/movie-database/dtos/movies/fetch-top-rated-movies.dto';
 import {
   FetchNowPlayingMoviesInput,
   FetchNowPlayingMoviesOutput,
   FetchNowPlayingMoviesResponse,
-} from '@/movie-database/dtos/movie-contents/fetch-now-playing-movies.dto';
+} from '@/movie-database/dtos/movies/fetch-now-playing-movies.dto';
 import {
   FetchLatestMovieInput,
   FetchLatestMovieOutput,
-} from '@/movie-database/dtos/movie-contents/fetch-latest-movie.dto';
+} from '@/movie-database/dtos/movies/fetch-latest-movie.dto';
 import {
   FetchUpcomingMoviesInput,
   FetchUpcomingMoviesOutput,
   FetchUpcomingMoviesResponse,
-} from '@/movie-database/dtos/movie-contents/fetch-upcoming-movies.dto';
+} from '@/movie-database/dtos/movies/fetch-upcoming-movies.dto';
 import {
   FetchMovieDetailsInput,
   FetchMovieDetailsOutput,
-} from '@/movie-database/dtos/movie-contents/fetch-movie-details.dto';
+} from '@/movie-database/dtos/movies/fetch-movie-details.dto';
 import {
   FetchMovieKeywordsInput,
   FetchMovieKeywordsOutput,
   FetchMovieKeywordsResponse,
-} from '@/movie-database/dtos/movie-contents/fetch-movie-keywords.dto';
+} from '@/movie-database/dtos/movies/fetch-movie-keywords.dto';
 import {
   FetchRecommendationMoviesInput,
   FetchRecommendationMoviesOutput,
-} from '@/movie-database/dtos/movie-contents/fetch-recommendation-movies.dto';
+} from '@/movie-database/dtos/movies/fetch-recommendation-movies.dto';
 import {
   FetchMovieVideosByIdInput,
   FetchMovieVideosByIdOutput,
   FetchMovieVideosByIdResponse,
-} from '@/movie-database/dtos/movie-contents/fetch-movie-videos.dto';
+} from '@/movie-database/dtos/movies/fetch-movie-videos.dto';
 import {
   FetchSimilarMoviesByIdInput,
   FetchSimilarMoviesByIdOutput,
-} from '@/movie-database/dtos/movie-contents/fetch-similar-movies.dto';
+} from '@/movie-database/dtos/movies/fetch-similar-movies.dto';
 import {
   FetchMovieImagesByIdInput,
   FetchMovieImagesByIdOutput,
   FetchMovieImagesResponse,
-} from '@/movie-database/dtos/movie-contents/fetch-movie-images.dto';
+} from '@/movie-database/dtos/movies/fetch-movie-images.dto';
 import {
   FetchMovieCreditsByIdInput,
   FetchMovieCreditsByIdOutput,
   FetchMovieCreditsResponse,
-} from '@/movie-database/dtos/movie-contents/fetch-movie-credits.dto';
+} from '@/movie-database/dtos/movies/fetch-movie-credits.dto';
 import {
   FetchMovieAlternativeTitlesInput,
   FetchMovieAlternativeTitlesOutput,
   FetchMovieAlternativeTitlesResponse,
-} from '@/movie-database/dtos/movie-contents/fetch-movie-alternative-titles.dto';
+} from '@/movie-database/dtos/movies/fetch-movie-alternative-titles.dto';
+import {
+  FetchMovieGenreListInput,
+  FetchMovieGenreListOutput,
+  FetchMovieGenreListResponse,
+} from '../dtos/movies/fetch-movie-genre-list.dto';
 
 @Injectable()
 export class MoviesService {
@@ -434,6 +439,33 @@ export class MoviesService {
       return {
         ok: false,
         error: 'Failed fetch movie alternative titles by ID.',
+      };
+    }
+  }
+
+  /**
+   * Get the list of official genres for movies.
+   */
+  async fetchMovieGenreList({
+    language,
+  }: FetchMovieGenreListInput): Promise<FetchMovieGenreListOutput> {
+    try {
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchMovieGenreListResponse>({
+        configService: this.configService,
+        path: `/genre/movie/list`,
+        queries: { language },
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchMovieGenreList]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch movie genre list.',
       };
     }
   }

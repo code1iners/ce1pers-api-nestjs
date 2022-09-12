@@ -1,6 +1,6 @@
 import { Field, InputType, ObjectType, PickType } from '@nestjs/graphql';
 import { CoreOutput } from '@/core/dtos/core.dto';
-import { CommonFetchMoviesInput } from '@/movie-database/dtos/movie-contents/shared.dto';
+import { CommonFetchMoviesInput } from '@/movie-database/dtos/movies/shared.dto';
 
 @ObjectType({ description: 'Available region results (Camel case).' })
 export class AvailableRegionResult {

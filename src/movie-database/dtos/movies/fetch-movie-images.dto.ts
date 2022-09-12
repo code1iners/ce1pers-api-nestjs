@@ -3,7 +3,7 @@ import { CoreOutput } from '@/core/dtos/core.dto';
 import {
   CommonFetchMovieInput,
   MovieImage,
-} from '@/movie-database/dtos/movie-contents/shared.dto';
+} from '@/movie-database/dtos/movies/shared.dto';
 
 @InputType()
 export class FetchMovieImagesByIdInput extends PickType(CommonFetchMovieInput, [

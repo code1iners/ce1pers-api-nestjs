@@ -3,7 +3,7 @@ import { CoreOutput } from '@/core/dtos/core.dto';
 import {
   CommonFetchMoviesInput,
   CommonFetchMoviesOutput,
-} from '@/movie-database/dtos/movie-contents/shared.dto';
+} from '@/movie-database/dtos/movies/shared.dto';
 
 @ObjectType()
 export class FetchTopRatedMoviesResponse extends CommonFetchMoviesOutput {}

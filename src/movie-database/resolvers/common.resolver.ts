@@ -10,14 +10,7 @@ export class MovieDatabaseCommonResolver {
   constructor(private readonly commonService: MovieDatabaseCommonService) {}
 
   @Query(() => GetImageUrlOutput)
-  imageUrl(@Args('input') { isOriginal }: GetImageUrlInput): GetImageUrlOutput {
-    const origin = 'https://image.tmdb.org';
-    const path = `/t/p/${isOriginal ? 'original' : 'w500'}`;
-    const fullUrl = `${origin}${path}`;
-    return {
-      origin,
-      path,
-      fullUrl,
-    };
+  imageUrl(@Args('input') input: GetImageUrlInput): GetImageUrlOutput {
+    return this.commonService.makeImageUrl(input);
   }
 }

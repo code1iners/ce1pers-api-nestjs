@@ -4,7 +4,7 @@ import {
   CommonFetchMoviesInput,
   CommonFetchMoviesOutput,
   MovieDate,
-} from '@/movie-database/dtos/movie-contents/shared.dto';
+} from '@/movie-database/dtos/movies/shared.dto';
 
 @ObjectType()
 export class FetchNowPlayingMoviesResponse extends CommonFetchMoviesOutput {

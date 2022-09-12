@@ -3,16 +3,16 @@ import { CoreOutput } from '@/core/dtos/core.dto';
 import {
   CommonFetchMovieInput,
   CommonFetchMoviesOutput,
-} from '@/movie-database/dtos/movie-contents/shared.dto';
+} from '@/movie-database/dtos/movies/shared.dto';
 
 @InputType()
-export class FetchRecommendationMoviesInput extends OmitType(
+export class FetchSimilarMoviesByIdInput extends OmitType(
   CommonFetchMovieInput,
   ['region'] as const,
 ) {}
 
 @ObjectType()
-export class FetchRecommendationMoviesOutput extends CoreOutput {
+export class FetchSimilarMoviesByIdOutput extends CoreOutput {
   @Field(() => CommonFetchMoviesOutput, { nullable: true })
   data?: CommonFetchMoviesOutput;
 }

@@ -7,7 +7,7 @@ import {
 } from '@nestjs/graphql';
 import { IsEnum } from 'class-validator';
 import { CoreOutput } from '@/core/dtos/core.dto';
-import { MovieMediaContentResult } from '@/movie-database/dtos/movie-contents/shared.dto';
+import { MovieMediaContentResult } from '@/movie-database/dtos/movies/shared.dto';
 
 export enum TrendingMediaType {
   All = 'ALL',

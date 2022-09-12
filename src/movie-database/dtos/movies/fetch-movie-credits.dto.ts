@@ -4,7 +4,7 @@ import {
   CommonFetchMovieInput,
   MovieCast,
   MovieCrew,
-} from '@/movie-database/dtos/movie-contents/shared.dto';
+} from '@/movie-database/dtos/movies/shared.dto';
 
 @InputType()
 export class FetchMovieCreditsByIdInput extends PickType(

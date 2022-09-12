@@ -8,12 +8,12 @@ import {
 } from '@nestjs/graphql';
 import { IsEnum } from 'class-validator';
 import { CoreOutput } from '@/core/dtos/core.dto';
-import { MovieDetailAppendToResponseType } from '@/movie-database/dtos/movie-contents/fetch-movie-details.dto';
+import { MovieDetailAppendToResponseType } from '@/movie-database/dtos/movies/fetch-movie-details.dto';
 import { CommonFetchTvInput } from '@/movie-database/dtos/tv-shows/shared.dto';
 import {
   AppendToResponseImages,
   AppendToResponseVideos,
-} from '@/movie-database/dtos/movie-contents/shared.dto';
+} from '@/movie-database/dtos/movies/shared.dto';
 
 @InputType()
 export class FetchTvShowDetailsInput extends PickType(CommonFetchTvInput, [

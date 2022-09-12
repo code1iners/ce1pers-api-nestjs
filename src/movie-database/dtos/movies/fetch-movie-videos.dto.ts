@@ -3,7 +3,7 @@ import { CoreOutput } from '@/core/dtos/core.dto';
 import {
   AppendToResponseVideosResult,
   CommonFetchMovieInput,
-} from '@/movie-database/dtos/movie-contents/shared.dto';
+} from '@/movie-database/dtos/movies/shared.dto';
 
 @InputType()
 export class FetchMovieVideosByIdInput extends PickType(CommonFetchMovieInput, [

@@ -8,7 +8,7 @@ import {
 } from '@nestjs/graphql';
 import { IsEnum } from 'class-validator';
 import { CoreOutput } from '@/core/dtos/core.dto';
-import { CommonFetchMoviesInput } from '@/movie-database/dtos/movie-contents/shared.dto';
+import { CommonFetchMoviesInput } from '@/movie-database/dtos/movies/shared.dto';
 
 export enum MediaContentType {
   Movie = 'MOVIE',

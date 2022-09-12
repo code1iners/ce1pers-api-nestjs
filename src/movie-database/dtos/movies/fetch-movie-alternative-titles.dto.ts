@@ -1,5 +1,5 @@
 import { Field, InputType, Int, ObjectType, PickType } from '@nestjs/graphql';
-import { CommonFetchMovieInput } from '@/movie-database/dtos/movie-contents/shared.dto';
+import { CommonFetchMovieInput } from '@/movie-database/dtos/movies/shared.dto';
 import { CoreOutput } from '@/core/dtos/core.dto';
 
 @InputType()

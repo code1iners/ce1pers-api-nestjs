@@ -11,7 +11,7 @@ import { CoreOutput } from '@/core/dtos/core.dto';
 import {
   FetchMovieDetailsAppendToResponse,
   CommonFetchMovieInput,
-} from '@/movie-database/dtos/movie-contents/shared.dto';
+} from '@/movie-database/dtos/movies/shared.dto';
 
 export enum MovieDetailAppendToResponseType {
   Videos = 'videos',
