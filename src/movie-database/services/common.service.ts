@@ -7,9 +7,14 @@ import {
   FetchMoviesByKeywordInput,
   FetchMoviesByKeywordOutput,
   FetchMoviesByKeywordResponse,
-} from '../dtos/commons/fetch-movies-by-keyword.dto';
+} from '@/movie-database/dtos/commons/fetch-movies-by-keyword.dto';
 import { movieDatabaseFetcher } from '../helpers/movies-helper';
 import { ConfigService } from '@nestjs/config';
+import {
+  FetchKeywordDetailsInput,
+  FetchKeywordDetailsOutput,
+  FetchKeywordDetailsResponse,
+} from '@/movie-database/dtos/commons/fetch-keyword-details.dto';
 
 @Injectable()
 export class MovieDatabaseCommonService {
@@ -51,6 +56,32 @@ export class MovieDatabaseCommonService {
       return {
         ok: false,
         error: 'Failed fetch movies by keyword.',
+      };
+    }
+  }
+
+  /**
+   * Get the keyword details by ID.
+   */
+  async fetchKeywordDetails({
+    keywordId,
+  }: FetchKeywordDetailsInput): Promise<FetchKeywordDetailsOutput> {
+    try {
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchKeywordDetailsResponse>({
+        configService: this.configService,
+        path: `/keyword/${keywordId}`,
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchKeywordDetails]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch keyword details.',
       };
     }
   }

@@ -7,7 +7,11 @@ import {
 import {
   FetchMoviesByKeywordInput,
   FetchMoviesByKeywordOutput,
-} from '../dtos/commons/fetch-movies-by-keyword.dto';
+} from '@/movie-database/dtos/commons/fetch-movies-by-keyword.dto';
+import {
+  FetchKeywordDetailsInput,
+  FetchKeywordDetailsOutput,
+} from '@/movie-database/dtos/commons/fetch-keyword-details.dto';
 
 @Resolver()
 export class MovieDatabaseCommonResolver {
@@ -23,5 +27,12 @@ export class MovieDatabaseCommonResolver {
     @Args('input') input: FetchMoviesByKeywordInput,
   ): Promise<FetchMoviesByKeywordOutput> {
     return this.commonService.fetchMoviesByKeyword(input);
+  }
+
+  @Query(() => FetchKeywordDetailsOutput)
+  async keywordDetails(
+    @Args('input') input: FetchKeywordDetailsInput,
+  ): Promise<FetchKeywordDetailsOutput> {
+    return this.commonService.fetchKeywordDetails(input);
   }
 }
