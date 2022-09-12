@@ -60,6 +60,10 @@ import {
   FetchTvShowDetailsInput,
   FetchTvShowDetailsOutput,
 } from '@/movie-database/dtos/tv-shows/fetch-tv-show-details.dto';
+import {
+  FetchTvShowGenreListInput,
+  FetchTvShowGenreListOutput,
+} from '../dtos/tv-shows/fetch-tv-genre-list.dto';
 
 @Resolver()
 export class TvShowResolver {
@@ -170,5 +174,11 @@ export class TvShowResolver {
   ): Promise<FetchTvShowDetailsOutput> {
     return this.tvShowsService.fetchTvShowDetailsById(input);
   }
-  // Tv content end.
+
+  @Query(() => FetchTvShowGenreListOutput)
+  async tvShowGenreList(
+    @Args('input') input: FetchTvShowGenreListInput,
+  ): Promise<FetchTvShowGenreListOutput> {
+    return this.tvShowsService.fetchTvShowGenreList(input);
+  }
 }

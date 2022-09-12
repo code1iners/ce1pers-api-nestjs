@@ -75,6 +75,11 @@ import {
   FetchTvShowDetailsInput,
   FetchTvShowDetailsOutput,
 } from '@/movie-database/dtos/tv-shows/fetch-tv-show-details.dto';
+import {
+  FetchTvShowGenreListInput,
+  FetchTvShowGenreListOutput,
+  FetchTvShowGenreListResponse,
+} from '../dtos/tv-shows/fetch-tv-genre-list.dto';
 
 @Injectable()
 export class TvShowsService {
@@ -499,6 +504,33 @@ export class TvShowsService {
       return {
         ok: false,
         error: 'Failed fetch tv show details by ID.',
+      };
+    }
+  }
+
+  /**
+   * Get the list of official genres for TV shows.
+   */
+  async fetchTvShowGenreList({
+    language,
+  }: FetchTvShowGenreListInput): Promise<FetchTvShowGenreListOutput> {
+    try {
+      // Data fetching.
+      const data = await movieDatabaseFetcher<FetchTvShowGenreListResponse>({
+        configService: this.configService,
+        path: `/genre/tv/list`,
+        queries: { language },
+      });
+
+      return {
+        ok: true,
+        data,
+      };
+    } catch (err) {
+      console.error('[fetchTvShowGenreList]', err);
+      return {
+        ok: false,
+        error: 'Failed fetch tv show genre list.',
       };
     }
   }
