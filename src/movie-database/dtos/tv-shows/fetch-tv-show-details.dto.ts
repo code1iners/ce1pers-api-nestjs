@@ -9,7 +9,13 @@ import {
 import { IsEnum } from 'class-validator';
 import { CoreOutput } from '@/core/dtos/core.dto';
 import { MovieDetailAppendToResponseType } from '@/movie-database/dtos/movies/fetch-movie-details.dto';
-import { CommonFetchTvInput } from '@/movie-database/dtos/tv-shows/shared.dto';
+import {
+  CommonFetchTvInput,
+  FetchTvShowDetailsNetwork,
+  FetchTvShowDetailsProductionCompany,
+  FetchTvShowDetailsProductionCountry,
+  FetchTvShowDetailsSpokenLanguage,
+} from '@/movie-database/dtos/tv-shows/shared.dto';
 import {
   AppendToResponseImages,
   AppendToResponseVideos,
@@ -92,45 +98,6 @@ class FetchTvShowDetailsLastEpisodeToAir {
 }
 
 @ObjectType()
-class FetchTvShowDetailsNetwork {
-  @Field(() => Int)
-  id: number;
-
-  @Field(() => String)
-  name: string;
-
-  @Field(() => String)
-  logoPath: string;
-
-  @Field(() => String)
-  originCountry: string;
-}
-
-@ObjectType()
-class FetchTvShowDetailsProductionCompany {
-  @Field(() => Int)
-  id: number;
-
-  @Field(() => String, { nullable: true })
-  logoPath?: string;
-
-  @Field(() => String)
-  name: string;
-
-  @Field(() => String)
-  originCountry: string;
-}
-
-@ObjectType()
-class FetchTvShowDetailsProductionCountry {
-  @Field(() => String)
-  iso31661: string;
-
-  @Field(() => String)
-  name: string;
-}
-
-@ObjectType()
 class FetchTvShowDetailsSeason {
   @Field(() => String)
   airDate: string;
@@ -152,18 +119,6 @@ class FetchTvShowDetailsSeason {
 
   @Field(() => Int)
   seasonNumber: number;
-}
-
-@ObjectType()
-class FetchTvShowDetailsSpokenLanguage {
-  @Field(() => String)
-  englishName: string;
-
-  @Field(() => String)
-  iso6391: string;
-
-  @Field(() => String)
-  name: string;
 }
 
 @ObjectType()

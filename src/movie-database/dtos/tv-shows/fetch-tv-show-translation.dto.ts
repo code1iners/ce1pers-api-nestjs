@@ -3,7 +3,7 @@ import { CoreOutput } from '@/core/dtos/core.dto';
 import { CommonFetchTvInput } from '@/movie-database/dtos/tv-shows/shared.dto';
 
 @InputType()
-export class FetchTvTranslationsInput extends PickType(CommonFetchTvInput, [
+export class FetchTvShowTranslationsInput extends PickType(CommonFetchTvInput, [
   'tvId',
 ] as const) {}
 
@@ -41,7 +41,7 @@ class ContentTranslation {
 }
 
 @ObjectType()
-export class FetchTvTranslationsResponse {
+export class FetchTvShowTranslationsResponse {
   @Field(() => Int)
   id: number;
 
@@ -50,7 +50,7 @@ export class FetchTvTranslationsResponse {
 }
 
 @ObjectType()
-export class FetchTvTranslationsOutput extends CoreOutput {
-  @Field(() => FetchTvTranslationsResponse, { nullable: true })
-  data?: FetchTvTranslationsResponse;
+export class FetchTvShowTranslationsOutput extends CoreOutput {
+  @Field(() => FetchTvShowTranslationsResponse, { nullable: true })
+  data?: FetchTvShowTranslationsResponse;
 }

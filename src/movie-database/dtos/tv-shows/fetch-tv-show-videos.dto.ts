@@ -4,13 +4,13 @@ import { CommonFetchTvInput } from '@/movie-database/dtos/tv-shows/shared.dto';
 import { AppendToResponseVideosResult } from '@/movie-database/dtos/movies/shared.dto';
 
 @InputType()
-export class FetchTvVideosInput extends PickType(CommonFetchTvInput, [
+export class FetchTvShowVideosInput extends PickType(CommonFetchTvInput, [
   'tvId',
   'language',
 ] as const) {}
 
 @ObjectType()
-export class FetchTvVideosResponse {
+export class FetchTvShowVideosResponse {
   @Field(() => Int)
   id: number;
 
@@ -19,7 +19,7 @@ export class FetchTvVideosResponse {
 }
 
 @ObjectType()
-export class FetchTvVideosOutput extends CoreOutput {
-  @Field(() => FetchTvVideosResponse, { nullable: true })
-  data?: FetchTvVideosResponse;
+export class FetchTvShowVideosOutput extends CoreOutput {
+  @Field(() => FetchTvShowVideosResponse, { nullable: true })
+  data?: FetchTvShowVideosResponse;
 }

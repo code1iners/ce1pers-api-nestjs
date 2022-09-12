@@ -9,6 +9,10 @@ import {
 import { CoreOutput } from '@/core/dtos/core.dto';
 import {
   CommonFetchTvListInput,
+  FetchTvShowDetailsNetwork,
+  FetchTvShowDetailsProductionCompany,
+  FetchTvShowDetailsProductionCountry,
+  FetchTvShowDetailsSpokenLanguage,
   TvCreatedBy,
   TvGenre,
   TvLastEpisodeToAir,
@@ -16,12 +20,12 @@ import {
 } from '@/movie-database/dtos/tv-shows/shared.dto';
 
 @InputType()
-export class FetchLatestTvInput extends PickType(CommonFetchTvListInput, [
+export class FetchLatestTvShowInput extends PickType(CommonFetchTvListInput, [
   'language',
 ] as const) {}
 
 @ObjectType()
-export class FetchLatestTvResponse {
+export class FetchLatestTvShowResponse {
   @Field(() => Boolean)
   adult: boolean;
 
@@ -46,11 +50,11 @@ export class FetchLatestTvResponse {
   @Field(() => Boolean)
   inProduction: boolean;
 
-  @Field(() => String)
-  lastAirDate: string;
+  @Field(() => String, { nullable: true })
+  lastAirDate?: string;
 
-  @Field(() => TvLastEpisodeToAir)
-  lastEpisodeToAir: TvLastEpisodeToAir;
+  @Field(() => TvLastEpisodeToAir, { nullable: true })
+  lastEpisodeToAir?: TvLastEpisodeToAir;
 
   @Field(() => String)
   name: string;
@@ -100,21 +104,27 @@ export class FetchLatestTvResponse {
   @Field(() => Int)
   voteCount: number;
 
-  episodeRunTime: [];
+  @Field(() => [FetchTvShowDetailsNetwork], { nullable: true })
+  networks?: FetchTvShowDetailsNetwork[];
 
-  languages: [];
+  @Field(() => [String], { nullable: true })
+  languages?: string[];
 
-  networks: [];
+  @Field(() => [FetchTvShowDetailsProductionCompany], { nullable: true })
+  productionCompanies?: FetchTvShowDetailsProductionCompany[];
 
-  productionCompanies: [];
+  @Field(() => [FetchTvShowDetailsProductionCountry], { nullable: true })
+  productionCountries?: FetchTvShowDetailsProductionCountry[];
 
-  productionCountries: [];
+  @Field(() => [FetchTvShowDetailsSpokenLanguage], { nullable: true })
+  spokenLanguages?: FetchTvShowDetailsSpokenLanguage[];
 
-  spokenLanguages: [];
+  @Field(() => [Int])
+  episodeRunTime: number[];
 }
 
 @ObjectType()
-export class FetchLatestTvOutput extends CoreOutput {
-  @Field(() => FetchLatestTvResponse, { nullable: true })
-  data?: FetchLatestTvResponse;
+export class FetchLatestTvShowOutput extends CoreOutput {
+  @Field(() => FetchLatestTvShowResponse, { nullable: true })
+  data?: FetchLatestTvShowResponse;
 }

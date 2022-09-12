@@ -2,59 +2,59 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { movieDatabaseFetcher } from '@/movie-database/helpers/movies-helper';
 import {
-  FetchTvWatchProvidersInput,
-  FetchTvWatchProvidersOutput,
-  FetchTvWatchProvidersResponse,
-} from '@/movie-database/dtos/tv-shows/fetch-tv-watch-providers.dto';
+  FetchTvShowWatchProvidersInput,
+  FetchTvShowWatchProvidersOutput,
+  FetchTvShowWatchProvidersResponse,
+} from '@/movie-database/dtos/tv-shows/fetch-tv-show-watch-providers.dto';
 import {
-  FetchLatestTvInput,
-  FetchLatestTvOutput,
-  FetchLatestTvResponse,
-} from '@/movie-database/dtos/tv-shows/fetch-latest-tv.dto';
+  FetchLatestTvShowInput,
+  FetchLatestTvShowOutput,
+  FetchLatestTvShowResponse,
+} from '@/movie-database/dtos/tv-shows/fetch-latest-tv-show.dto';
 import {
-  FetchPopularTvListInput,
-  FetchPopularTvListOutput,
-  FetchPopularTvListResponse,
-} from '@/movie-database/dtos/tv-shows/fetch-popular-tv.dto';
+  FetchPopularTvShowsInput,
+  FetchPopularTvShowsOutput,
+  FetchPopularTvShowsResponse,
+} from '@/movie-database/dtos/tv-shows/fetch-popular-tv-shows.dto';
 import {
-  FetchTopRatedTvListInput,
-  FetchTopRatedTvListOutput,
-} from '@/movie-database/dtos/tv-shows/fetch-top-rated-tv.dto';
+  FetchTopRatedTvShowsInput,
+  FetchTopRatedTvShowsOutput,
+} from '@/movie-database/dtos/tv-shows/fetch-top-rated-tv-shows.dto';
 import {
-  FetchTvOnTheAirListInput,
-  FetchTvOnTheAirListOutput,
-  FetchTvOnTheAirListResponse,
-} from '@/movie-database/dtos/tv-shows/fetch-tv-on-the-air.dto';
+  FetchOnTheAirTvShowsInput,
+  FetchOnTheAirTvShowsOutput,
+  FetchOnTheAirTvShowsResponse,
+} from '@/movie-database/dtos/tv-shows/fetch-on-the-air-tv-shows.dto';
 import {
-  FetchTvVideosInput,
-  FetchTvVideosOutput,
-  FetchTvVideosResponse,
-} from '@/movie-database/dtos/tv-shows/fetch-tv-videos.dto';
+  FetchTvShowVideosInput,
+  FetchTvShowVideosOutput,
+  FetchTvShowVideosResponse,
+} from '@/movie-database/dtos/tv-shows/fetch-tv-show-videos.dto';
 import {
-  FetchTvTranslationsInput,
-  FetchTvTranslationsOutput,
-  FetchTvTranslationsResponse,
-} from '@/movie-database/dtos/tv-shows/fetch-tv-translation.dto';
+  FetchTvShowTranslationsInput,
+  FetchTvShowTranslationsOutput,
+  FetchTvShowTranslationsResponse,
+} from '@/movie-database/dtos/tv-shows/fetch-tv-show-translation.dto';
 import {
   FetchSimilarTvShowsInput,
   FetchSimilarTvShowsOutput,
   FetchSimilarTvShowsResponse,
 } from '@/movie-database/dtos/tv-shows/fetch-similar-tv-shows.dto';
 import {
-  FetchTvReviewsInput,
-  FetchTvReviewsOutput,
-  FetchTvReviewsResponse,
-} from '@/movie-database/dtos/tv-shows/fetch-tv-reviews.dto';
+  FetchTvShowReviewsInput,
+  FetchTvShowReviewsOutput,
+  FetchTvShowReviewsResponse,
+} from '@/movie-database/dtos/tv-shows/fetch-tv-show-reviews.dto';
 import {
   FetchRecommendationTvShowsInput,
   FetchRecommendationTvShowsOutput,
   FetchRecommendationTvShowsResponse,
 } from '@/movie-database/dtos/tv-shows/fetch-recommendation-tv-shows.dto';
 import {
-  FetchTvKeywordsInput,
-  FetchTvKeywordsOutput,
-  FetchTvKeywordsResponse,
-} from '@/movie-database/dtos/tv-shows/fetch-tv-keywords.dto';
+  FetchTvShowKeywordsInput,
+  FetchTvShowKeywordsOutput,
+  FetchTvShowKeywordsResponse,
+} from '@/movie-database/dtos/tv-shows/fetch-tv-show-keywords.dto';
 import {
   FetchTvShowCreditsInput,
   FetchTvShowCreditsOutput,
@@ -79,7 +79,7 @@ import {
   FetchTvShowGenreListInput,
   FetchTvShowGenreListOutput,
   FetchTvShowGenreListResponse,
-} from '../dtos/tv-shows/fetch-tv-genre-list.dto';
+} from '@/movie-database/dtos/tv-shows/fetch-tv-show-genre-list.dto';
 
 @Injectable()
 export class TvShowsService {
@@ -90,10 +90,10 @@ export class TvShowsService {
    */
   async fetchLatestTv({
     language,
-  }: FetchLatestTvInput): Promise<FetchLatestTvOutput> {
+  }: FetchLatestTvShowInput): Promise<FetchLatestTvShowOutput> {
     try {
       // Data fetching.
-      const data = await movieDatabaseFetcher<FetchLatestTvResponse>({
+      const data = await movieDatabaseFetcher<FetchLatestTvShowResponse>({
         configService: this.configService,
         path: `/tv/latest`,
         queries: { language },
@@ -118,10 +118,10 @@ export class TvShowsService {
   async fetchPopularTvList({
     page,
     language,
-  }: FetchPopularTvListInput): Promise<FetchPopularTvListOutput> {
+  }: FetchPopularTvShowsInput): Promise<FetchPopularTvShowsOutput> {
     try {
       // Data fetching.
-      const data = await movieDatabaseFetcher<FetchPopularTvListResponse>({
+      const data = await movieDatabaseFetcher<FetchPopularTvShowsResponse>({
         configService: this.configService,
         path: `/tv/popular`,
         queries: { page, language },
@@ -146,10 +146,10 @@ export class TvShowsService {
   async fetchTopRatedTvList({
     page,
     language,
-  }: FetchTopRatedTvListInput): Promise<FetchTopRatedTvListOutput> {
+  }: FetchTopRatedTvShowsInput): Promise<FetchTopRatedTvShowsOutput> {
     try {
       // Data fetching.
-      const data = await movieDatabaseFetcher<FetchPopularTvListResponse>({
+      const data = await movieDatabaseFetcher<FetchPopularTvShowsResponse>({
         configService: this.configService,
         path: `/tv/top_rated`,
         queries: { page, language },
@@ -175,10 +175,10 @@ export class TvShowsService {
   async fetchTvOnTheAirList({
     page,
     language,
-  }: FetchTvOnTheAirListInput): Promise<FetchTvOnTheAirListOutput> {
+  }: FetchOnTheAirTvShowsInput): Promise<FetchOnTheAirTvShowsOutput> {
     try {
       // Data fetching.
-      const data = await movieDatabaseFetcher<FetchTvOnTheAirListResponse>({
+      const data = await movieDatabaseFetcher<FetchOnTheAirTvShowsResponse>({
         configService: this.configService,
         path: `/tv/on_the_air`,
         queries: { page, language },
@@ -205,13 +205,14 @@ export class TvShowsService {
    */
   async fetchTvWatchProvidersById({
     tvId,
-  }: FetchTvWatchProvidersInput): Promise<FetchTvWatchProvidersOutput> {
+  }: FetchTvShowWatchProvidersInput): Promise<FetchTvShowWatchProvidersOutput> {
     try {
       // Data fetching.
-      const data = await movieDatabaseFetcher<FetchTvWatchProvidersResponse>({
-        configService: this.configService,
-        path: `/tv/${tvId}/watch/providers`,
-      });
+      const data =
+        await movieDatabaseFetcher<FetchTvShowWatchProvidersResponse>({
+          configService: this.configService,
+          path: `/tv/${tvId}/watch/providers`,
+        });
 
       return {
         ok: true,
@@ -232,10 +233,10 @@ export class TvShowsService {
   async fetchTvVideosById({
     tvId,
     language,
-  }: FetchTvVideosInput): Promise<FetchTvVideosOutput> {
+  }: FetchTvShowVideosInput): Promise<FetchTvShowVideosOutput> {
     try {
       // Data fetching.
-      const data = await movieDatabaseFetcher<FetchTvVideosResponse>({
+      const data = await movieDatabaseFetcher<FetchTvShowVideosResponse>({
         configService: this.configService,
         path: `/tv/${tvId}/videos`,
         queries: { language },
@@ -259,10 +260,10 @@ export class TvShowsService {
    */
   async fetchTvTranslationsById({
     tvId,
-  }: FetchTvTranslationsInput): Promise<FetchTvTranslationsOutput> {
+  }: FetchTvShowTranslationsInput): Promise<FetchTvShowTranslationsOutput> {
     try {
       // Data fetching.
-      const data = await movieDatabaseFetcher<FetchTvTranslationsResponse>({
+      const data = await movieDatabaseFetcher<FetchTvShowTranslationsResponse>({
         configService: this.configService,
         path: `/tv/${tvId}/translations`,
       });
@@ -314,10 +315,10 @@ export class TvShowsService {
   async fetchTvReviewsById({
     tvId,
     language,
-  }: FetchTvReviewsInput): Promise<FetchTvReviewsOutput> {
+  }: FetchTvShowReviewsInput): Promise<FetchTvShowReviewsOutput> {
     try {
       // Data fetching.
-      const data = await movieDatabaseFetcher<FetchTvReviewsResponse>({
+      const data = await movieDatabaseFetcher<FetchTvShowReviewsResponse>({
         configService: this.configService,
         path: `/tv/${tvId}/reviews`,
         queries: { language },
@@ -371,10 +372,10 @@ export class TvShowsService {
    */
   async fetchTvKeywordsById({
     tvId,
-  }: FetchTvKeywordsInput): Promise<FetchTvKeywordsOutput> {
+  }: FetchTvShowKeywordsInput): Promise<FetchTvShowKeywordsOutput> {
     try {
       // Data fetching.
-      const data = await movieDatabaseFetcher<FetchTvKeywordsResponse>({
+      const data = await movieDatabaseFetcher<FetchTvShowKeywordsResponse>({
         configService: this.configService,
         path: `/tv/${tvId}/keywords`,
       });

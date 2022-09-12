@@ -57,8 +57,8 @@ export class TvLastEpisodeToAir {
 
 @ObjectType()
 export class TvSeason {
-  @Field(() => String)
-  airDate: string;
+  @Field(() => String, { nullable: true })
+  airDate?: string;
 
   @Field(() => Int)
   episodeCount: number;
@@ -161,4 +161,55 @@ export class FetchTvListResponse {
 
   @Field(() => Int)
   totalResults: number;
+}
+
+@ObjectType()
+export class FetchTvShowDetailsNetwork {
+  @Field(() => Int)
+  id: number;
+
+  @Field(() => String)
+  name: string;
+
+  @Field(() => String)
+  logoPath: string;
+
+  @Field(() => String)
+  originCountry: string;
+}
+
+@ObjectType()
+export class FetchTvShowDetailsProductionCompany {
+  @Field(() => Int)
+  id: number;
+
+  @Field(() => String, { nullable: true })
+  logoPath?: string;
+
+  @Field(() => String)
+  name: string;
+
+  @Field(() => String)
+  originCountry: string;
+}
+
+@ObjectType()
+export class FetchTvShowDetailsProductionCountry {
+  @Field(() => String)
+  iso31661: string;
+
+  @Field(() => String)
+  name: string;
+}
+
+@ObjectType()
+export class FetchTvShowDetailsSpokenLanguage {
+  @Field(() => String)
+  englishName: string;
+
+  @Field(() => String)
+  iso6391: string;
+
+  @Field(() => String)
+  name: string;
 }

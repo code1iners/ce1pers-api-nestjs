@@ -3,9 +3,10 @@ import { CoreOutput } from '@/core/dtos/core.dto';
 import { CommonFetchTvInput } from '@/movie-database/dtos/tv-shows/shared.dto';
 
 @InputType()
-export class FetchTvWatchProvidersInput extends PickType(CommonFetchTvInput, [
-  'tvId',
-] as const) {}
+export class FetchTvShowWatchProvidersInput extends PickType(
+  CommonFetchTvInput,
+  ['tvId'] as const,
+) {}
 
 @ObjectType()
 export class TvWatchProviderResultFlatrate {
@@ -202,7 +203,7 @@ export class TvWatchProviderResult {
 }
 
 @ObjectType()
-export class FetchTvWatchProvidersResponse {
+export class FetchTvShowWatchProvidersResponse {
   @Field(() => Int)
   id: number;
 
@@ -211,7 +212,7 @@ export class FetchTvWatchProvidersResponse {
 }
 
 @ObjectType()
-export class FetchTvWatchProvidersOutput extends CoreOutput {
-  @Field(() => FetchTvWatchProvidersResponse, { nullable: true })
-  data?: FetchTvWatchProvidersResponse;
+export class FetchTvShowWatchProvidersOutput extends CoreOutput {
+  @Field(() => FetchTvShowWatchProvidersResponse, { nullable: true })
+  data?: FetchTvShowWatchProvidersResponse;
 }

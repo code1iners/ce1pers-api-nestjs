@@ -1,49 +1,49 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { TvShowsService } from '@/movie-database/services/tv-shows.service';
 import {
-  FetchLatestTvInput,
-  FetchLatestTvOutput,
-} from '@/movie-database/dtos/tv-shows/fetch-latest-tv.dto';
+  FetchLatestTvShowInput,
+  FetchLatestTvShowOutput,
+} from '@/movie-database/dtos/tv-shows/fetch-latest-tv-show.dto';
 import {
-  FetchPopularTvListInput,
-  FetchPopularTvListOutput,
-} from '@/movie-database/dtos/tv-shows/fetch-popular-tv.dto';
+  FetchPopularTvShowsInput,
+  FetchPopularTvShowsOutput,
+} from '@/movie-database/dtos/tv-shows/fetch-popular-tv-shows.dto';
 import {
-  FetchTopRatedTvListInput,
-  FetchTopRatedTvListOutput,
-} from '@/movie-database/dtos/tv-shows/fetch-top-rated-tv.dto';
+  FetchTopRatedTvShowsInput,
+  FetchTopRatedTvShowsOutput,
+} from '@/movie-database/dtos/tv-shows/fetch-top-rated-tv-shows.dto';
 import {
-  FetchTvOnTheAirListInput,
-  FetchTvOnTheAirListOutput,
-} from '@/movie-database/dtos/tv-shows/fetch-tv-on-the-air.dto';
+  FetchOnTheAirTvShowsInput,
+  FetchOnTheAirTvShowsOutput,
+} from '@/movie-database/dtos/tv-shows/fetch-on-the-air-tv-shows.dto';
 import {
-  FetchTvWatchProvidersInput,
-  FetchTvWatchProvidersOutput,
-} from '@/movie-database/dtos/tv-shows/fetch-tv-watch-providers.dto';
+  FetchTvShowWatchProvidersInput,
+  FetchTvShowWatchProvidersOutput,
+} from '@/movie-database/dtos/tv-shows/fetch-tv-show-watch-providers.dto';
 import {
-  FetchTvVideosInput,
-  FetchTvVideosOutput,
-} from '@/movie-database/dtos/tv-shows/fetch-tv-videos.dto';
+  FetchTvShowVideosInput,
+  FetchTvShowVideosOutput,
+} from '@/movie-database/dtos/tv-shows/fetch-tv-show-videos.dto';
 import {
-  FetchTvTranslationsInput,
-  FetchTvTranslationsOutput,
-} from '@/movie-database/dtos/tv-shows/fetch-tv-translation.dto';
+  FetchTvShowTranslationsInput,
+  FetchTvShowTranslationsOutput,
+} from '@/movie-database/dtos/tv-shows/fetch-tv-show-translation.dto';
 import {
   FetchSimilarTvShowsInput,
   FetchSimilarTvShowsOutput,
 } from '@/movie-database/dtos/tv-shows/fetch-similar-tv-shows.dto';
 import {
-  FetchTvReviewsInput,
-  FetchTvReviewsOutput,
-} from '@/movie-database/dtos/tv-shows/fetch-tv-reviews.dto';
+  FetchTvShowReviewsInput,
+  FetchTvShowReviewsOutput,
+} from '@/movie-database/dtos/tv-shows/fetch-tv-show-reviews.dto';
 import {
   FetchRecommendationTvShowsInput,
   FetchRecommendationTvShowsOutput,
 } from '@/movie-database/dtos/tv-shows/fetch-recommendation-tv-shows.dto';
 import {
-  FetchTvKeywordsInput,
-  FetchTvKeywordsOutput,
-} from '@/movie-database/dtos/tv-shows/fetch-tv-keywords.dto';
+  FetchTvShowKeywordsInput,
+  FetchTvShowKeywordsOutput,
+} from '@/movie-database/dtos/tv-shows/fetch-tv-show-keywords.dto';
 import {
   FetchTvShowCreditsInput,
   FetchTvShowCreditsOutput,
@@ -63,59 +63,59 @@ import {
 import {
   FetchTvShowGenreListInput,
   FetchTvShowGenreListOutput,
-} from '../dtos/tv-shows/fetch-tv-genre-list.dto';
+} from '../dtos/tv-shows/fetch-tv-show-genre-list.dto';
 
 @Resolver()
 export class TvShowResolver {
   constructor(private readonly tvShowsService: TvShowsService) {}
 
   // Tv content start.
-  @Query(() => FetchLatestTvOutput)
+  @Query(() => FetchLatestTvShowOutput)
   async latestTv(
-    @Args('input') input: FetchLatestTvInput,
-  ): Promise<FetchLatestTvOutput> {
+    @Args('input') input: FetchLatestTvShowInput,
+  ): Promise<FetchLatestTvShowOutput> {
     return this.tvShowsService.fetchLatestTv(input);
   }
 
-  @Query(() => FetchPopularTvListOutput)
+  @Query(() => FetchPopularTvShowsOutput)
   async popularTvList(
-    @Args('input') input: FetchPopularTvListInput,
-  ): Promise<FetchPopularTvListOutput> {
+    @Args('input') input: FetchPopularTvShowsInput,
+  ): Promise<FetchPopularTvShowsOutput> {
     return this.tvShowsService.fetchPopularTvList(input);
   }
 
-  @Query(() => FetchTopRatedTvListOutput)
+  @Query(() => FetchTopRatedTvShowsOutput)
   async topRatedTvList(
-    @Args('input') input: FetchTopRatedTvListInput,
-  ): Promise<FetchTopRatedTvListOutput> {
+    @Args('input') input: FetchTopRatedTvShowsInput,
+  ): Promise<FetchTopRatedTvShowsOutput> {
     return this.tvShowsService.fetchTopRatedTvList(input);
   }
 
-  @Query(() => FetchTvOnTheAirListOutput)
+  @Query(() => FetchOnTheAirTvShowsOutput)
   async tvOnTheAirList(
-    @Args('input') input: FetchTvOnTheAirListInput,
-  ): Promise<FetchTvOnTheAirListOutput> {
+    @Args('input') input: FetchOnTheAirTvShowsInput,
+  ): Promise<FetchOnTheAirTvShowsOutput> {
     return this.tvShowsService.fetchTvOnTheAirList(input);
   }
 
-  @Query(() => FetchTvWatchProvidersOutput)
+  @Query(() => FetchTvShowWatchProvidersOutput)
   async tvWatchProviders(
-    @Args('input') input: FetchTvWatchProvidersInput,
-  ): Promise<FetchTvWatchProvidersOutput> {
+    @Args('input') input: FetchTvShowWatchProvidersInput,
+  ): Promise<FetchTvShowWatchProvidersOutput> {
     return this.tvShowsService.fetchTvWatchProvidersById(input);
   }
 
-  @Query(() => FetchTvVideosOutput)
+  @Query(() => FetchTvShowVideosOutput)
   async tvVideos(
-    @Args('input') input: FetchTvVideosInput,
-  ): Promise<FetchTvVideosOutput> {
+    @Args('input') input: FetchTvShowVideosInput,
+  ): Promise<FetchTvShowVideosOutput> {
     return this.tvShowsService.fetchTvVideosById(input);
   }
 
-  @Query(() => FetchTvTranslationsOutput)
+  @Query(() => FetchTvShowTranslationsOutput)
   async tvTranslations(
-    @Args('input') input: FetchTvTranslationsInput,
-  ): Promise<FetchTvTranslationsOutput> {
+    @Args('input') input: FetchTvShowTranslationsInput,
+  ): Promise<FetchTvShowTranslationsOutput> {
     return this.tvShowsService.fetchTvTranslationsById(input);
   }
 
@@ -126,10 +126,10 @@ export class TvShowResolver {
     return this.tvShowsService.fetchSimilarTvShowsById(input);
   }
 
-  @Query(() => FetchTvReviewsOutput)
+  @Query(() => FetchTvShowReviewsOutput)
   async tvReviews(
-    @Args('input') input: FetchTvReviewsInput,
-  ): Promise<FetchTvReviewsOutput> {
+    @Args('input') input: FetchTvShowReviewsInput,
+  ): Promise<FetchTvShowReviewsOutput> {
     return this.tvShowsService.fetchTvReviewsById(input);
   }
 
@@ -140,10 +140,10 @@ export class TvShowResolver {
     return this.tvShowsService.fetchRecommendationTvShowsById(input);
   }
 
-  @Query(() => FetchTvKeywordsOutput)
+  @Query(() => FetchTvShowKeywordsOutput)
   async tvKeywords(
-    @Args('input') input: FetchTvKeywordsInput,
-  ): Promise<FetchTvKeywordsOutput> {
+    @Args('input') input: FetchTvShowKeywordsInput,
+  ): Promise<FetchTvShowKeywordsOutput> {
     return this.tvShowsService.fetchTvKeywordsById(input);
   }
 

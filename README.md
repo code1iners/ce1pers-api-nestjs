@@ -27,21 +27,45 @@ This project serve various API services.
   - Weather widget (Pending).
 
 - Movies / Tv (Processing)
-  - Movie services (Done).
+  - Common services.
+    - Keyword details.
+    - Movies by keyword.
+    - Image url.
+    - Trending movies.
+    - Available regions.
+    - Content providers.
+  - Movie services.
     - Latest movie.
     - Movie alternative titles.
     - Movie credits.
     - Movie details.
+    - Movie genre list.
     - Movie images.
     - Movie keywords.
     - Movie videos.
+    - Now playing movies.
     - Popular movies.
     - Recommendation movies.
     - Similar movies.
     - Top rated movies.
     - Upcoming movies.
-  - Tv (Processing)
-    - Latest Tv.
+  - Tv
+    - Latest tv show.
+    - On the air tv shows.
+    - Popular tv shows.
+    - Recommendation tv shows.
+    - Similar tv shows.
+    - Top rated tv shows.
+    - Tv show alternative titles.
+    - Tv show content ratings.
+    - Tv show credits.
+    - Tv show details.
+    - Tv show genre list.
+    - Tv show keywords.
+    - Tv show reviews.
+    - Tv show translation.
+    - Tv show videos.
+    - Tv show watch providers.
 
 ## Main tech stacks
 
