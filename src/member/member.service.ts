@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { hash } from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { OutputError, failure } from 'src/helpers/error-helpers';
 import { FindMembersOutput } from 'src/member/dtos/find-members.dto';
@@ -77,7 +78,7 @@ export class MemberService {
 
   async createMember(input: CreateMemberInput): Promise<CreateMemberOutput> {
     try {
-      const { email } = input;
+      const { email, password } = input;
 
       const foundMember = await this.prisma.member.findUnique({
         where: { email },
@@ -86,7 +87,17 @@ export class MemberService {
       if (foundMember)
         throw new OutputError('Already exist the member.', 'E02');
 
-      await this.prisma.member.create({ data: input });
+      // Hashing password.
+      let hashedPassword = '';
+      try {
+        hashedPassword = await hash(password, 10);
+      } catch (err) {
+        throw new OutputError(err.message, 'E03');
+      }
+
+      await this.prisma.member.create({
+        data: { ...input, password: hashedPassword },
+      });
 
       return { ok: true };
     } catch (err) {
@@ -105,8 +116,21 @@ export class MemberService {
       if (!foundMember)
         throw new OutputError('The member does not found', 'E02');
 
+      // Hashing password.
+      let hashedPassword = '';
+      if (input.password) {
+        try {
+          hashedPassword = await hash(input.password, 10);
+        } catch (err) {
+          throw new OutputError(err.message, 'E03');
+        }
+      }
+
       await this.prisma.member.update({
-        data: input,
+        data: {
+          ...input,
+          ...(hashedPassword && { password: hashedPassword }),
+        },
         where: { id: input.id },
       });
 
