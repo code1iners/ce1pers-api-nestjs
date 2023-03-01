@@ -47,10 +47,10 @@ export class MemberService {
     }
   }
 
-  async findMember({ id }: FindMemberInput): Promise<FindMemberOutput> {
+  async findMember(input: FindMemberInput): Promise<FindMemberOutput> {
     try {
       const member = await this.prisma.member.findUnique({
-        where: { id },
+        where: { ...input },
         select: {
           id: true,
           email: true,

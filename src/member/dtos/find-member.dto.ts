@@ -1,14 +1,15 @@
-import { Field, InputType, ObjectType, PickType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { CoreOutput } from 'src/core/dtos/core.dto';
-import { MemberEntity } from 'src/member/entities/member.entity';
 import { MemberWithoutPassword } from 'src/member/dtos/member-without-password';
 
 @InputType()
-export class FindMemberInput extends PickType(
-  MemberEntity,
-  ['id'] as const,
-  InputType,
-) {}
+export class FindMemberInput {
+  @Field(() => Number, { nullable: true })
+  id?: number;
+
+  @Field(() => String, { nullable: true })
+  email?: string;
+}
 
 @ObjectType()
 class FindMemberOutputData {
