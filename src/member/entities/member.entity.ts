@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { CoreEntity } from 'src/core/entities/core.entity';
 
 @ObjectType()

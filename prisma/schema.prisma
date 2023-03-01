@@ -23,4 +23,14 @@ model Member {
   isPhoneNumberVerified Boolean   @default(false)
   isDormant             Boolean   @default(false)
   birthdate             DateTime?
+  JwtToken              JwtToken?
+}
+
+model JwtToken {
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  refreshToken String
+  member       Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  memberId     Int      @unique
 }
