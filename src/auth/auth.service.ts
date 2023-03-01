@@ -46,7 +46,6 @@ export class AuthService {
       const isCreatedJwtToken = await this.jwtService.saveRefreshToken(
         foundMember.id,
         refreshToken,
-        true,
       );
       if (!isCreatedJwtToken) {
         throw new OutputError('Failed to save the refresh token', 'E05');
@@ -84,7 +83,7 @@ export class AuthService {
       // Re-sign tokens.
       const { accessToken, refreshToken } = this.jwtService.sign(decoded.id);
 
-      await this.jwtService.saveRefreshToken(decoded.id, refreshToken, true);
+      await this.jwtService.saveRefreshToken(decoded.id, refreshToken);
 
       return { ok: false, data: { accessToken, refreshToken } };
     } catch (err) {

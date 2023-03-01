@@ -1,6 +1,7 @@
 import { DynamicModule, Global, Module } from '@nestjs/common';
 import { JwtService } from 'src/jwt/jwt.service';
 import { PrismaModule } from 'src/prisma/prisma.module';
+import { JwtConstants } from 'src/jwt/jwt.constants';
 
 export interface JwtModuleOptions {
   privateKey: string;
@@ -16,7 +17,7 @@ export class JwtModule {
       module: JwtModule,
       providers: [
         {
-          provide: 'CONFIG_OPTIONS',
+          provide: JwtConstants.CONFIG_OPTIONS,
           useValue: options,
         },
         JwtService,

@@ -1,12 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { sign, verify, decode } from 'jsonwebtoken';
-import { JwtModuleOptions } from 'src/jwt/jwt.module';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { JwtModuleOptions } from 'src/jwt/jwt.module';
+import { JwtConstants } from 'src/jwt/jwt.constants';
 
 @Injectable()
 export class JwtService {
   constructor(
-    @Inject('CONFIG_OPTIONS') private readonly options: JwtModuleOptions,
+    @Inject(JwtConstants.CONFIG_OPTIONS)
+    private readonly options: JwtModuleOptions,
     private readonly prismaService: PrismaService,
   ) {}
 
@@ -28,21 +30,14 @@ export class JwtService {
     return decode(token);
   }
 
-  async saveRefreshToken(
-    memberId: number,
-    refreshToken: string,
-    force?: boolean,
-  ) {
-    if (force) {
-      try {
-        await this.prismaService.jwtToken.delete({ where: { memberId } });
-      } catch (err) {}
-    }
+  async saveRefreshToken(memberId: number, refreshToken: string) {
+    try {
+      await this.prismaService.jwtToken.delete({ where: { memberId } });
+    } catch (err) {}
 
     try {
       await this.prismaService.jwtToken.create({
         data: { memberId, refreshToken },
-        select: { id: true },
       });
     } catch (err) {
       return false;

@@ -13,8 +13,6 @@ export class JwtMiddleware implements NestMiddleware {
   ) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
-    // Extract tokens.
-
     if ('authorization' in req.headers) {
       const authorization = req.headers['authorization'] as string;
       const [tokenType, tokenValue] = authorization.split(' ');
