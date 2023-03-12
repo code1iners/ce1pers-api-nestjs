@@ -11,6 +11,7 @@ import { MemberModule } from 'src/member/member.module';
 import { JwtModule } from 'src/jwt/jwt.module';
 import { JwtMiddleware } from 'src/jwt/jwt.middleware';
 import { AuthModule } from 'src/auth/auth.module';
+import { AuthMiddleware } from './auth/auth.middleware';
 
 @Module({
   imports: [
@@ -36,7 +37,7 @@ import { AuthModule } from 'src/auth/auth.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(JwtMiddleware).forRoutes({
+    consumer.apply(AuthMiddleware, JwtMiddleware).forRoutes({
       path: 'graphql',
       method: RequestMethod.POST,
     });

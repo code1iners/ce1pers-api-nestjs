@@ -10,12 +10,21 @@ export class LoginInput extends PickType(
 ) {}
 
 @ObjectType()
-export class LoginOutputData {
+class LoginOutputDataAuthorizations {
   @Field(() => String)
   accessToken: string;
 
   @Field(() => String)
   refreshToken: string;
+}
+
+@ObjectType()
+export class LoginOutputData {
+  @Field(() => LoginOutputDataAuthorizations)
+  authorizations: LoginOutputDataAuthorizations;
+
+  @Field(() => MemberEntity)
+  member: MemberEntity;
 }
 
 @ObjectType()

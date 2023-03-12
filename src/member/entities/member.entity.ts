@@ -1,5 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { CoreEntity } from 'src/core/entities/core.entity';
+import { ProfileEntity } from './profile.entity';
 
 @ObjectType()
 export class MemberEntity extends CoreEntity {
@@ -10,23 +11,8 @@ export class MemberEntity extends CoreEntity {
   email: string;
 
   @Field(() => String)
-  name: string;
-
-  @Field(() => String)
   password: string;
 
-  @Field(() => String, { nullable: true })
-  phoneNumber?: string;
-
-  @Field(() => String, { defaultValue: false, nullable: true })
-  isEmailVerified: boolean;
-
-  @Field(() => String, { defaultValue: false, nullable: true })
-  isPhoneNumberVerified: boolean;
-
-  @Field(() => String, { defaultValue: false, nullable: true })
-  isDormant: boolean;
-
-  @Field(() => String, { nullable: true })
-  birthdate: Date;
+  @Field(() => [ProfileEntity], { defaultValue: [] })
+  profiles: ProfileEntity[];
 }

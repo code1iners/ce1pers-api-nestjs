@@ -5,8 +5,10 @@ import { MemberService } from 'src/member/member.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { FindMembersOutput } from 'src/member/dtos/find-members.dto';
 import {
-  FindMemberInput,
+  FindMemberByIdInput,
+  FindMemberByEmailInput,
   FindMemberOutput,
+  FindMemberInput,
 } from 'src/member/dtos/find-member.dto';
 import {
   CreateMemberInput,
@@ -21,21 +23,30 @@ import {
   UpdateMemberOutput,
 } from 'src/member/dtos/update-member.dto';
 import { MemberWithoutPassword } from 'src/member/dtos/member-without-password';
+import { ServiceKind, ServiceKindObject } from 'src/auth/auth.decorator';
 
 @Resolver(() => MemberEntity)
 export class MemberResolver {
   constructor(private readonly memberService: MemberService) {}
 
   @Query(() => FindMembersOutput)
-  async members(): Promise<FindMembersOutput> {
-    return await this.memberService.findMembers();
+  async findMembers(
+    @ServiceKind() serviceKind: ServiceKindObject,
+  ): Promise<FindMembersOutput> {
+    return await this.memberService.findMembers(serviceKind);
   }
 
   @Query(() => FindMemberOutput)
-  async member(
+  async findMember(
+    @ServiceKind() serviceKind: ServiceKindObject,
     @Args('input') input: FindMemberInput,
   ): Promise<FindMemberOutput> {
-    return await this.memberService.findMember(input);
+    return input.id
+      ? await this.memberService.findMemberById(serviceKind, input.id)
+      : await this.memberService.findMemberByUsername(
+          serviceKind,
+          input.username,
+        );
   }
 
   @Query(() => MemberWithoutPassword)
@@ -45,17 +56,26 @@ export class MemberResolver {
   }
 
   @Mutation(() => CreateMemberOutput)
-  async createMember(@Args('input') input: CreateMemberInput) {
-    return await this.memberService.createMember(input);
-  }
-
-  @Mutation(() => DeleteMemberOutput)
-  async deleteMember(@Args('input') input: DeleteMemberInput) {
-    return await this.memberService.deleteMember(input);
+  async createMember(
+    @ServiceKind() serviceKind: ServiceKindObject,
+    @Args('input') input: CreateMemberInput,
+  ) {
+    return await this.memberService.createMember(serviceKind, input);
   }
 
   @Mutation(() => UpdateMemberOutput)
-  async updateMember(@Args('input') input: UpdateMemberInput) {
-    return await this.memberService.updateMember(input);
+  async updateMember(
+    @ServiceKind() serviceKind: ServiceKindObject,
+    @Args('input') input: UpdateMemberInput,
+  ) {
+    return await this.memberService.updateMember(serviceKind, input);
+  }
+
+  @Mutation(() => DeleteMemberOutput)
+  async deleteMember(
+    @ServiceKind() serviceKind: ServiceKindObject,
+    @Args('input') input: DeleteMemberInput,
+  ) {
+    return await this.memberService.deleteMember(serviceKind, input);
   }
 }

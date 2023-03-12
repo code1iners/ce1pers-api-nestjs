@@ -2,101 +2,165 @@ import { Injectable } from '@nestjs/common';
 import { hash } from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { OutputError, failure } from 'src/helpers/error-helpers';
-import { FindMembersOutput } from 'src/member/dtos/find-members.dto';
-import {
-  FindMemberInput,
-  FindMemberOutput,
-} from 'src/member/dtos/find-member.dto';
-import {
+import type { FindMembersOutput } from 'src/member/dtos/find-members.dto';
+import type { FindMemberOutput } from 'src/member/dtos/find-member.dto';
+import type {
   CreateMemberInput,
   CreateMemberOutput,
 } from 'src/member/dtos/create-member.dto';
-import {
+import type {
   DeleteMemberInput,
   DeleteMemberOutput,
 } from 'src/member/dtos/delete-member.dto';
-import {
+import type {
   UpdateMemberInput,
   UpdateMemberOutput,
 } from 'src/member/dtos/update-member.dto';
+import { ServiceKindObject } from 'src/auth/auth.decorator';
 
 @Injectable()
 export class MemberService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findMembers(): Promise<FindMembersOutput> {
+  async findMembers(
+    serviceKind: ServiceKindObject,
+  ): Promise<FindMembersOutput> {
     try {
-      const members = await this.prisma.member.findMany({
+      // Find members by service code.
+      const foundMemberProfiles = await this.prisma.profile.findMany({
+        where: { service: { serviceCode: serviceKind.serviceCode } },
         select: {
           id: true,
-          email: true,
-          name: true,
-          phoneNumber: true,
-          birthdate: true,
-          isDormant: true,
-          isEmailVerified: true,
-          isPhoneNumberVerified: true,
           createdAt: true,
           updatedAt: true,
+          username: true,
+          avatar: true,
+          phoneNumber: true,
+          birthdate: true,
+          isEmailVerified: true,
+          isPhoneNumberVerified: true,
+          isDormant: true,
+          gender: true,
+          loginType: true,
+          membershipLevel: true,
+          memberId: true,
         },
       });
 
-      return { ok: true, data: { members } };
+      return { ok: true, data: foundMemberProfiles };
     } catch (err) {
-      return failure(err.message, 'E01');
+      return failure(err.message, 'findMembers:catch');
     }
   }
 
-  async findMember(input: FindMemberInput): Promise<FindMemberOutput> {
+  async findMemberById(
+    serviceKind: ServiceKindObject,
+    memberId: number,
+  ): Promise<FindMemberOutput> {
     try {
-      const member = await this.prisma.member.findUnique({
-        where: { ...input },
-        select: {
-          id: true,
-          email: true,
-          name: true,
-          phoneNumber: true,
-          birthdate: true,
-          isDormant: true,
-          isEmailVerified: true,
-          isPhoneNumberVerified: true,
-          createdAt: true,
-          updatedAt: true,
+      const foundMember = await this.prisma.profile.findFirst({
+        where: {
+          AND: [
+            { id: memberId },
+            { service: { serviceCode: serviceKind.serviceCode } },
+          ],
         },
       });
 
-      if (!member) throw new OutputError('Does not found the member', 'E02');
+      if (!foundMember)
+        return failure(
+          'Does not found the member.',
+          'findMemberById:foundMember',
+        );
 
-      return {
-        ok: true,
-        data: { member },
-      };
+      return { ok: true, data: foundMember };
     } catch (err) {
-      return failure(err.message, 'E01');
+      return failure(err.message, 'findMemberById:catch');
     }
   }
 
-  async createMember(input: CreateMemberInput): Promise<CreateMemberOutput> {
+  async findMemberByUsername(
+    serviceKind: ServiceKindObject,
+    memberUsername: string,
+  ): Promise<FindMemberOutput> {
     try {
-      const { email, password } = input;
+      const foundMember = await this.prisma.profile.findFirst({
+        where: {
+          username: memberUsername,
+          service: { serviceCode: serviceKind.serviceCode },
+        },
+      });
 
-      const foundMember = await this.prisma.member.findUnique({
-        where: { email },
+      if (!foundMember)
+        return failure(
+          'Does not found the member.',
+          'findMemberByUsername:foundMember',
+        );
+
+      return { ok: true, data: foundMember };
+
+      return { ok: true };
+    } catch (err) {
+      return failure(err.message, 'findMemberByUsername:catch');
+    }
+  }
+
+  async createMember(
+    serviceKind: ServiceKindObject,
+    input: CreateMemberInput,
+  ): Promise<CreateMemberOutput> {
+    try {
+      const {
+        email,
+        password,
+        username,
+        birthdate,
+        phoneNumber,
+        loginType,
+        gender,
+      } = input;
+
+      // Already exists?
+      const foundMember = await this.prisma.member.findFirst({
+        where: { OR: [{ email }] },
         select: { id: true },
       });
-      if (foundMember)
-        throw new OutputError('Already exist the member.', 'E02');
+      if (foundMember) {
+        return {
+          ok: false,
+          error: { code: 'E02', message: 'Already exist the member.' },
+        };
+      }
 
       // Hashing password.
       let hashedPassword = '';
       try {
         hashedPassword = await hash(password, 10);
       } catch (err) {
-        throw new OutputError(err.message, 'E03');
+        return failure(err.message, 'E03');
       }
 
+      // Create member.
       await this.prisma.member.create({
-        data: { ...input, password: hashedPassword },
+        data: {
+          email,
+          password: hashedPassword,
+          profiles: {
+            create: {
+              username,
+              phoneNumber,
+              birthdate,
+              gender,
+              loginType,
+              service: {
+                create: {
+                  serviceCode: serviceKind.serviceCode,
+                  serviceName: serviceKind.serviceName,
+                },
+              },
+            },
+          },
+        },
       });
 
       return { ok: true };
@@ -105,16 +169,17 @@ export class MemberService {
     }
   }
 
-  async updateMember(input: UpdateMemberInput): Promise<UpdateMemberOutput> {
+  async updateMember(
+    serviceKind: ServiceKindObject,
+    input: UpdateMemberInput,
+  ): Promise<UpdateMemberOutput> {
     try {
       const { id } = input;
 
-      const foundMember = await this.prisma.member.findUnique({
-        where: { id },
-        select: { id: true },
-      });
-      if (!foundMember)
-        throw new OutputError('The member does not found', 'E02');
+      const { ok, error } = await this.findMemberById(serviceKind, id);
+      if (!ok) {
+        return failure(error.message, 'updateMember:foundMember');
+      }
 
       // Hashing password.
       let hashedPassword = '';
@@ -126,12 +191,13 @@ export class MemberService {
         }
       }
 
-      await this.prisma.member.update({
+      // Update member profile.
+      await this.prisma.profile.update({
+        where: { id },
         data: {
           ...input,
           ...(hashedPassword && { password: hashedPassword }),
         },
-        where: { id: input.id },
       });
 
       return { ok: true };
@@ -140,18 +206,18 @@ export class MemberService {
     }
   }
 
-  async deleteMember(input: DeleteMemberInput): Promise<DeleteMemberOutput> {
+  async deleteMember(
+    serviceKind: ServiceKindObject,
+    input: DeleteMemberInput,
+  ): Promise<DeleteMemberOutput> {
     try {
       const { id } = input;
 
-      const foundMember = await this.prisma.member.findUnique({
-        where: { id },
-        select: { id: true },
-      });
-      if (!foundMember)
-        throw new OutputError('Does not found the member', 'E02');
-
-      await this.prisma.member.delete({ where: { id } });
+      const { ok, error } = await this.findMemberById(serviceKind, id);
+      if (!ok) {
+        return failure(error.message, 'deleteMember:foundMember');
+      }
+      await this.prisma.profile.delete({ where: { id } });
 
       return { ok: true };
     } catch (err) {

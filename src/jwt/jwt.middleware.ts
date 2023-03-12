@@ -20,10 +20,14 @@ export class JwtMiddleware implements NestMiddleware {
       try {
         const verified = this.jwtService.verify(tokenValue);
         if (typeof verified === 'object' && verified.hasOwnProperty('id')) {
-          const foundMember = await this.memberService.findMember({
-            id: verified.id,
-          });
-          req['member'] = foundMember?.data?.member;
+          const foundMember = await this.memberService.findMemberById(
+            {
+              serviceCode: req.headers['service-code'] as string,
+              serviceName: req.headers['service-name'] as string,
+            },
+            verified.id,
+          );
+          req['member'] = foundMember?.data;
         }
       } catch (err) {}
     }

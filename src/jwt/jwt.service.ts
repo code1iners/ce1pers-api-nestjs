@@ -29,19 +29,4 @@ export class JwtService {
   decode(token: string) {
     return decode(token);
   }
-
-  async saveRefreshToken(memberId: number, refreshToken: string) {
-    try {
-      await this.prismaService.jwtToken.delete({ where: { memberId } });
-    } catch (err) {}
-
-    try {
-      await this.prismaService.jwtToken.create({
-        data: { memberId, refreshToken },
-      });
-    } catch (err) {
-      return false;
-    }
-    return true;
-  }
 }
