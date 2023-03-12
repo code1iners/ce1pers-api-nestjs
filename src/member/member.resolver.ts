@@ -5,8 +5,6 @@ import { MemberService } from 'src/member/member.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { FindMembersOutput } from 'src/member/dtos/find-members.dto';
 import {
-  FindMemberByIdInput,
-  FindMemberByEmailInput,
   FindMemberOutput,
   FindMemberInput,
 } from 'src/member/dtos/find-member.dto';

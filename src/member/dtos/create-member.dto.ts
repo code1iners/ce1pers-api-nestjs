@@ -1,10 +1,10 @@
 import { Field, InputType, ObjectType, PickType } from '@nestjs/graphql';
+import { Gender, LoginType, MembershipLevel } from '@prisma/client';
 import { CoreOutput } from 'src/core/dtos/core.dto';
 import { MemberEntity } from 'src/member/entities/member.entity';
-import { MemberProfileGender } from '../enums/profile-gender.enum';
-import { ServiceMembershipLevel } from '../enums/profile-membership-level.enum';
-import { MemberProfileLoginType } from '../enums/profile-login-type.enum';
-import { Gender, LoginType, MembershipLevel } from '@prisma/client';
+import { MemberProfileGender } from 'src/member/enums/profile-gender.enum';
+import { ServiceMembershipLevel } from 'src/member/enums/profile-membership-level.enum';
+import { MemberProfileLoginType } from 'src/member/enums/profile-login-type.enum';
 
 @InputType()
 export class CreateMemberInput extends PickType(

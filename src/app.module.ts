@@ -9,9 +9,9 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { MemberModule } from 'src/member/member.module';
 import { JwtModule } from 'src/jwt/jwt.module';
-import { JwtMiddleware } from 'src/jwt/jwt.middleware';
 import { AuthModule } from 'src/auth/auth.module';
-import { AuthMiddleware } from './auth/auth.middleware';
+import { JwtMiddleware } from 'src/jwt/jwt.middleware';
+import { AuthMiddleware } from 'src/auth/auth.middleware';
 
 @Module({
   imports: [

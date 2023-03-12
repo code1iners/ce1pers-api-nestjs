@@ -10,7 +10,7 @@ import {
   VerifyRefreshTokenInput,
   VerifyRefreshTokenOutput,
 } from 'src/auth/dtos/verify-token.dto';
-import { LogoutInput, LogoutOutput } from './dtos/logout-member.dto';
+import { LogoutInput, LogoutOutput } from 'src/auth/dtos/logout-member.dto';
 
 @Injectable()
 export class AuthService {

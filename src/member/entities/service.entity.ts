@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { CoreEntity } from 'src/core/entities/core.entity';
 import { MemberEntity } from 'src/member/entities/member.entity';
-import { ServiceMembershipLevel } from '../enums/profile-membership-level.enum';
+import { ServiceMembershipLevel } from 'src/member/enums/profile-membership-level.enum';
 
 @ObjectType()
 export class ServiceEntity extends CoreEntity {

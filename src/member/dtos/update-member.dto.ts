@@ -1,6 +1,6 @@
 import { Field, InputType, ObjectType, PartialType } from '@nestjs/graphql';
 import { CoreOutput } from 'src/core/dtos/core.dto';
-import { CreateMemberInput } from './create-member.dto';
+import { CreateMemberInput } from 'src/member/dtos/create-member.dto';
 
 @InputType()
 export class UpdateMemberInput extends PartialType(

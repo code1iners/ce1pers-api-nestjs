@@ -1,9 +1,9 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { CoreOutput } from 'src/core/dtos/core.dto';
-import { MemberProfileGender } from '../enums/profile-gender.enum';
-import { MemberProfileLoginType } from '../enums/profile-login-type.enum';
-import { ServiceMembershipLevel } from '../enums/profile-membership-level.enum';
 import { Gender, LoginType, MembershipLevel } from '@prisma/client';
+import { CoreOutput } from 'src/core/dtos/core.dto';
+import { MemberProfileGender } from 'src/member/enums/profile-gender.enum';
+import { MemberProfileLoginType } from 'src/member/enums/profile-login-type.enum';
+import { ServiceMembershipLevel } from 'src/member/enums/profile-membership-level.enum';
 
 @InputType()
 export class FindMemberInput {

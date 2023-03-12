@@ -1,6 +1,6 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { CoreEntity } from 'src/core/entities/core.entity';
-import { ProfileEntity } from './profile.entity';
+import { ProfileEntity } from 'src/member/entities/profile.entity';
 
 @ObjectType()
 @InputType({ isAbstract: true })

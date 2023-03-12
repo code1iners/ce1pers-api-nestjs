@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  ExecutionContext,
-  createParamDecorator,
-} from '@nestjs/common';
+import { ExecutionContext, createParamDecorator } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
 export interface ServiceKindObject {
