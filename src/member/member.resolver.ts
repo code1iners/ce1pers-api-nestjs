@@ -22,13 +22,13 @@ import {
   UpdateMemberOutput,
 } from 'src/member/dtos/update-member.dto';
 import { ServiceKind, ServiceKindObject } from 'src/auth/auth.decorator';
+import { failure } from 'src/helpers/error-helpers';
 
 @Resolver(() => MemberEntity)
 export class MemberResolver {
   constructor(private readonly memberService: MemberService) {}
 
   @Query(() => FindMembersOutput)
-  @UseGuards(AuthGuard)
   async findMembers(
     @ServiceKind() serviceKind: ServiceKindObject,
   ): Promise<FindMembersOutput> {
@@ -36,17 +36,23 @@ export class MemberResolver {
   }
 
   @Query(() => FindMemberOutput)
-  @UseGuards(AuthGuard)
   async findMember(
     @ServiceKind() serviceKind: ServiceKindObject,
     @Args('input') input: FindMemberInput,
   ): Promise<FindMemberOutput> {
-    return input.id
-      ? await this.memberService.findMemberById(serviceKind, input.id)
-      : await this.memberService.findMemberByUsername(
-          serviceKind,
-          input.username,
-        );
+    if (input.id)
+      return await this.memberService.findMemberById(serviceKind, input.id);
+    else if (input.username)
+      return await this.memberService.findMemberByUsername(
+        serviceKind,
+        input.username,
+      );
+    else if (input.email)
+      return await this.memberService.findMemberByEmail(
+        serviceKind,
+        input.email,
+      );
+    return failure('Parameter is required.', 'findMember:else');
   }
 
   @Query(() => FindMemberOutputData)

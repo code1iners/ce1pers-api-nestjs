@@ -12,6 +12,9 @@ export class FindMemberInput {
 
   @Field(() => String, { nullable: true })
   username?: string;
+
+  @Field(() => String, { nullable: true })
+  email?: string;
 }
 
 @InputType()

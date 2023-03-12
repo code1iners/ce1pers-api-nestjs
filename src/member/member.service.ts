@@ -68,6 +68,51 @@ export class MemberService {
     }
   }
 
+  async findMemberByEmail(
+    serviceKind: ServiceKindObject,
+    memberEmail: string,
+  ): Promise<FindMemberOutput> {
+    try {
+      const foundMember = await this.prisma.member.findFirst({
+        where: {
+          AND: [
+            { email: memberEmail },
+            {
+              profiles: {
+                some: { service: { serviceCode: serviceKind.serviceCode } },
+              },
+            },
+          ],
+        },
+        select: {
+          profiles: {
+            select: findMemberFragment,
+          },
+        },
+      });
+
+      if (!foundMember) {
+        return failure(
+          'Does not found the member.',
+          'findMemberByEmail:foundMember',
+        );
+      }
+
+      if (!foundMember.profiles.length) {
+        return failure(
+          'Does not exist the member in the service.',
+          'findMemberByEmail:foundMemberProfiles',
+        );
+      }
+
+      const [foundMemberProfile] = foundMember.profiles;
+
+      return { ok: true, data: foundMemberProfile };
+    } catch (err) {
+      return failure(err.message, 'findMemberByEmail:catch');
+    }
+  }
+
   async findMemberByUsername(
     serviceKind: ServiceKindObject,
     memberUsername: string,
