@@ -76,3 +76,20 @@ export class FindMemberOutput extends CoreOutput {
   @Field(() => FindMemberOutputData, { nullable: true })
   data?: FindMemberOutputData;
 }
+
+export const findMemberFragment = {
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  username: true,
+  avatar: true,
+  phoneNumber: true,
+  birthdate: true,
+  isEmailVerified: true,
+  isPhoneNumberVerified: true,
+  isDormant: true,
+  gender: true,
+  loginType: true,
+  membershipLevel: true,
+  memberId: true,
+};

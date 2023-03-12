@@ -4,6 +4,11 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtModuleOptions } from 'src/jwt/jwt.module';
 import { JwtConstants } from 'src/jwt/jwt.constants';
 
+interface SignInput {
+  memberId: number;
+  profileId: number;
+}
+
 @Injectable()
 export class JwtService {
   constructor(
@@ -12,8 +17,8 @@ export class JwtService {
     private readonly prismaService: PrismaService,
   ) {}
 
-  sign(id: number) {
-    const accessToken = sign({ id }, this.options.privateKey, {
+  sign(input: SignInput) {
+    const accessToken = sign(input, this.options.privateKey, {
       expiresIn: '1d',
     });
     const refreshToken = sign({}, this.options.privateKey, {

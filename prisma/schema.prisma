@@ -26,7 +26,7 @@ model Profile {
   updatedAt             DateTime        @updatedAt
   username              String
   avatar                String?
-  phoneNumber           String?         @unique
+  phoneNumber           String?
   birthdate             DateTime?
   isEmailVerified       Boolean         @default(false)
   isPhoneNumberVerified Boolean         @default(false)

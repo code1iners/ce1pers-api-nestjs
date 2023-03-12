@@ -1,5 +1,6 @@
 import { Field, InputType, ObjectType, PickType } from '@nestjs/graphql';
 import { CoreOutput } from 'src/core/dtos/core.dto';
+import { FindMemberOutputData } from 'src/member/dtos/find-member.dto';
 import { MemberEntity } from 'src/member/entities/member.entity';
 
 @InputType()
@@ -23,8 +24,8 @@ export class LoginOutputData {
   @Field(() => LoginOutputDataAuthorizations)
   authorizations: LoginOutputDataAuthorizations;
 
-  @Field(() => MemberEntity)
-  member: MemberEntity;
+  @Field(() => FindMemberOutputData)
+  profile: FindMemberOutputData;
 }
 
 @ObjectType()

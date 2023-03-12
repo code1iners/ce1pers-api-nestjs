@@ -3,7 +3,10 @@ import { hash } from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { OutputError, failure } from 'src/helpers/error-helpers';
 import type { FindMembersOutput } from 'src/member/dtos/find-members.dto';
-import type { FindMemberOutput } from 'src/member/dtos/find-member.dto';
+import {
+  FindMemberOutput,
+  findMemberFragment,
+} from 'src/member/dtos/find-member.dto';
 import type {
   CreateMemberInput,
   CreateMemberOutput,
@@ -29,22 +32,7 @@ export class MemberService {
       // Find members by service code.
       const foundMemberProfiles = await this.prisma.profile.findMany({
         where: { service: { serviceCode: serviceKind.serviceCode } },
-        select: {
-          id: true,
-          createdAt: true,
-          updatedAt: true,
-          username: true,
-          avatar: true,
-          phoneNumber: true,
-          birthdate: true,
-          isEmailVerified: true,
-          isPhoneNumberVerified: true,
-          isDormant: true,
-          gender: true,
-          loginType: true,
-          membershipLevel: true,
-          memberId: true,
-        },
+        select: findMemberFragment,
       });
 
       return { ok: true, data: foundMemberProfiles };
@@ -65,6 +53,7 @@ export class MemberService {
             { service: { serviceCode: serviceKind.serviceCode } },
           ],
         },
+        select: findMemberFragment,
       });
 
       if (!foundMember)
@@ -98,8 +87,6 @@ export class MemberService {
         );
 
       return { ok: true, data: foundMember };
-
-      return { ok: true };
     } catch (err) {
       return failure(err.message, 'findMemberByUsername:catch');
     }
@@ -122,14 +109,25 @@ export class MemberService {
 
       // Already exists?
       const foundMember = await this.prisma.member.findFirst({
-        where: { OR: [{ email }] },
-        select: { id: true },
+        where: {
+          AND: [
+            { email },
+            {
+              profiles: {
+                some: {
+                  phoneNumber,
+                  service: { serviceCode: serviceKind.serviceCode },
+                },
+              },
+            },
+          ],
+        },
+        select: {
+          id: true,
+        },
       });
       if (foundMember) {
-        return {
-          ok: false,
-          error: { code: 'E02', message: 'Already exist the member.' },
-        };
+        return failure('Already exist the member.', 'createMember:foundMember');
       }
 
       // Hashing password.
@@ -140,25 +138,35 @@ export class MemberService {
         return failure(err.message, 'E03');
       }
 
+      const profilesCreateFragment = {
+        username,
+        phoneNumber,
+        birthdate,
+        gender,
+        loginType,
+        service: {
+          create: {
+            serviceCode: serviceKind.serviceCode,
+            serviceName: serviceKind.serviceName,
+          },
+        },
+      };
+
       // Create member.
-      await this.prisma.member.create({
-        data: {
+      await this.prisma.member.upsert({
+        where: {
+          email,
+        },
+        create: {
           email,
           password: hashedPassword,
           profiles: {
-            create: {
-              username,
-              phoneNumber,
-              birthdate,
-              gender,
-              loginType,
-              service: {
-                create: {
-                  serviceCode: serviceKind.serviceCode,
-                  serviceName: serviceKind.serviceName,
-                },
-              },
-            },
+            create: profilesCreateFragment,
+          },
+        },
+        update: {
+          profiles: {
+            create: profilesCreateFragment,
           },
         },
       });

@@ -1,16 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { compare } from 'bcrypt';
-import { OutputError, failure } from 'src/helpers/error-helpers';
+import { failure } from 'src/helpers/error-helpers';
 import { JwtService } from 'src/jwt/jwt.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { LoginInput, LoginOutput } from 'src/auth/dtos/login-member.dto';
-import {
-  VerifyTokenInput,
-  VerifyTokenOutput,
-  VerifyRefreshTokenInput,
-  VerifyRefreshTokenOutput,
-} from 'src/auth/dtos/verify-token.dto';
 import { LogoutInput, LogoutOutput } from 'src/auth/dtos/logout-member.dto';
+import { ServiceKindObject } from './auth.decorator';
+import { findMemberFragment } from 'src/member/dtos/find-member.dto';
 
 @Injectable()
 export class AuthService {
@@ -19,111 +15,121 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async loginMember(input: LoginInput): Promise<LoginOutput> {
+  async loginMember(
+    serviceKind: ServiceKindObject,
+    input: LoginInput,
+  ): Promise<LoginOutput> {
     try {
       const { email, password } = input;
 
       // Find member by email.
-      const foundMember = await this.prismaService.member.findUnique({
-        where: { email },
+      const foundMember = await this.prismaService.member.findFirst({
+        where: {
+          AND: [
+            { email },
+            {
+              profiles: {
+                some: { service: { serviceCode: serviceKind.serviceCode } },
+              },
+            },
+          ],
+        },
+        select: {
+          password: true,
+          profiles: {
+            select: {
+              ...findMemberFragment,
+              service: { select: { serviceCode: true } },
+            },
+          },
+        },
       });
-      if (!foundMember)
-        throw new OutputError('Does not found the member', 'E02');
+      if (!foundMember) {
+        return failure('Does not found the member.', 'loginMember:foundMember');
+      }
 
       // Verify password.
-      let isPasswordValid = false;
       try {
-        isPasswordValid = await compare(password, foundMember.password);
+        const isPasswordValid = await compare(password, foundMember.password);
+        if (!isPasswordValid) {
+          return failure('Invalid password', 'loginMember:isPasswordValid');
+        }
       } catch (err) {
-        throw new OutputError(err.message, 'E03');
+        return failure(err.message, 'loginMember:compare');
       }
-      if (!isPasswordValid) throw new OutputError('Invalid password', 'E04');
+
+      if (!foundMember.profiles.length) {
+        return failure(
+          'Does not exist the member in the service.',
+          'loginMember:foundMemberProfiles',
+        );
+      }
+
+      const [foundProfile] = foundMember.profiles;
 
       // Create access/refresh tokens.
-      const { accessToken, refreshToken } = this.jwtService.sign(
-        foundMember.id,
-      );
+      const { accessToken, refreshToken } = this.jwtService.sign({
+        memberId: foundProfile.id,
+        profileId: foundProfile.id,
+      });
 
-      // Save refresh token by member's id.
-      // const isCreatedJwtToken = await this.jwtService.saveRefreshToken(
-      //   foundMember.id,
-      //   refreshToken,
-      // );
-      // if (!isCreatedJwtToken) {
-      //   throw new OutputError('Failed to save the refresh token', 'E05');
-      // }
+      // Clear member's tokens.
+      await this.prismaService.jwtToken.deleteMany({
+        where: { profileId: foundProfile.id },
+      });
+      // Save member's tokens.
+      await this.prismaService.jwtToken.create({
+        data: {
+          accessToken,
+          refreshToken,
+          profileId: foundProfile.id,
+        },
+      });
 
       return {
         ok: true,
-        // data: {
-        // authorizations: { accessToken, refreshToken },
-        // member: { ...foundMember },
-        // },
+        data: {
+          authorizations: { accessToken, refreshToken },
+          profile: foundProfile,
+        },
       };
     } catch (err) {
-      return failure(err.message, 'E01');
+      return failure(err.message, 'loginMember:catch');
     }
   }
 
-  async logoutMember(input: LogoutInput): Promise<LogoutOutput> {
+  async logoutMember(
+    serviceKind: ServiceKindObject,
+    input: LogoutInput,
+  ): Promise<LogoutOutput> {
     try {
       const { id } = input;
-      // await this.prismaService.jwtToken.deleteMany({ where: { memberId: id } });
+      // Find profile id by member id.
+      const foundMemberProfile = await this.prismaService.profile.findFirst({
+        where: {
+          AND: [
+            { memberId: id },
+            { service: { serviceCode: serviceKind.serviceCode } },
+          ],
+        },
+        select: { id: true },
+      });
+
+      if (!foundMemberProfile) {
+        return failure(
+          'Does not found the member profile.',
+          'logoutMember:foundMemberProfile',
+        );
+      }
+
+      // Delete all tokens by profile id.
+      await this.prismaService.jwtToken.deleteMany({
+        where: { profileId: foundMemberProfile.id },
+      });
+
       return { ok: true };
     } catch (err) {
-      return failure(err.message, 'E01');
-    }
-  }
-
-  async verifyToken(input: VerifyTokenInput): Promise<VerifyTokenOutput> {
-    try {
-      const [type, value] = input.token.split(' ');
-      type;
-
-      try {
-        const verified = this.jwtService.verify(value) as any;
-        const foundMember = await this.prismaService.member.findUnique({
-          where: { id: verified.id },
-        });
-        if (!foundMember) return failure('Does not found member.', 'E02');
-      } catch (err) {
-        return failure('Failed to verify the access token.', 'E03');
-      }
-
-      return { ok: true };
-    } catch (err) {
-      return failure(err.message, 'E01');
-    }
-  }
-
-  async verifyRefreshToken(
-    input: VerifyRefreshTokenInput,
-  ): Promise<VerifyRefreshTokenOutput> {
-    try {
-      const [accessTokenType, accessTokenValue] = input.accessToken.split(' ');
-      const [refreshTokenType, refreshTokenValue] =
-        input.refreshToken.split(' ');
-
-      const decoded = this.jwtService.decode(accessTokenValue);
-
-      try {
-        this.jwtService.verify(refreshTokenValue);
-      } catch (err) {
-        throw new OutputError('The refresh token is expired.', 'E02');
-      }
-
-      if (typeof decoded !== 'object' || !decoded.hasOwnProperty('id')) {
-        throw new OutputError('Failed decode access token.', 'E03');
-      }
-
-      // Re-sign tokens.
-      const { accessToken, refreshToken } = this.jwtService.sign(decoded.id);
-
-      // await this.jwtService.saveRefreshToken(decoded.id, refreshToken);
-
-      return { ok: true, data: { accessToken, refreshToken } };
-    } catch (err) {
-      return failure(err.message, 'E01');
+      return failure(err.message, 'logoutMember:catch');
     }
   }
 }
