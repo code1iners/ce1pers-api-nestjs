@@ -8,6 +8,7 @@ export class AuthGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const graphqlContext = GqlExecutionContext.create(context).getContext();
+    console.log(graphqlContext['member']);
     return !!graphqlContext['member'];
   }
 }

@@ -7,6 +7,7 @@ import { FindMembersOutput } from 'src/member/dtos/find-members.dto';
 import {
   FindMemberOutput,
   FindMemberInput,
+  FindMemberOutputData,
 } from 'src/member/dtos/find-member.dto';
 import {
   CreateMemberInput,
@@ -20,7 +21,6 @@ import {
   UpdateMemberInput,
   UpdateMemberOutput,
 } from 'src/member/dtos/update-member.dto';
-import { MemberWithoutPassword } from 'src/member/dtos/member-without-password';
 import { ServiceKind, ServiceKindObject } from 'src/auth/auth.decorator';
 
 @Resolver(() => MemberEntity)
@@ -28,6 +28,7 @@ export class MemberResolver {
   constructor(private readonly memberService: MemberService) {}
 
   @Query(() => FindMembersOutput)
+  @UseGuards(AuthGuard)
   async findMembers(
     @ServiceKind() serviceKind: ServiceKindObject,
   ): Promise<FindMembersOutput> {
@@ -35,6 +36,7 @@ export class MemberResolver {
   }
 
   @Query(() => FindMemberOutput)
+  @UseGuards(AuthGuard)
   async findMember(
     @ServiceKind() serviceKind: ServiceKindObject,
     @Args('input') input: FindMemberInput,
@@ -47,9 +49,9 @@ export class MemberResolver {
         );
   }
 
-  @Query(() => MemberWithoutPassword)
+  @Query(() => FindMemberOutputData)
   @UseGuards(AuthGuard)
-  me(@Context() context: any): MemberWithoutPassword {
+  me(@Context() context: any): FindMemberOutputData {
     return context.req['member'];
   }
 
@@ -62,6 +64,7 @@ export class MemberResolver {
   }
 
   @Mutation(() => UpdateMemberOutput)
+  @UseGuards(AuthGuard)
   async updateMember(
     @ServiceKind() serviceKind: ServiceKindObject,
     @Args('input') input: UpdateMemberInput,
@@ -70,6 +73,7 @@ export class MemberResolver {
   }
 
   @Mutation(() => DeleteMemberOutput)
+  @UseGuards(AuthGuard)
   async deleteMember(
     @ServiceKind() serviceKind: ServiceKindObject,
     @Args('input') input: DeleteMemberInput,

@@ -19,13 +19,16 @@ export class JwtMiddleware implements NestMiddleware {
       // Check access token validity.
       try {
         const verified = this.jwtService.verify(tokenValue);
-        if (typeof verified === 'object' && verified.hasOwnProperty('id')) {
+        if (
+          typeof verified === 'object' &&
+          verified.hasOwnProperty('memberId')
+        ) {
           const foundMember = await this.memberService.findMemberById(
             {
               serviceCode: req.headers['service-code'] as string,
               serviceName: req.headers['service-name'] as string,
             },
-            verified.id,
+            verified.memberId,
           );
           req['member'] = foundMember?.data;
         }
