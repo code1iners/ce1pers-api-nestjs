@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { hash } from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { OutputError, failure } from 'src/helpers/error-helpers';
+import { ServiceKindObject } from 'src/auth/auth.decorator';
 import type { FindMembersOutput } from 'src/member/dtos/find-members.dto';
 import {
   FindMemberOutput,
@@ -19,7 +20,10 @@ import type {
   UpdateMemberInput,
   UpdateMemberOutput,
 } from 'src/member/dtos/update-member.dto';
-import { ServiceKindObject } from 'src/auth/auth.decorator';
+import type {
+  EmailAvailabilityInput,
+  EmailAvailabilityOutput,
+} from 'src/member/dtos/email-availability.dto';
 
 @Injectable()
 export class MemberService {
@@ -275,6 +279,39 @@ export class MemberService {
       return { ok: true };
     } catch (err) {
       return failure(err.message, 'E01');
+    }
+  }
+
+  async emailAvailability(
+    serviceKind: ServiceKindObject,
+    input: EmailAvailabilityInput,
+  ): Promise<EmailAvailabilityOutput> {
+    try {
+      const foundMember = await this.prisma.member.findFirst({
+        where: {
+          AND: [
+            { email: input.email },
+            {
+              profiles: {
+                some: { service: { serviceCode: serviceKind.serviceCode } },
+              },
+            },
+          ],
+        },
+      });
+
+      console.log(foundMember);
+
+      if (foundMember) {
+        return failure(
+          'Already exist the member.',
+          'emailAvailability:foundMember',
+        );
+      }
+
+      return { ok: true };
+    } catch (err) {
+      return failure(err.message, 'emailExists:catch');
     }
   }
 }

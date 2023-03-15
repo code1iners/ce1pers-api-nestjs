@@ -3,6 +3,8 @@ import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MemberEntity } from 'src/member/entities/member.entity';
 import { MemberService } from 'src/member/member.service';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { failure } from 'src/helpers/error-helpers';
+import { ServiceKind, ServiceKindObject } from 'src/auth/auth.decorator';
 import { FindMembersOutput } from 'src/member/dtos/find-members.dto';
 import {
   FindMemberOutput,
@@ -21,8 +23,10 @@ import {
   UpdateMemberInput,
   UpdateMemberOutput,
 } from 'src/member/dtos/update-member.dto';
-import { ServiceKind, ServiceKindObject } from 'src/auth/auth.decorator';
-import { failure } from 'src/helpers/error-helpers';
+import {
+  EmailAvailabilityInput,
+  EmailAvailabilityOutput,
+} from 'src/member/dtos/email-availability.dto';
 
 @Resolver(() => MemberEntity)
 export class MemberResolver {
@@ -85,5 +89,13 @@ export class MemberResolver {
     @Args('input') input: DeleteMemberInput,
   ) {
     return await this.memberService.deleteMember(serviceKind, input);
+  }
+
+  @Query(() => EmailAvailabilityOutput)
+  async emailAvailability(
+    @ServiceKind() serviceKind: ServiceKindObject,
+    @Args('input') input: EmailAvailabilityInput,
+  ) {
+    return await this.memberService.emailAvailability(serviceKind, input);
   }
 }
