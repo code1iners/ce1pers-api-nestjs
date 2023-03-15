@@ -19,8 +19,8 @@ import { AuthMiddleware } from 'src/auth/auth.middleware';
       driver: ApolloDriver,
       autoSchemaFile: true,
       sortSchema: true,
-      debug: process.env.NODE_ENV !== 'production',
-      playground: process.env.NODE_ENV !== 'production',
+      debug: true,
+      playground: true,
       context: ({ req }) => ({
         member: req['member'],
       }),

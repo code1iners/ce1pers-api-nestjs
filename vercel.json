@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "src/main.ts",
+      "dest": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "src/main.ts",
+      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"]
+    }
+  ],
+  "env": {
+    "DATABASE_URL": "mysql://l6g5iryx236h9a2qgmdd:pscale_pw_bouPuvlXc2BWO2RUrpVmsduOYpQSHDwtZZ70XwAiIkH@ap-northeast.connect.psdb.cloud/ce1pers-api-db?sslaccept=strict",
+    "PRIVATE_KEY": "LIGHGXEvP2Kh9a6TUtaKtwf78LvghoSh"
+  }
+}
