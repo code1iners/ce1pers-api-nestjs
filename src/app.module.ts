@@ -33,11 +33,11 @@ import { AuthMiddleware } from 'src/auth/auth.middleware';
         member: req['member'],
       }),
     }),
-    PrismaModule,
-    MemberModule,
     JwtModule.forRoot({
       privateKey: process.env.PRIVATE_KEY,
     }),
+    PrismaModule,
+    MemberModule,
     AuthModule,
   ],
   controllers: [],

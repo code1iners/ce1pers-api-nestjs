@@ -13,6 +13,6 @@ export class MemberEntity extends CoreEntity {
   @Field(() => String)
   password: string;
 
-  @Field(() => [ProfileEntity], { defaultValue: [] })
-  profiles: ProfileEntity[];
+  @Field(() => ProfileEntity, { nullable: true })
+  profile: ProfileEntity;
 }

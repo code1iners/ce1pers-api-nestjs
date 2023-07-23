@@ -32,6 +32,14 @@ import {
 export class MemberResolver {
   constructor(private readonly memberService: MemberService) {}
 
+  @Mutation(() => CreateMemberOutput)
+  async createMember(
+    @ServiceKind() serviceKind: ServiceKindObject,
+    @Args('input') input: CreateMemberInput,
+  ) {
+    return await this.memberService.createMember(serviceKind, input);
+  }
+
   @Query(() => FindMembersOutput)
   async findMembers(
     @ServiceKind() serviceKind: ServiceKindObject,
@@ -59,20 +67,6 @@ export class MemberResolver {
     return failure('Parameter is required.', 'findMember:else');
   }
 
-  @Query(() => FindMemberOutputData)
-  @UseGuards(AuthGuard)
-  me(@Context() context: any): FindMemberOutputData {
-    return context.req['member'];
-  }
-
-  @Mutation(() => CreateMemberOutput)
-  async createMember(
-    @ServiceKind() serviceKind: ServiceKindObject,
-    @Args('input') input: CreateMemberInput,
-  ) {
-    return await this.memberService.createMember(serviceKind, input);
-  }
-
   @Mutation(() => UpdateMemberOutput)
   @UseGuards(AuthGuard)
   async updateMember(
@@ -89,6 +83,12 @@ export class MemberResolver {
     @Args('input') input: DeleteMemberInput,
   ) {
     return await this.memberService.deleteMember(serviceKind, input);
+  }
+
+  @Query(() => FindMemberOutputData)
+  @UseGuards(AuthGuard)
+  me(@Context() context: any): FindMemberOutputData {
+    return context.req['member'];
   }
 
   @Query(() => EmailAvailabilityOutput)

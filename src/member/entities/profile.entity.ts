@@ -1,6 +1,5 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { CoreEntity } from 'src/core/entities/core.entity';
-import { JwtTokenEntity } from 'src/member/entities/jwt-token.entity';
 import { MemberProfileGender } from 'src/member/enums/profile-gender.enum';
 import { MemberProfileLoginType } from 'src/member/enums/profile-login-type.enum';
 import { ServiceMembershipLevel } from 'src/member/enums/profile-membership-level.enum';
@@ -40,7 +39,4 @@ export class ProfileEntity extends CoreEntity {
 
   @Field(() => ServiceMembershipLevel, { defaultValue: 'FREE' })
   membershipLevel: ServiceMembershipLevel;
-
-  @Field(() => JwtTokenEntity, { nullable: true })
-  jwtToken?: JwtTokenEntity;
 }
