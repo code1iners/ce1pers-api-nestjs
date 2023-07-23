@@ -41,6 +41,6 @@ export class ProfileEntity extends CoreEntity {
   @Field(() => ServiceMembershipLevel, { defaultValue: 'FREE' })
   membershipLevel: ServiceMembershipLevel;
 
-  @Field(() => JwtTokenEntity, { nullable: true, defaultValue: 'EMAIL' })
+  @Field(() => JwtTokenEntity, { nullable: true })
   jwtToken?: JwtTokenEntity;
 }

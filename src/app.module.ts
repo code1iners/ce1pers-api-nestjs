@@ -5,6 +5,8 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
+import * as Joi from 'joi';
+import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { MemberModule } from 'src/member/member.module';
@@ -15,11 +17,17 @@ import { AuthMiddleware } from 'src/auth/auth.middleware';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validationSchema: Joi.object({
+        DATABASE_URL: Joi.string().required(),
+        PRIVATE_KEY: Joi.string().required(),
+      }),
+    }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
       sortSchema: true,
-      debug: true,
       playground: true,
       context: ({ req }) => ({
         member: req['member'],
